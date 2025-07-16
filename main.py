@@ -191,6 +191,7 @@ async def daily_quiz_task():
 
     now = datetime.datetime.now()
     current_hour = now.hour
+    current_minute = now.minute
 
     if not (9 <= current_hour <= 21):
         return
@@ -199,12 +200,21 @@ async def daily_quiz_task():
         quiz_hours = sorted(random.sample(range(9, 21), 3))
         quiz_date = now.date()
 
-    if current_hour in quiz_hours:
-        guild = bot.get_guild(GUILD_ID)
-        channel = discord.utils.get(guild.text_channels, name="quiz")  # Zmień na swój kanał!
-        if channel:
+    guild = bot.get_guild(GUILD_ID)
+    channel = discord.utils.get(guild.text_channels, name="quiz")  # Zmień na swój kanał!
+
+    if not channel:
+        return
+
+    for hour in quiz_hours[:]:
+        # Pre-alert 10 minut przed quizem
+        if current_hour == hour - 1 and current_minute == 50:
+            await channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
+
+        # Sam quiz
+        if current_hour == hour and current_minute == 0:
             await run_quiz(channel)
-            quiz_hours.remove(current_hour)
+            quiz_hours.remove(hour)
 
 # Keep alive HTTP serwer
 class PingHandler(BaseHTTPRequestHandler):
