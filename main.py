@@ -9,13 +9,13 @@ import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+# === ŁADOWANIE ZMIENNYCH ŚRODOWISKOWYCH ===
 load_dotenv()
-
 TOKEN = os.getenv("TOKEN")
 GUILD_ID = int(os.getenv("GUILD_ID"))
-
 SUPPORTER_ROLE_ID = 1377326388415299777
 
+# === INTENCJE DISCORDA ===
 intents = discord.Intents.default()
 intents.message_content = True
 intents.guilds = True
@@ -24,11 +24,11 @@ intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# Ścieżki do plików
+# === ŚCIEŻKI DO PLIKÓW ===
 PYTANIA_PATH = "pytania.json"
 RANKING_PATH = "ranking.json"
 
-# Zmienne pomocnicze
+# === ZMIENNE POMOCNICZE ===
 current_question = None
 current_message = None
 answered_users = set()
@@ -36,24 +36,22 @@ quiz_hours = []
 quiz_date = None
 supporter_quiz_used_at = None
 
-# Ładowanie pytań
+# === FUNKCJE QUIZOWE ===
+
 def load_questions():
     with open(PYTANIA_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
-# Zapisywanie rankingu
 def save_ranking(data):
     with open(RANKING_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
-# Ładowanie rankingu
 def load_ranking():
     if not os.path.exists(RANKING_PATH):
         return {}
     with open(RANKING_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
-# Główna funkcja do quizu
 async def run_quiz(channel):
     global current_question, current_message, answered_users
 
@@ -110,10 +108,10 @@ async def reveal_answer(channel):
                 ranking[user_id]["monthly"][today] = ranking[user_id]["monthly"].get(today, 0) + 1
 
     save_ranking(ranking)
-
     await channel.send(f"Prawidłowa odpowiedź to: **{current_question['answer']}** {correct_emoji}")
 
-# Komenda !quiz (dla wspierających raz dziennie lub admina)
+# === KOMENDY BOTA ===
+
 @bot.command()
 async def quiz(ctx):
     global supporter_quiz_used_at
@@ -132,7 +130,6 @@ async def quiz(ctx):
     else:
         await ctx.send("Nie masz uprawnień do tej komendy.")
 
-# Komenda !punkty
 @bot.command()
 async def punkty(ctx):
     ranking = load_ranking()
@@ -144,7 +141,6 @@ async def punkty(ctx):
     else:
         await ctx.send(f"Masz {user_data['points']} punktów całkowitych.")
 
-# Ranking ogólny
 @bot.command()
 async def ranking(ctx):
     ranking = load_ranking()
@@ -156,7 +152,6 @@ async def ranking(ctx):
 
     await ctx.send(embed=embed)
 
-# Ranking tygodniowy
 @bot.command()
 async def rankingweekly(ctx):
     ranking = load_ranking()
@@ -176,7 +171,6 @@ async def rankingweekly(ctx):
 
     await ctx.send(embed=embed)
 
-# Ranking miesięczny
 @bot.command()
 async def rankingmonthly(ctx):
     ranking = load_ranking()
@@ -196,7 +190,8 @@ async def rankingmonthly(ctx):
 
     await ctx.send(embed=embed)
 
-# Codzienne 3 pytania w losowych godzinach
+# === QUIZY CODZIENNE O LOSOWYCH GODZINACH ===
+
 @tasks.loop(minutes=1)
 async def daily_quiz_task():
     global quiz_hours, quiz_date
@@ -213,22 +208,21 @@ async def daily_quiz_task():
         quiz_date = now.date()
 
     guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.text_channels, name="quiz")  # Zmień na swój kanał!
+    channel = discord.utils.get(guild.text_channels, name="quiz")  # Dostosuj nazwę kanału
 
     if not channel:
         return
 
     for hour in quiz_hours[:]:
-        # Pre-alert 10 minut przed quizem
         if current_hour == hour - 1 and current_minute == 50:
             await channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
 
-        # Sam quiz
         if current_hour == hour and current_minute == 0:
             await run_quiz(channel)
             quiz_hours.remove(hour)
 
-# Keep alive HTTP serwer
+# === KEEP-ALIVE SERVER (dla Render/UptimeRobot) ===
+
 class PingHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -242,10 +236,13 @@ def run_ping_server():
     thread.daemon = True
     thread.start()
 
-@bot.event
-async def on_ready():
-    print(f"Zalogowano jako {bot.user}")
-    daily_quiz_task.start()
-    run_ping_server()
+# === START BOTA ===
 
-bot.run(TOKEN)
+if __name__ == "__main__":
+    run_ping_server()
+    @bot.event
+    async def on_ready():
+        print(f"Zalogowano jako {bot.user}")
+        daily_quiz_task.start()
+
+    bot.run(TOKEN)
