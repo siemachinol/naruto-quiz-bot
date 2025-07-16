@@ -113,7 +113,7 @@ async def reveal_answer(channel):
 
     await channel.send(f"Prawidłowa odpowiedź to: **{current_question['answer']}** {correct_emoji}")
 
-# Komenda !quiz (dla wspierających raz dziennie)
+# Komenda !quiz (dla wspierających raz dziennie lub admina)
 @bot.command()
 async def quiz(ctx):
     global supporter_quiz_used_at
@@ -122,8 +122,8 @@ async def quiz(ctx):
     author = ctx.author
     role_ids = [role.id for role in author.roles]
 
-    if SUPPORTER_ROLE_ID in role_ids:
-        if supporter_quiz_used_at == today:
+    if SUPPORTER_ROLE_ID in role_ids or author.guild_permissions.administrator:
+        if supporter_quiz_used_at == today and not author.guild_permissions.administrator:
             await ctx.send("Quiz został już dziś aktywowany przez wspierającego.")
             return
         else:
@@ -131,6 +131,18 @@ async def quiz(ctx):
             await run_quiz(ctx.channel)
     else:
         await ctx.send("Nie masz uprawnień do tej komendy.")
+
+# Komenda !punkty
+@bot.command()
+async def punkty(ctx):
+    ranking = load_ranking()
+    user_id = str(ctx.author.id)
+    user_data = ranking.get(user_id)
+
+    if not user_data:
+        await ctx.send("Nie masz jeszcze żadnych punktów.")
+    else:
+        await ctx.send(f"Masz {user_data['points']} punktów całkowitych.")
 
 # Ranking ogólny
 @bot.command()
