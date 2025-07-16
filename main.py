@@ -9,7 +9,7 @@ import os
 
 load_dotenv()
 
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("TOKEN")
 GUILD_ID = int(os.getenv("GUILD_ID"))
 
 SUPPORTER_ROLE_ID = 1377326388415299777
