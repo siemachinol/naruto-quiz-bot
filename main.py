@@ -1,204 +1,212 @@
-import os
-from dotenv import load_dotenv
-load_dotenv(dotenv_path=".env")
-
 import discord
 from discord.ext import commands, tasks
-import json
 import random
+import json
 import asyncio
 import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+TOKEN = os.getenv("DISCORD_TOKEN")
+GUILD_ID = int(os.getenv("GUILD_ID"))
+
+SUPPORTER_ROLE_ID = 1377326388415299777
 
 intents = discord.Intents.default()
-intents.messages = True
 intents.message_content = True
-intents.reactions = True
 intents.guilds = True
+intents.reactions = True
+intents.members = True
 
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents)
 
-QUIZ_CHANNEL_ID = 1394762078115336365  # <- ID kanału do quizu
-QUIZ_ROLE_IDS = [1356372381043523584]  # <- ID ról uprawnionych do !quiz
+# Ścieżki do plików
+PYTANIA_PATH = "pytania.json"
+RANKING_PATH = "ranking.json"
 
-DAILY_QUESTION_HOUR_RANGE = (9, 21)
-QUESTION_FILE = 'pytania.json'
-RANKING_FILE = 'ranking.json'
-
+# Zmienne pomocnicze
 current_question = None
+current_message = None
 answered_users = set()
-reaction_msg_id = None
-question_end_time = None
+quiz_hours = []
+quiz_date = None
+supporter_quiz_used_at = None
 
+# Ładowanie pytań
 def load_questions():
-    with open(QUESTION_FILE, 'r', encoding='utf-8') as f:
+    with open(PYTANIA_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
+# Zapisywanie rankingu
+def save_ranking(data):
+    with open(RANKING_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+
+# Ładowanie rankingu
 def load_ranking():
-    if not os.path.exists(RANKING_FILE):
+    if not os.path.exists(RANKING_PATH):
         return {}
-    with open(RANKING_FILE, 'r', encoding='utf-8') as f:
+    with open(RANKING_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def save_ranking(ranking):
-    with open(RANKING_FILE, 'w', encoding='utf-8') as f:
-        json.dump(ranking, f, indent=2, ensure_ascii=False)
-
-def get_filtered_ranking(days=None):
-    ranking = load_ranking()
-    filtered = {}
-    now = datetime.datetime.utcnow()
-
-    for uid, timestamps in ranking.items():
-        count = 0
-        for ts in timestamps:
-            dt = datetime.datetime.fromisoformat(ts)
-            if not days or (now - dt).days < days:
-                count += 1
-        if count > 0:
-            filtered[uid] = count
-
-    return dict(sorted(filtered.items(), key=lambda x: x[1], reverse=True))
-
-@bot.event
-async def on_ready():
-    print(f'Zalogowano jako {bot.user}')
-    post_daily_question.start()
-
-@bot.event
-async def on_reaction_add(reaction, user):
-    global current_question, answered_users, reaction_msg_id, question_end_time
-
-    if user.bot:
-        return
-    if current_question is None or reaction.message.id != reaction_msg_id:
-        return
-    if datetime.datetime.utcnow() > question_end_time:
-        return
-
-    correct_index = ord(current_question["answer"]) - ord("A")
-    correct_emoji = ["🇦", "🇧", "🇨", "🇩"][correct_index]
-
-    if reaction.emoji != correct_emoji:
-        return
-    if user.id in answered_users:
-        return
-
-    ranking = load_ranking()
-    now_str = datetime.datetime.utcnow().isoformat()
-    if str(user.id) not in ranking:
-        ranking[str(user.id)] = []
-    ranking[str(user.id)].append(now_str)
-    save_ranking(ranking)
-
-    answered_users.add(user.id)
-
-async def post_quiz_question(channel):
-    global current_question, answered_users, reaction_msg_id, question_end_time
+# Główna funkcja do quizu
+async def run_quiz(channel):
+    global current_question, current_message, answered_users
 
     questions = load_questions()
     current_question = random.choice(questions)
     answered_users = set()
 
-    q = current_question
-    msg = await channel.send(
-        f"@everyone\n📜 **Pytanie dnia:**\n{q['question']}\n\n"
-        f"🇦 {q['options'][0]}\n"
-        f"🇧 {q['options'][1]}\n"
-        f"🇨 {q['options'][2]}\n"
-        f"🇩 {q['options'][3]}"
-    )
+    embed = discord.Embed(title="Pytanie Quizowe!", description=current_question["question"], color=0xff9900)
+    for option in ["A", "B", "C", "D"]:
+        embed.add_field(name=option, value=current_question["options"][option], inline=False)
+
+    current_message = await channel.send(embed=embed)
+
     for emoji in ["🇦", "🇧", "🇨", "🇩"]:
-        await msg.add_reaction(emoji)
+        await current_message.add_reaction(emoji)
 
-    reaction_msg_id = msg.id
-    question_end_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=300)
+    await asyncio.sleep(900)  # 15 minut
 
-    await asyncio.sleep(300)
+    await reveal_answer(channel)
 
-    if answered_users:
-        user_mentions = []
-        for uid in answered_users:
-            user = await bot.fetch_user(uid)
-            user_mentions.append(user.mention)
-        users_list = ', '.join(user_mentions)
-        await channel.send(
-            f"✅ Czas minął! Odpowiedź poprawna to: **{current_question['answer']}**\n"
-            f"Punkty zdobyli: {users_list}"
-        )
-    else:
-        await channel.send(
-            f"✅ Czas minął! Odpowiedź poprawna to: **{current_question['answer']}**\n"
-            f"Nikt nie zdobył punktu 😢"
-        )
+async def reveal_answer(channel):
+    global current_question, current_message, answered_users
 
+    correct_emoji = {
+        "A": "🇦",
+        "B": "🇧",
+        "C": "🇨",
+        "D": "🇩"
+    }[current_question["answer"]]
+
+    message = await channel.fetch_message(current_message.id)
+    ranking = load_ranking()
+
+    for reaction in message.reactions:
+        if reaction.emoji == correct_emoji:
+            users = await reaction.users().flatten()
+            for user in users:
+                if user.bot or user.id in answered_users:
+                    continue
+                answered_users.add(user.id)
+                user_id = str(user.id)
+                today = str(datetime.date.today())
+
+                if user_id not in ranking:
+                    ranking[user_id] = {
+                        "name": user.name,
+                        "points": 0,
+                        "weekly": {},
+                        "monthly": {}
+                    }
+
+                ranking[user_id]["points"] += 1
+                ranking[user_id]["weekly"][today] = ranking[user_id]["weekly"].get(today, 0) + 1
+                ranking[user_id]["monthly"][today] = ranking[user_id]["monthly"].get(today, 0) + 1
+
+    save_ranking(ranking)
+
+    await channel.send(f"Prawidłowa odpowiedź to: **{current_question['answer']}** {correct_emoji}")
+
+# Komenda !quiz (dla wspierających raz dziennie)
 @bot.command()
 async def quiz(ctx):
-    if not any(role.id in QUIZ_ROLE_IDS for role in ctx.author.roles):
-        return
-    await post_quiz_question(ctx.channel)
+    global supporter_quiz_used_at
 
+    today = datetime.date.today()
+    author = ctx.author
+    role_ids = [role.id for role in author.roles]
+
+    if SUPPORTER_ROLE_ID in role_ids:
+        if supporter_quiz_used_at == today:
+            await ctx.send("Quiz został już dziś aktywowany przez wspierającego.")
+            return
+        else:
+            supporter_quiz_used_at = today
+            await run_quiz(ctx.channel)
+    else:
+        await ctx.send("Nie masz uprawnień do tej komendy.")
+
+# Ranking ogólny
 @bot.command()
 async def ranking(ctx):
-    await send_ranking(ctx, None, "🏆 Ranking wszechczasów")
+    ranking = load_ranking()
+    sorted_users = sorted(ranking.items(), key=lambda x: x[1]["points"], reverse=True)
 
+    embed = discord.Embed(title="Ranking All-Time", color=0x00ff00)
+    for i, (user_id, data) in enumerate(sorted_users[:10], start=1):
+        embed.add_field(name=f"{i}. {data['name']}", value=f"{data['points']} punktów", inline=False)
+
+    await ctx.send(embed=embed)
+
+# Ranking tygodniowy
 @bot.command()
 async def rankingweekly(ctx):
-    await send_ranking(ctx, 7, "📅 Ranking tygodniowy (7 dni)")
+    ranking = load_ranking()
+    week_ago = datetime.date.today() - datetime.timedelta(days=7)
 
+    scores = {}
+    for user_id, data in ranking.items():
+        total = sum(points for date, points in data["weekly"].items() if datetime.date.fromisoformat(date) >= week_ago)
+        if total > 0:
+            scores[user_id] = (data["name"], total)
+
+    sorted_scores = sorted(scores.items(), key=lambda x: x[1][1], reverse=True)
+
+    embed = discord.Embed(title="Ranking Tygodniowy", color=0x00ffcc)
+    for i, (user_id, (name, points)) in enumerate(sorted_scores[:10], start=1):
+        embed.add_field(name=f"{i}. {name}", value=f"{points} punktów", inline=False)
+
+    await ctx.send(embed=embed)
+
+# Ranking miesięczny
 @bot.command()
 async def rankingmonthly(ctx):
-    await send_ranking(ctx, 30, "🗓 Ranking miesięczny (30 dni)")
+    ranking = load_ranking()
+    month_ago = datetime.date.today() - datetime.timedelta(days=30)
 
-async def send_ranking(ctx, days, title):
-    filtered = get_filtered_ranking(days)
-    if not filtered:
-        await ctx.send("Brak wyników.")
-        return
-    msg = f"**{title}:**\n"
-    for i, (uid, score) in enumerate(filtered.items(), start=1):
-        user = await bot.fetch_user(int(uid))
-        msg += f"{i}. {user.name} – {score} pkt\n"
-    await ctx.send(msg)
+    scores = {}
+    for user_id, data in ranking.items():
+        total = sum(points for date, points in data["monthly"].items() if datetime.date.fromisoformat(date) >= month_ago)
+        if total > 0:
+            scores[user_id] = (data["name"], total)
 
-@bot.command()
-async def punkty(ctx):
-    user_id = str(ctx.author.id)
-    now = datetime.datetime.utcnow()
-    data = load_ranking()
+    sorted_scores = sorted(scores.items(), key=lambda x: x[1][1], reverse=True)
 
-    if user_id not in data or not data[user_id]:
-        await ctx.send(f"{ctx.author.mention}, nie masz jeszcze żadnych punktów.")
-        return
+    embed = discord.Embed(title="Ranking Miesięczny", color=0x0099ff)
+    for i, (user_id, (name, points)) in enumerate(sorted_scores[:10], start=1):
+        embed.add_field(name=f"{i}. {name}", value=f"{points} punktów", inline=False)
 
-    all_points = len(data[user_id])
-    weekly_points = sum(
-        1 for ts in data[user_id]
-        if (now - datetime.datetime.fromisoformat(ts)).days < 7
-    )
-    monthly_points = sum(
-        1 for ts in data[user_id]
-        if (now - datetime.datetime.fromisoformat(ts)).days < 30
-    )
+    await ctx.send(embed=embed)
 
-    await ctx.send(
-        f"📊 {ctx.author.mention}, Twój wynik:\n"
-        f"• 🏆 Ogólnie: **{all_points}** pkt\n"
-        f"• 📅 Ostatnie 7 dni: **{weekly_points}** pkt\n"
-        f"• 🗓 Ostatnie 30 dni: **{monthly_points}** pkt"
-    )
+# Codzienne 3 pytania w losowych godzinach
+@tasks.loop(minutes=1)
+async def daily_quiz_task():
+    global quiz_hours, quiz_date
 
-@tasks.loop(hours=24)
-async def post_daily_question():
-    await bot.wait_until_ready()
-    channel = bot.get_channel(QUIZ_CHANNEL_ID)
     now = datetime.datetime.now()
-    target_hour = random.randint(*DAILY_QUESTION_HOUR_RANGE)
-    target_time = now.replace(hour=target_hour, minute=0, second=0, microsecond=0)
-    if target_time < now:
-        target_time += datetime.timedelta(days=1)
-    wait_seconds = (target_time - now).total_seconds()
-    await asyncio.sleep(wait_seconds)
-    await post_quiz_question(channel)
+    current_hour = now.hour
 
-token = os.getenv("TOKEN")
-bot.run(token)
+    if not (9 <= current_hour <= 21):
+        return
+
+    if quiz_date != now.date():
+        quiz_hours = sorted(random.sample(range(9, 21), 3))
+        quiz_date = now.date()
+
+    if current_hour in quiz_hours:
+        guild = bot.get_guild(GUILD_ID)
+        channel = discord.utils.get(guild.text_channels, name="quiz")  # Zmień na swój kanał!
+        if channel:
+            await run_quiz(channel)
+            quiz_hours.remove(current_hour)
+
+@bot.event
+async def on_ready():
+    print(f"Zalogowano jako {bot.user}")
+    daily_quiz_task.start()
+
+bot.run(TOKEN)
