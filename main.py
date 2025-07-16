@@ -6,6 +6,8 @@ import asyncio
 import datetime
 from dotenv import load_dotenv
 import os
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 load_dotenv()
 
@@ -204,9 +206,24 @@ async def daily_quiz_task():
             await run_quiz(channel)
             quiz_hours.remove(current_hour)
 
+# Keep alive HTTP serwer
+class PingHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(b'Bot is running.')
+
+def run_ping_server():
+    server = HTTPServer(('0.0.0.0', 8080), PingHandler)
+    thread = threading.Thread(target=server.serve_forever)
+    thread.daemon = True
+    thread.start()
+
 @bot.event
 async def on_ready():
     print(f"Zalogowano jako {bot.user}")
     daily_quiz_task.start()
+    run_ping_server()
 
 bot.run(TOKEN)
