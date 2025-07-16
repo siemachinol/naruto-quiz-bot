@@ -1,0 +1,502 @@
+[
+  {
+    "question": "Jak nazywa się technika, której Itachi użył na Kakashim podczas ich pierwszego starcia?",
+    "options": [
+      "Chidori",
+      "Amaterasu",
+      "Tsukuyomi",
+      "Kamui"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Kto był przywódcą Pierwszego Oddziału Aliansu Shinobi podczas Wojny Ninja?",
+    "options": [
+      "Darui",
+      "Kitsuchi",
+      "Gaara",
+      "Kakashi"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Który z członków Akatsuki był nieoficjalnie szpiegiem dla Konohy?",
+    "options": [
+      "Kisame",
+      "Sasori",
+      "Itachi",
+      "Hidan"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Jak nazywa się technika, której użył Minato, aby zapieczętować Kyuubiego?",
+    "options": [
+      "Hiraishin no Jutsu",
+      "Shiki Fujin",
+      "Reaper Death Seal",
+      "Fuinjutsu: Kyubi Fūin"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Który z Hokage stworzył technikę Edo Tensei?",
+    "options": [
+      "Hiruzen Sarutobi",
+      "Tobirama Senju",
+      "Minato Namikaze",
+      "Hashirama Senju"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Kto zabił Shisui Uchiha?",
+    "options": [
+      "Danzo",
+      "Itachi",
+      "Kakashi",
+      "Sam popełnił samobójstwo"
+    ],
+    "answer": "D"
+  },
+  {
+    "question": "Jaka była unikalna umiejętność Kekkei Genkai Kimimaro?",
+    "options": [
+      "Mokuton",
+      "Jinton",
+      "Shikotsumyaku",
+      "Yoton"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Jak nazywała się organizacja, do której należał Yahiko?",
+    "options": [
+      "Akatsuki",
+      "ANBU",
+      "Uzushio",
+      "Kara"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Kto był piątym Mizukage?",
+    "options": [
+      "Zabuza",
+      "Yagura",
+      "Mei Terumi",
+      "Chojuro"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Podczas walki Naruto i Sasuke w Dolinie Końca (part 1), ile ogonów Kuramy maksymalnie przejawił Naruto?",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Jaką techniką Shikamaru ostatecznie unieruchomił Hidana w lesie?",
+    "options": [
+      "Kagemane no Jutsu",
+      "Kagemane Shuriken",
+      "Kage Nui",
+      "Pułapka i detonacja"
+    ],
+    "answer": "D"
+  },
+  {
+    "question": "Która z wymienionych postaci NIE była Jinchuuriki?",
+    "options": [
+      "Yugito Nii",
+      "Killer Bee",
+      "Han",
+      "Fugaku Uchiha"
+    ],
+    "answer": "D"
+  },
+  {
+    "question": "Jakie było prawdziwe imię Tobi przed ujawnieniem swojej tożsamości?",
+    "options": [
+      "Madara",
+      "Obito",
+      "Izuna",
+      "Shisui"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Kto był mistrzem Hiruzen Sarutobi?",
+    "options": [
+      "Tobirama Senju",
+      "Hashirama Senju",
+      "Kagami Uchiha",
+      "Utakata"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Która z technik pozwala na manipulowanie cieniami?",
+    "options": [
+      "Kagemane no Jutsu",
+      "Tsukuyomi",
+      "Raikiri",
+      "Amaterasu"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jak nazywa się potężna bariera obronna klanu Hyuga?",
+    "options": [
+      "Kaiten",
+      "Tenketsu",
+      "Byakugan Dome",
+      "Hakke Kūshō"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jaką rangę miał Kakashi w czasie egzaminu Chuunin Naruto?",
+    "options": [
+      "Jounin",
+      "Tokubetsu Jounin",
+      "Chuunin",
+      "ANBU"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Który z członków Akatsuki był nieśmiertelny?",
+    "options": [
+      "Deidara",
+      "Hidan",
+      "Sasori",
+      "Zetsu"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Kto był pierwszym właścicielem Rinnegan po Rikudou Sennin?",
+    "options": [
+      "Nagato",
+      "Madara",
+      "Obito",
+      "Indra"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jaką specjalizację miał klan Aburame?",
+    "options": [
+      "Techniki genjutsu",
+      "Kontrola owadów",
+      "Manipulacja czasem",
+      "Fuuinjutsu"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Jak zginął Asuma Sarutobi?",
+    "options": [
+      "Został zabity przez Hidan",
+      "Zginął w walce z Kakuzu",
+      "Został zabity przez Itachiego",
+      "Popełnił samobójstwo"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Które z poniższych jutsu NIE jest techniką przestrzenno-czasową?",
+    "options": [
+      "Kamui",
+      "Flying Raijin",
+      "Amaterasu",
+      "Summoning Technique"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Jak nazywała się organizacja założona przez Yahiko?",
+    "options": [
+      "Akatsuki",
+      "Root",
+      "Kara",
+      "Hebi"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jakiego koloru były włosy Nagato przed aktywacją Rinnegana?",
+    "options": [
+      "Czarne",
+      "Czerwone",
+      "Białe",
+      "Fioletowe"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Jakie bijuu miała Yugito Nii?",
+    "options": [
+      "Nibi (Dwa Ogony)",
+      "Sanbi (Trzy Ogony)",
+      "Ichibi (Jeden Ogon)",
+      "Gobi (Pięć Ogonów)"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Z jakiego kraju pochodził Killer Bee?",
+    "options": [
+      "Kraj Ognia",
+      "Kraj Chmur",
+      "Kraj Ziemi",
+      "Kraj Wody"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Jaką zdolność miał Mangekyou Sharingan Shisui?",
+    "options": [
+      "Amaterasu",
+      "Tsukuyomi",
+      "Kotoamatsukami",
+      "Susanoo"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Który z ninja był mistrzem Kabuto Yakushiego?",
+    "options": [
+      "Orochimaru",
+      "Sasori",
+      "Danzo",
+      "Hiruzen"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Która z poniższych technik nie należy do Minato?",
+    "options": [
+      "Flying Raijin",
+      "Rasengan",
+      "Death Reaper Seal",
+      "Chidori"
+    ],
+    "answer": "D"
+  },
+  {
+    "question": "Kto został Kage najwcześniej wiekiem?",
+    "options": [
+      "Gaara",
+      "Tsunade",
+      "Minato",
+      "Yagura"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jaka technika pozwoliła Itachiemu zatrzymać kontrolę Edo Tensei?",
+    "options": [
+      "Tsukuyomi",
+      "Amaterasu",
+      "Kotoamatsukami",
+      "Izanami"
+    ],
+    "answer": "D"
+  },
+  {
+    "question": "Kto był pierwotnym właścicielem miecza Samehada?",
+    "options": [
+      "Mangetsu Hozuki",
+      "Kisame Hoshigaki",
+      "Fuguki Suikazan",
+      "Suigetsu Hozuki"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Jak nazywa się technika Hashiramy pozwalająca stworzyć olbrzymiego drewnianego wojownika?",
+    "options": [
+      "Mokuton: Mokuryuu",
+      "Mokuton: Kajukai Kōrin",
+      "Mokuton: Hotei no Jutsu",
+      "Mokuton: Susanoo Golem"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Która postać miała bezpośredni kontakt z Rikudou Senninem według historii w anime?",
+    "options": [
+      "Naruto",
+      "Hagoromo",
+      "Hamura",
+      "Asura"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Który członek Akatsuki był odpowiedzialny za szpiegowanie Orochimaru?",
+    "options": [
+      "Sasori",
+      "Zetsu",
+      "Kabuto",
+      "Itachi"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jakiego rodzaju chakrą posługiwał się Pakura z Sunagakure?",
+    "options": [
+      "Shakuton (Heat Release)",
+      "Yoton (Lava)",
+      "Jiton (Magnet)",
+      "Futton (Boil)"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Który z Kage potrafił używać Kekkei Tota?",
+    "options": [
+      "Muu",
+      "Oonoki",
+      "Tobirama",
+      "Hiruzen"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Kto jako pierwszy zrezygnował z walki z Naruto podczas Wielkiej Wojny Ninja?",
+    "options": [
+      "Nagato",
+      "Obito",
+      "Zetsu",
+      "Itachi"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Jakiego rodzaju jutsu użył Sasuke, by uwięzić Biju po zdobyciu Rinnegan?",
+    "options": [
+      "Amenotejikara",
+      "Chibaku Tensei",
+      "Kotoamatsukami",
+      "Limbo"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Które z dzieci Hagoromo odziedziczyło jego fizyczną siłę i ciało?",
+    "options": [
+      "Indra",
+      "Asura",
+      "Hamura",
+      "Kaguya"
+    ],
+    "answer": "B"
+  },
+  {
+    "question": "Jaką technikę uznaje się za pierwowzór Rasengana?",
+    "options": [
+      "Bijuu Dama",
+      "Chidori",
+      "Odama Rasengan",
+      "Flying Thunder God"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jaką cechę dziedziczyli członkowie klanu Kaguya?",
+    "options": [
+      "Shikotsumyaku",
+      "Byakugan",
+      "Jinton",
+      "Shakuton"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Co było kluczowe do aktywowania Rinnegan przez Madarę?",
+    "options": [
+      "Komórki Hashiramy",
+      "Mangekyou Sharingan",
+      "Chakra Kuramy",
+      "DNA Senju"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jak nazywał się specjalny klan z Kirigakure zdolny do manipulacji wodą?",
+    "options": [
+      "Hozuki",
+      "Yuki",
+      "Fuma",
+      "Kamizuru"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jak nazywał się nauczyciel ANBU, który trenował Yamato?",
+    "options": [
+      "Danzo",
+      "Kakashi",
+      "Hiruzen",
+      "Orochimaru"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Który z członków Siedmiu Mieczników Mgły był bratem Suigetsu?",
+    "options": [
+      "Zabuza Momochi",
+      "Fuguki Suikazan",
+      "Kisame Hoshigaki",
+      "Mangetsu Hozuki"
+    ],
+    "answer": "D"
+  },
+  {
+    "question": "Kto był naczelnym doradcą Tsunade?",
+    "options": [
+      "Shizune",
+      "Kakashi",
+      "Jiraiya",
+      "Danzo"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Kto był drugim liderem organizacji Akatsuki po Yahiko?",
+    "options": [
+      "Pain (Nagato)",
+      "Konan",
+      "Obito",
+      "Zetsu"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Jak nazywa się organizacja, do której należał Koji Kashin (Boruto)?",
+    "options": [
+      "Kara",
+      "Akatsuki",
+      "ROOT",
+      "Byakuya Gang"
+    ],
+    "answer": "A"
+  },
+  {
+    "question": "Kto przejął kontrolę nad Dziewięcioogoniastym Lisem podczas ataku na Wioskę Liścia?",
+    "options": [
+      "Obito Uchiha",
+      "Madara Uchiha",
+      "Danzo Shimura",
+      "Orochimaru"
+    ],
+    "answer": "A"
+  }
+]
