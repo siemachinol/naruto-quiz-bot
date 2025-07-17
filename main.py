@@ -334,12 +334,15 @@ def run_ping_server():
 if __name__ == "__main__":
     run_ping_server()
 
-    @bot.event
-async def on_ready():
-    print(f"Zalogowano jako {bot.user}")
-    bot.add_view(QuizView("A"))
-    if not daily_quiz_task.is_running():
-        daily_quiz_task.start()
+if __name__ == "__main__":
+    run_ping_server()
 
+    @bot.event
+    async def on_ready():
+        print(f"Zalogowano jako {bot.user}")
+        bot.add_view(QuizView("A"))
+        if not daily_quiz_task.is_running():
+            daily_quiz_task.start()
 
     bot.run(TOKEN)
+
