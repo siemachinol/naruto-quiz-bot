@@ -31,7 +31,7 @@ RANKING_PATH = "ranking.json"
 # === ZMIENNE POMOCNICZE ===
 current_question = None
 current_message = None
-answered_users = set()
+answered_users = {}
 supporter_quiz_used_at = None
 fired_times_today = set()
 
@@ -55,21 +55,23 @@ async def run_quiz(channel):
 
     questions = load_questions()
     current_question = random.choice(questions)
-    answered_users = set()
+    answered_users = {}
 
-    embed = discord.Embed(
-        title="🧠 PYTANIE QUIZOWE",
-        description=f"{current_question['question']}",
-        color=0xff9900
+    content = (
+        "@everyone\n"
+        "\U0001F3B5 **Pytanie dnia:**\n"
+        f"{current_question['question']}\n\n"
+        f"\U0001F1E6 {current_question['options']['A']}\n"
+        f"\U0001F1E7 {current_question['options']['B']}\n"
+        f"\U0001F1E8 {current_question['options']['C']}\n"
+        f"\U0001F1E9 {current_question['options']['D']}\n\n"
+        "Zagłosuj, klikając odpowiednią reakcję \uD83D\uDC47.\n"
+        "Masz 15 minut na odpowiedź!"
     )
-    embed.add_field(name="🇦", value=current_question["options"]["A"], inline=False)
-    embed.add_field(name="🇧", value=current_question["options"]["B"], inline=False)
-    embed.add_field(name="🇨", value=current_question["options"]["C"], inline=False)
-    embed.add_field(name="🇩", value=current_question["options"]["D"], inline=False)
 
-    current_message = await channel.send("@everyone", embed=embed)
+    current_message = await channel.send(content)
 
-    for emoji in ["🇦", "🇧", "🇨", "🇩"]:
+    for emoji in ["\U0001F1E6", "\U0001F1E7", "\U0001F1E8", "\U0001F1E9"]:
         await current_message.add_reaction(emoji)
 
     await asyncio.sleep(900)  # 15 minut
@@ -79,40 +81,64 @@ async def run_quiz(channel):
 async def reveal_answer(channel):
     global current_question, current_message, answered_users
 
+    correct_letter = current_question["answer"]
     correct_emoji = {
-        "A": "🇦",
-        "B": "🇧",
-        "C": "🇨",
-        "D": "🇩"
-    }[current_question["answer"]]
+        "A": "\U0001F1E6",
+        "B": "\U0001F1E7",
+        "C": "\U0001F1E8",
+        "D": "\U0001F1E9"
+    }[correct_letter]
 
     message = await channel.fetch_message(current_message.id)
     ranking = load_ranking()
 
+    user_answers = {}
+    user_multi = set()
+
     for reaction in message.reactions:
-        if reaction.emoji == correct_emoji:
-            users = await reaction.users().flatten()
-            for user in users:
-                if user.bot or user.id in answered_users:
-                    continue
-                answered_users.add(user.id)
-                user_id = str(user.id)
-                today = str(datetime.date.today())
+        users = await reaction.users().flatten()
+        for user in users:
+            if user.bot:
+                continue
+            if user.id in user_answers:
+                user_multi.add(user.id)
+            user_answers.setdefault(user.id, set()).add(reaction.emoji)
 
-                if user_id not in ranking:
-                    ranking[user_id] = {
-                        "name": user.name,
-                        "points": 0,
-                        "weekly": {},
-                        "monthly": {}
-                    }
+    awarded_users = []
+    changed_users = []
 
-                ranking[user_id]["points"] += 1
-                ranking[user_id]["weekly"][today] = ranking[user_id]["weekly"].get(today, 0) + 1
-                ranking[user_id]["monthly"][today] = ranking[user_id]["monthly"].get(today, 0) + 1
+    for user_id, emojis in user_answers.items():
+        if len(emojis) > 1:
+            changed_users.append(user_id)
+            continue
+        if correct_emoji in emojis:
+            user = await bot.fetch_user(user_id)
+            user_id_str = str(user.id)
+            today = str(datetime.date.today())
+
+            if user_id_str not in ranking:
+                ranking[user_id_str] = {
+                    "name": user.name,
+                    "points": 0,
+                    "weekly": {},
+                    "monthly": {}
+                }
+
+            ranking[user_id_str]["points"] += 1
+            ranking[user_id_str]["weekly"][today] = ranking[user_id_str]["weekly"].get(today, 0) + 1
+            ranking[user_id_str]["monthly"][today] = ranking[user_id_str]["monthly"].get(today, 0) + 1
+
+            awarded_users.append(user.mention)
 
     save_ranking(ranking)
-    await channel.send(f"✅ Prawidłowa odpowiedź to: **{current_question['answer']}** {correct_emoji}")
+
+    await channel.send(f"Prawidłowa odpowiedź to: **{correct_letter}** {correct_emoji}")
+
+    if awarded_users:
+        await channel.send(f"✅ Punkty otrzymali: {', '.join(awarded_users)}")
+    if changed_users:
+        mentions = [f"<@{uid}>" for uid in changed_users]
+        await channel.send(f"⚠️ Nie przyznano punktów za zmianę odpowiedzi: {', '.join(mentions)}")
 
 # === KOMENDY BOTA ===
 @bot.command()
@@ -223,7 +249,7 @@ async def daily_quiz_task():
         return
 
     if now_time in alert_times:
-        await channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
+        await channel.send("\U0001F9E0 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
 
     for qt in quiz_times:
         if now_time == qt and qt not in fired_times_today:
