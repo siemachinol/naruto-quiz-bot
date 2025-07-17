@@ -334,9 +334,6 @@ def run_ping_server():
 if __name__ == "__main__":
     run_ping_server()
 
-if __name__ == "__main__":
-    run_ping_server()
-
     @bot.event
     async def on_ready():
         print(f"Zalogowano jako {bot.user}")
