@@ -43,21 +43,13 @@ quiz_closed_messages = set()
 
 # === KOMPONENT PRZYCISKÓW ===
 class QuizView(discord.ui.View):
-    def __init__(self, correct_letter, message_id):
-        super().__init__(timeout=None)
+    def __init__(self, correct_letter):
+        super().__init__(timeout=900)  # 15 minut na odpowiedź
         self.correct_letter = correct_letter
-        self.message_id = message_id
 
-    async def disable_all_buttons(self):
-        for child in self.children:
-            if isinstance(child, discord.ui.Button):
-                child.disabled = True
-
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        if self.message_id in quiz_closed_messages:
-            await interaction.response.send_message("Czas na odpowiedź minął!", ephemeral=True)
-            return False
-        return True
+def disable_all_buttons(self):
+        for item in self.children:
+            item.disabled = True
 
     @discord.ui.button(label="A", style=discord.ButtonStyle.primary, custom_id="quiz_A")
     async def answer_a(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -85,11 +77,18 @@ async def handle_answer(interaction, selected_letter):
         message_user_answers[message_id] = {}
 
     if user_id in message_user_answers[message_id]:
-        await interaction.response.send_message("Już odpowiedziałeś na to pytanie!", ephemeral=True)
+        try:
+            await interaction.response.send_message("Już odpowiedziałeś na to pytanie!", ephemeral=True)
+        except discord.errors.InteractionResponded:
+            await interaction.followup.send("Już odpowiedziałeś na to pytanie!", ephemeral=True)
         return
 
     message_user_answers[message_id][user_id] = selected_letter
-    await interaction.response.send_message(f"Zapisano Twoją odpowiedź: {selected_letter}", ephemeral=True)
+
+    try:
+        await interaction.response.send_message(f"Zapisano Twoją odpowiedź: {selected_letter}", ephemeral=True)
+    except discord.errors.InteractionResponded:
+        await interaction.followup.send(f"Zapisano Twoją odpowiedź: {selected_letter}", ephemeral=True)
 
 # === FUNKCJE QUIZOWE ===
 def load_questions():
@@ -146,16 +145,14 @@ async def run_quiz(channel):
         "Kliknij przycisk z odpowiedzią poniżej. Masz 15 minut na odpowiedź!"
     )
 
-    view = QuizView(current_question["answer"], message_id="temp")  # tymczasowo, zaktualizujemy niżej
-    message = await channel.send(content, view=view)
-    current_message = message
-    view.message_id = str(message.id)
+    quiz_view = QuizView(current_question["answer"])
+    current_message = await channel.send(content, view=quiz_view)
 
     await asyncio.sleep(900)  # 15 minut
 
-    quiz_closed_messages.add(str(message.id))
-    await view.disable_all_buttons()
-    await message.edit(view=view)
+    # ⛔ Dezaktywuj przyciski po czasie
+    quiz_view.disable_all_buttons()
+    await current_message.edit(view=quiz_view)
 
     await reveal_answer(channel)
 
