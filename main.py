@@ -69,27 +69,36 @@ class QuizView(discord.ui.View):
 
 
 async def handle_answer(interaction, selected_letter):
-    global message_user_answers
+    global message_user_answers, current_message, quiz_closed_messages
 
     user_id = str(interaction.user.id)
     message_id = str(interaction.message.id)
+
+    # Sprawdź, czy quiz jest już zamknięty
+    if message_id in quiz_closed_messages:
+        try:
+            await interaction.response.send_message("⏱️ Czas na odpowiedzi minął. Nie można już odpowiadać.", ephemeral=True)
+        except discord.errors.InteractionResponded:
+            await interaction.followup.send("⏱️ Czas na odpowiedzi minął. Nie można już odpowiadać.", ephemeral=True)
+        return
 
     if message_id not in message_user_answers:
         message_user_answers[message_id] = {}
 
     if user_id in message_user_answers[message_id]:
         try:
-            await interaction.response.send_message("Już odpowiedziałeś na to pytanie!", ephemeral=True)
+            await interaction.response.send_message("✅ Już odpowiedziałeś na to pytanie!", ephemeral=True)
         except discord.errors.InteractionResponded:
-            await interaction.followup.send("Już odpowiedziałeś na to pytanie!", ephemeral=True)
+            await interaction.followup.send("✅ Już odpowiedziałeś na to pytanie!", ephemeral=True)
         return
 
+    # Zapisz odpowiedź
     message_user_answers[message_id][user_id] = selected_letter
 
     try:
-        await interaction.response.send_message(f"Zapisano Twoją odpowiedź: {selected_letter}", ephemeral=True)
+        await interaction.response.send_message(f"📝 Zapisano Twoją odpowiedź: **{selected_letter}**", ephemeral=True)
     except discord.errors.InteractionResponded:
-        await interaction.followup.send(f"Zapisano Twoją odpowiedź: {selected_letter}", ephemeral=True)
+        await interaction.followup.send(f"📝 Zapisano Twoją odpowiedź: **{selected_letter}**", ephemeral=True)
 
 # === FUNKCJE QUIZOWE ===
 def load_questions():
@@ -155,7 +164,10 @@ async def run_quiz(channel):
     quiz_view.disable_all_buttons()
     await current_message.edit(view=quiz_view)
 
+    quiz_closed_messages.add(str(current_message.id))
+
     await reveal_answer(channel)
+
 
 async def reveal_answer(channel):
     global current_question, current_message, answered_users, message_user_answers
