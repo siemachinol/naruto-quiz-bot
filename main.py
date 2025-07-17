@@ -42,30 +42,33 @@ message_user_answers = {}
 quiz_closed_messages = set()
 
 # === KOMPONENT PRZYCISKÓW ===
-class QuizView(discord.ui.View):
-    def __init__(self, correct_letter):
+from discord import ui, ButtonStyle, Interaction
+
+class QuizView(ui.View):
+    def __init__(self, correct_answer):
         super().__init__(timeout=None)
-        self.correct_letter = correct_letter
+        self.correct_answer = correct_answer
 
-    def disable_all_buttons(self):
-        for item in self.children:
-            item.disabled = True
-
-    @discord.ui.button(label="A", style=discord.ButtonStyle.primary, custom_id="quiz_a")
-    async def answer_a(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @ui.button(label="A", style=ButtonStyle.primary, custom_id="answer_a")
+    async def answer_a(self, button: ui.Button, interaction: Interaction):
         await self.handle_answer(interaction, "A")
 
-    @discord.ui.button(label="B", style=discord.ButtonStyle.primary, custom_id="quiz_b")
-    async def answer_b(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @ui.button(label="B", style=ButtonStyle.primary, custom_id="answer_b")
+    async def answer_b(self, button: ui.Button, interaction: Interaction):
         await self.handle_answer(interaction, "B")
 
-    @discord.ui.button(label="C", style=discord.ButtonStyle.primary, custom_id="quiz_c")
-    async def answer_c(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @ui.button(label="C", style=ButtonStyle.primary, custom_id="answer_c")
+    async def answer_c(self, button: ui.Button, interaction: Interaction):
         await self.handle_answer(interaction, "C")
 
-    @discord.ui.button(label="D", style=discord.ButtonStyle.primary, custom_id="quiz_d")
-    async def answer_d(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @ui.button(label="D", style=ButtonStyle.primary, custom_id="answer_d")
+    async def answer_d(self, button: ui.Button, interaction: Interaction):
         await self.handle_answer(interaction, "D")
+
+    async def handle_answer(self, interaction: Interaction, selected_answer: str):
+        user_id = str(interaction.user.id)
+        # ... tu cała logika sprawdzania odpowiedzi, przyznawania punktów itd.
+        await interaction.response.send_message(f"Wybrałeś: {selected_answer}", ephemeral=True)
 
     async def handle_answer(self, interaction, selected_letter):
         global message_user_answers, quiz_closed_messages
