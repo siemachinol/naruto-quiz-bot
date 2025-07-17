@@ -58,27 +58,22 @@ async def run_quiz(channel):
     answered_users = set()
 
     embed = discord.Embed(
-        title="🧠 **Pytanie dnia:**",
+        title="🧠 PYTANIE QUIZOWE",
         description=f"{current_question['question']}",
-        color=discord.Color.orange()
+        color=0xff9900
     )
+    embed.add_field(name="🇦", value=current_question["options"]["A"], inline=False)
+    embed.add_field(name="🇧", value=current_question["options"]["B"], inline=False)
+    embed.add_field(name="🇨", value=current_question["options"]["C"], inline=False)
+    embed.add_field(name="🇩", value=current_question["options"]["D"], inline=False)
 
-    option_map = {
-        "A": current_question["options"]["A"],
-        "B": current_question["options"]["B"],
-        "C": current_question["options"]["C"],
-        "D": current_question["options"]["D"]
-    }
-
-    for key, value in option_map.items():
-        embed.add_field(name=f"{key}", value=value, inline=False)
-
-    current_message = await channel.send(content='@everyone', embed=embed)
+    current_message = await channel.send("@everyone", embed=embed)
 
     for emoji in ["🇦", "🇧", "🇨", "🇩"]:
         await current_message.add_reaction(emoji)
 
-    await asyncio.sleep(900)
+    await asyncio.sleep(900)  # 15 minut
+
     await reveal_answer(channel)
 
 async def reveal_answer(channel):
@@ -117,7 +112,7 @@ async def reveal_answer(channel):
                 ranking[user_id]["monthly"][today] = ranking[user_id]["monthly"].get(today, 0) + 1
 
     save_ranking(ranking)
-    await channel.send(f"Prawidłowa odpowiedź to: **{current_question['answer']}** {correct_emoji}")
+    await channel.send(f"✅ Prawidłowa odpowiedź to: **{current_question['answer']}** {correct_emoji}")
 
 # === KOMENDY BOTA ===
 @bot.command()
@@ -205,7 +200,7 @@ async def rankingmonthly(ctx):
 
 # === QUIZY O KONKRETNYCH GODZINACH ===
 @tasks.loop(minutes=1)
-def daily_quiz_task():
+async def daily_quiz_task():
     global fired_times_today
     now = datetime.datetime.now()
     now_time = now.time().replace(second=0, microsecond=0)
@@ -228,14 +223,11 @@ def daily_quiz_task():
         return
 
     if now_time in alert_times:
-        asyncio.run_coroutine_threadsafe(
-            channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!"),
-            bot.loop
-        )
+        await channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
 
     for qt in quiz_times:
         if now_time == qt and qt not in fired_times_today:
-            asyncio.run_coroutine_threadsafe(run_quiz(channel), bot.loop)
+            await run_quiz(channel)
             fired_times_today.add(qt)
 
     if now.hour == 0 and fired_times_today:
