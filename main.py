@@ -44,28 +44,29 @@ quiz_closed_messages = set()
 # === KOMPONENT PRZYCISKÓW ===
 class QuizView(discord.ui.View):
     def __init__(self, correct_letter):
-        super().__init__(timeout=900)
+        super().__init__(timeout=none)
         self.correct_letter = correct_letter
 
     def disable_all_buttons(self):
         for item in self.children:
             item.disabled = True
 
-    @discord.ui.button(label="A", style=discord.ButtonStyle.primary)
-    async def answer_a(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.handle_answer(interaction, "A")
+    @discord.ui.button(label="A", style=discord.ButtonStyle.primary, custom_id="quiz_a")
+async def answer_a(self, interaction: discord.Interaction, button: discord.ui.Button):
+    await self.handle_answer(interaction, "A")
 
-    @discord.ui.button(label="B", style=discord.ButtonStyle.primary)
-    async def answer_b(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.handle_answer(interaction, "B")
+@discord.ui.button(label="B", style=discord.ButtonStyle.primary, custom_id="quiz_b")
+async def answer_b(self, interaction: discord.Interaction, button: discord.ui.Button):
+    await self.handle_answer(interaction, "B")
 
-    @discord.ui.button(label="C", style=discord.ButtonStyle.primary)
-    async def answer_c(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.handle_answer(interaction, "C")
+@discord.ui.button(label="C", style=discord.ButtonStyle.primary, custom_id="quiz_c")
+async def answer_c(self, interaction: discord.Interaction, button: discord.ui.Button):
+    await self.handle_answer(interaction, "C")
 
-    @discord.ui.button(label="D", style=discord.ButtonStyle.primary)
-    async def answer_d(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.handle_answer(interaction, "D")
+@discord.ui.button(label="D", style=discord.ButtonStyle.primary, custom_id="quiz_d")
+async def answer_d(self, interaction: discord.Interaction, button: discord.ui.Button):
+    await self.handle_answer(interaction, "D")
+
 
     async def handle_answer(self, interaction, selected_letter):
         global message_user_answers, quiz_closed_messages
