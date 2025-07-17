@@ -51,54 +51,41 @@ class QuizView(discord.ui.View):
         for item in self.children:
             item.disabled = True
 
-    @discord.ui.button(label="A", style=discord.ButtonStyle.primary, custom_id="quiz_A")
+    @discord.ui.button(label="A", style=discord.ButtonStyle.primary)
     async def answer_a(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await handle_answer(interaction, "A")
+        await self.handle_answer(interaction, "A")
 
-    @discord.ui.button(label="B", style=discord.ButtonStyle.primary, custom_id="quiz_B")
+    @discord.ui.button(label="B", style=discord.ButtonStyle.primary)
     async def answer_b(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await handle_answer(interaction, "B")
+        await self.handle_answer(interaction, "B")
 
-    @discord.ui.button(label="C", style=discord.ButtonStyle.primary, custom_id="quiz_C")
+    @discord.ui.button(label="C", style=discord.ButtonStyle.primary)
     async def answer_c(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await handle_answer(interaction, "C")
+        await self.handle_answer(interaction, "C")
 
-    @discord.ui.button(label="D", style=discord.ButtonStyle.primary, custom_id="quiz_D")
+    @discord.ui.button(label="D", style=discord.ButtonStyle.primary)
     async def answer_d(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await handle_answer(interaction, "D")
+        await self.handle_answer(interaction, "D")
 
+    async def handle_answer(self, interaction, selected_letter):
+        global message_user_answers, quiz_closed_messages
 
-async def handle_answer(interaction, selected_letter):
-    global message_user_answers, current_message, quiz_closed_messages
+        user_id = str(interaction.user.id)
+        message_id = str(interaction.message.id)
 
-    user_id = str(interaction.user.id)
-    message_id = str(interaction.message.id)
+        if message_id in quiz_closed_messages:
+            await interaction.response.send_message("\u23F1\uFE0F Czas na odpowiedzi minął. Nie można już odpowiadać.", ephemeral=True)
+            return
 
-    # Sprawdź, czy quiz jest już zamknięty
-    if message_id in quiz_closed_messages:
-        try:
-            await interaction.response.send_message("⏱️ Czas na odpowiedzi minął. Nie można już odpowiadać.", ephemeral=True)
-        except discord.errors.InteractionResponded:
-            await interaction.followup.send("⏱️ Czas na odpowiedzi minął. Nie można już odpowiadać.", ephemeral=True)
-        return
+        if message_id not in message_user_answers:
+            message_user_answers[message_id] = {}
 
-    if message_id not in message_user_answers:
-        message_user_answers[message_id] = {}
-
-    if user_id in message_user_answers[message_id]:
-        try:
+        if user_id in message_user_answers[message_id]:
             await interaction.response.send_message("✅ Już odpowiedziałeś na to pytanie!", ephemeral=True)
-        except discord.errors.InteractionResponded:
-            await interaction.followup.send("✅ Już odpowiedziałeś na to pytanie!", ephemeral=True)
-        return
+            return
 
-    # Zapisz odpowiedź
-    message_user_answers[message_id][user_id] = selected_letter
-
-    try:
+        message_user_answers[message_id][user_id] = selected_letter
         await interaction.response.send_message(f"📝 Zapisano Twoją odpowiedź: **{selected_letter}**", ephemeral=True)
-    except discord.errors.InteractionResponded:
-        await interaction.followup.send(f"📝 Zapisano Twoją odpowiedź: **{selected_letter}**", ephemeral=True)
 
 # === FUNKCJE QUIZOWE ===
 def load_questions():
@@ -163,7 +150,6 @@ async def run_quiz(channel):
     # ⛔ Dezaktywuj przyciski po czasie
     quiz_view.disable_all_buttons()
     await current_message.edit(view=quiz_view)
-
     quiz_closed_messages.add(str(current_message.id))
 
     await reveal_answer(channel)
