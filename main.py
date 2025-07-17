@@ -57,17 +57,28 @@ async def run_quiz(channel):
     current_question = random.choice(questions)
     answered_users = set()
 
-    embed = discord.Embed(title="Pytanie Quizowe!", description=current_question["question"], color=0xff9900)
-    for option in ["A", "B", "C", "D"]:
-        embed.add_field(name=option, value=current_question["options"][option], inline=False)
+    embed = discord.Embed(
+        title="🧠 **Pytanie dnia:**",
+        description=f"{current_question['question']}",
+        color=discord.Color.orange()
+    )
 
-    current_message = await channel.send(embed=embed)
+    option_map = {
+        "A": current_question["options"]["A"],
+        "B": current_question["options"]["B"],
+        "C": current_question["options"]["C"],
+        "D": current_question["options"]["D"]
+    }
+
+    for key, value in option_map.items():
+        embed.add_field(name=f"{key}", value=value, inline=False)
+
+    current_message = await channel.send(content='@everyone', embed=embed)
 
     for emoji in ["🇦", "🇧", "🇨", "🇩"]:
         await current_message.add_reaction(emoji)
 
-    await asyncio.sleep(900)  # 15 minut
-
+    await asyncio.sleep(900)
     await reveal_answer(channel)
 
 async def reveal_answer(channel):
@@ -194,7 +205,7 @@ async def rankingmonthly(ctx):
 
 # === QUIZY O KONKRETNYCH GODZINACH ===
 @tasks.loop(minutes=1)
-async def daily_quiz_task():
+def daily_quiz_task():
     global fired_times_today
     now = datetime.datetime.now()
     now_time = now.time().replace(second=0, microsecond=0)
@@ -217,11 +228,14 @@ async def daily_quiz_task():
         return
 
     if now_time in alert_times:
-        await channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
+        asyncio.run_coroutine_threadsafe(
+            channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!"),
+            bot.loop
+        )
 
     for qt in quiz_times:
         if now_time == qt and qt not in fired_times_today:
-            await run_quiz(channel)
+            asyncio.run_coroutine_threadsafe(run_quiz(channel), bot.loop)
             fired_times_today.add(qt)
 
     if now.hour == 0 and fired_times_today:
