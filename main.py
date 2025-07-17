@@ -325,7 +325,7 @@ class PingHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
 def run_ping_server():
-    server = HTTPServer(('0.0.0.0', 8080), PingHandler)
+    server = HTTPServer(('0.0.0.0', 8081), PingHandler)
     thread = threading.Thread(target=server.serve_forever)
     thread.daemon = True
     thread.start()
