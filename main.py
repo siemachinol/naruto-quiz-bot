@@ -36,7 +36,6 @@ supporter_quiz_used_at = None
 fired_times_today = set()
 
 # === FUNKCJE QUIZOWE ===
-
 def load_questions():
     with open(PYTANIA_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -110,7 +109,6 @@ async def reveal_answer(channel):
     await channel.send(f"Prawidłowa odpowiedź to: **{current_question['answer']}** {correct_emoji}")
 
 # === KOMENDY BOTA ===
-
 @bot.command()
 async def quiz(ctx):
     global supporter_quiz_used_at
@@ -123,13 +121,6 @@ async def quiz(ctx):
         return
 
     role_ids = [role.id for role in author.roles]
-
-    print(f"== DEBUG ==")
-    print(f"Autor: {author.name}")
-    print(f"ID roli SUPPORTER: {SUPPORTER_ROLE_ID}")
-    print(f"Role autora: {role_ids}")
-    print(f"Admin?: {author.guild_permissions.administrator}")
-    print(f"SUPPORTER w rolach?: {SUPPORTER_ROLE_ID in role_ids}")
 
     if SUPPORTER_ROLE_ID in role_ids or author.guild_permissions.administrator:
         if supporter_quiz_used_at == today and not author.guild_permissions.administrator:
@@ -202,7 +193,6 @@ async def rankingmonthly(ctx):
     await ctx.send(embed=embed)
 
 # === QUIZY O KONKRETNYCH GODZINACH ===
-
 @tasks.loop(minutes=1)
 async def daily_quiz_task():
     global fired_times_today
@@ -237,8 +227,7 @@ async def daily_quiz_task():
     if now.hour == 0 and fired_times_today:
         fired_times_today.clear()
 
-# === KEEP-ALIVE SERVER (dla Render/UptimeRobot) ===
-
+# === KEEP-ALIVE SERVER ===
 class PingHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -258,7 +247,6 @@ def run_ping_server():
     thread.start()
 
 # === START BOTA ===
-
 if __name__ == "__main__":
     run_ping_server()
 
