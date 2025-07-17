@@ -38,6 +38,58 @@ current_message = None
 answered_users = {}
 supporter_quiz_used_at = None
 fired_times_today = set()
+message_user_answers = {}
+quiz_closed_messages = set()
+
+# === KOMPONENT PRZYCISKÓW ===
+class QuizView(discord.ui.View):
+    def __init__(self, correct_letter, message_id):
+        super().__init__(timeout=None)
+        self.correct_letter = correct_letter
+        self.message_id = message_id
+
+    async def disable_all_buttons(self):
+        for child in self.children:
+            if isinstance(child, discord.ui.Button):
+                child.disabled = True
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if self.message_id in quiz_closed_messages:
+            await interaction.response.send_message("Czas na odpowiedź minął!", ephemeral=True)
+            return False
+        return True
+
+    @discord.ui.button(label="A", style=discord.ButtonStyle.primary, custom_id="quiz_A")
+    async def answer_a(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await handle_answer(interaction, "A")
+
+    @discord.ui.button(label="B", style=discord.ButtonStyle.primary, custom_id="quiz_B")
+    async def answer_b(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await handle_answer(interaction, "B")
+
+    @discord.ui.button(label="C", style=discord.ButtonStyle.primary, custom_id="quiz_C")
+    async def answer_c(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await handle_answer(interaction, "C")
+
+    @discord.ui.button(label="D", style=discord.ButtonStyle.primary, custom_id="quiz_D")
+    async def answer_d(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await handle_answer(interaction, "D")
+
+async def handle_answer(interaction, selected_letter):
+    global message_user_answers
+
+    user_id = str(interaction.user.id)
+    message_id = str(interaction.message.id)
+
+    if message_id not in message_user_answers:
+        message_user_answers[message_id] = {}
+
+    if user_id in message_user_answers[message_id]:
+        await interaction.response.send_message("Już odpowiedziałeś na to pytanie!", ephemeral=True)
+        return
+
+    message_user_answers[message_id][user_id] = selected_letter
+    await interaction.response.send_message(f"Zapisano Twoją odpowiedź: {selected_letter}", ephemeral=True)
 
 # === FUNKCJE QUIZOWE ===
 def load_questions():
@@ -76,11 +128,12 @@ def save_ranking(data):
             }).execute()
 
 async def run_quiz(channel):
-    global current_question, current_message, answered_users
+    global current_question, current_message, answered_users, message_user_answers
 
     questions = load_questions()
     current_question = random.choice(questions)
     answered_users = {}
+    message_user_answers = {}
 
     content = (
         "@everyone\n"
@@ -90,54 +143,35 @@ async def run_quiz(channel):
         f"\U0001F1E7 {current_question['options']['B']}\n"
         f"\U0001F1E8 {current_question['options']['C']}\n"
         f"\U0001F1E9 {current_question['options']['D']}\n\n"
-        "Zagłosuj, klikając odpowiednią reakcję \uD83D\uDC47.\n"
-        "Masz 15 minut na odpowiedź!"
+        "Kliknij przycisk z odpowiedzią poniżej. Masz 15 minut na odpowiedź!"
     )
 
-    current_message = await channel.send(content)
-
-    for emoji in ["\U0001F1E6", "\U0001F1E7", "\U0001F1E8", "\U0001F1E9"]:
-        await current_message.add_reaction(emoji)
+    view = QuizView(current_question["answer"], message_id="temp")  # tymczasowo, zaktualizujemy niżej
+    message = await channel.send(content, view=view)
+    current_message = message
+    view.message_id = str(message.id)
 
     await asyncio.sleep(900)  # 15 minut
+
+    quiz_closed_messages.add(str(message.id))
+    await view.disable_all_buttons()
+    await message.edit(view=view)
 
     await reveal_answer(channel)
 
 async def reveal_answer(channel):
-    global current_question, current_message, answered_users
+    global current_question, current_message, answered_users, message_user_answers
 
     correct_letter = current_question["answer"]
-    correct_emoji = {
-        "A": "\U0001F1E6",
-        "B": "\U0001F1E7",
-        "C": "\U0001F1E8",
-        "D": "\U0001F1E9"
-    }[correct_letter]
+    message_id = str(current_message.id)
+    answers = message_user_answers.get(message_id, {})
 
-    message = await channel.fetch_message(current_message.id)
     ranking = load_ranking()
-
-    user_answers = {}
-    user_multi = set()
-
-    for reaction in message.reactions:
-        users = await reaction.users().flatten()
-        for user in users:
-            if user.bot:
-                continue
-            if user.id in user_answers:
-                user_multi.add(user.id)
-            user_answers.setdefault(user.id, set()).add(reaction.emoji)
-
     awarded_users = []
-    changed_users = []
 
-    for user_id, emojis in user_answers.items():
-        if len(emojis) > 1:
-            changed_users.append(user_id)
-            continue
-        if correct_emoji in emojis:
-            user = await bot.fetch_user(user_id)
+    for user_id, selected_letter in answers.items():
+        if selected_letter == correct_letter:
+            user = await bot.fetch_user(int(user_id))
             user_id_str = str(user.id)
             today = str(datetime.date.today())
 
@@ -157,13 +191,10 @@ async def reveal_answer(channel):
 
     save_ranking(ranking)
 
-    await channel.send(f"Prawidłowa odpowiedź to: **{correct_letter}** {correct_emoji}")
+    await channel.send(f"Prawidłowa odpowiedź to: **{correct_letter}**")
 
     if awarded_users:
         await channel.send(f"✅ Punkty otrzymali: {', '.join(awarded_users)}")
-    if changed_users:
-        mentions = [f"<@{uid}>" for uid in changed_users]
-        await channel.send(f"⚠️ Nie przyznano punktów za zmianę odpowiedzi: {', '.join(mentions)}")
 
 # === KOMENDY BOTA ===
 @bot.command()
