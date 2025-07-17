@@ -8,12 +8,16 @@ from dotenv import load_dotenv
 import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from supabase import create_client, Client
 
 # === ŁADOWANIE ZMIENNYCH ŚRODOWISKOWYCH ===
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 GUILD_ID = int(os.getenv("GUILD_ID"))
 SUPPORTER_ROLE_ID = 1377326388415299777
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # === INTENCJE DISCORDA ===
 intents = discord.Intents.default()
@@ -40,15 +44,36 @@ def load_questions():
     with open(PYTANIA_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def save_ranking(data):
-    with open(RANKING_PATH, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
-
 def load_ranking():
-    if not os.path.exists(RANKING_PATH):
-        return {}
-    with open(RANKING_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    response = supabase.table("ranking").select("*").execute()
+    ranking = {}
+    for row in response.data:
+        ranking[row["user_id"]] = {
+            "name": row["name"],
+            "points": row["points"],
+            "weekly": row["weekly"],
+            "monthly": row["monthly"]
+        }
+    return ranking
+
+def save_ranking(data):
+    for user_id, user_data in data.items():
+        existing = supabase.table("ranking").select("id").eq("user_id", user_id).execute().data
+        if existing:
+            supabase.table("ranking").update({
+                "name": user_data["name"],
+                "points": user_data["points"],
+                "weekly": user_data["weekly"],
+                "monthly": user_data["monthly"]
+            }).eq("user_id", user_id).execute()
+        else:
+            supabase.table("ranking").insert({
+                "user_id": user_id,
+                "name": user_data["name"],
+                "points": user_data["points"],
+                "weekly": user_data["weekly"],
+                "monthly": user_data["monthly"]
+            }).execute()
 
 async def run_quiz(channel):
     global current_question, current_message, answered_users
@@ -59,7 +84,7 @@ async def run_quiz(channel):
 
     content = (
         "@everyone\n"
-        "\U0001F3B5 **Pytanie dnia:**\n"
+        "\U0001F9E0 **Pytanie quizowe:**\n"
         f"{current_question['question']}\n\n"
         f"\U0001F1E6 {current_question['options']['A']}\n"
         f"\U0001F1E7 {current_question['options']['B']}\n"
