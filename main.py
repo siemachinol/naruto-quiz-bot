@@ -44,10 +44,10 @@ quiz_closed_messages = set()
 # === KOMPONENT PRZYCISKÓW ===
 class QuizView(discord.ui.View):
     def __init__(self, correct_letter):
-        super().__init__(timeout=900)  # 15 minut na odpowiedź
+        super().__init__(timeout=900)
         self.correct_letter = correct_letter
 
-def disable_all_buttons(self):
+    def disable_all_buttons(self):
         for item in self.children:
             item.disabled = True
 
@@ -66,6 +66,7 @@ def disable_all_buttons(self):
     @discord.ui.button(label="D", style=discord.ButtonStyle.primary, custom_id="quiz_D")
     async def answer_d(self, interaction: discord.Interaction, button: discord.ui.Button):
         await handle_answer(interaction, "D")
+
 
 async def handle_answer(interaction, selected_letter):
     global message_user_answers
