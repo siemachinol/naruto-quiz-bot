@@ -20,7 +20,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.guilds = True
 intents.reactions = True
-intents.members = True  # WAŻNE
+intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -116,7 +116,12 @@ async def quiz(ctx):
     global supporter_quiz_used_at
 
     today = datetime.date.today()
-    author = ctx.author
+    author = ctx.guild.get_member(ctx.author.id)
+
+    if author is None:
+        await ctx.send("Nie mogę pobrać Twoich ról. Spróbuj ponownie później.")
+        return
+
     role_ids = [role.id for role in author.roles]
 
     print(f"== DEBUG ==")
