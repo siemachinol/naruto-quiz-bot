@@ -20,7 +20,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.guilds = True
 intents.reactions = True
-intents.members = True
+intents.members = True  # WAŻNE
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -32,9 +32,8 @@ RANKING_PATH = "ranking.json"
 current_question = None
 current_message = None
 answered_users = set()
-quiz_hours = []
-quiz_date = None
 supporter_quiz_used_at = None
+fired_times_today = set()
 
 # === FUNKCJE QUIZOWE ===
 
@@ -120,6 +119,13 @@ async def quiz(ctx):
     author = ctx.author
     role_ids = [role.id for role in author.roles]
 
+    print(f"== DEBUG ==")
+    print(f"Autor: {author.name}")
+    print(f"ID roli SUPPORTER: {SUPPORTER_ROLE_ID}")
+    print(f"Role autora: {role_ids}")
+    print(f"Admin?: {author.guild_permissions.administrator}")
+    print(f"SUPPORTER w rolach?: {SUPPORTER_ROLE_ID in role_ids}")
+
     if SUPPORTER_ROLE_ID in role_ids or author.guild_permissions.administrator:
         if supporter_quiz_used_at == today and not author.guild_permissions.administrator:
             await ctx.send("Quiz został już dziś aktywowany przez wspierającego.")
@@ -190,36 +196,41 @@ async def rankingmonthly(ctx):
 
     await ctx.send(embed=embed)
 
-# === QUIZY CODZIENNE O LOSOWYCH GODZINACH ===
+# === QUIZY O KONKRETNYCH GODZINACH ===
 
 @tasks.loop(minutes=1)
 async def daily_quiz_task():
-    global quiz_hours, quiz_date
-
+    global fired_times_today
     now = datetime.datetime.now()
-    current_hour = now.hour
-    current_minute = now.minute
+    now_time = now.time().replace(second=0, microsecond=0)
 
-    if not (9 <= current_hour <= 21):
-        return
+    quiz_times = [
+        datetime.time(hour=12, minute=5),
+        datetime.time(hour=15, minute=35),
+        datetime.time(hour=20, minute=39)
+    ]
 
-    if quiz_date != now.date():
-        quiz_hours = sorted(random.sample(range(9, 21), 3))
-        quiz_date = now.date()
+    alert_times = [
+        (datetime.datetime.combine(now.date(), qt) - datetime.timedelta(minutes=10)).time()
+        for qt in quiz_times
+    ]
 
     guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.text_channels, name="quiz")  # Dostosuj nazwę kanału
+    channel = discord.utils.get(guild.text_channels, name="quiz")
 
     if not channel:
         return
 
-    for hour in quiz_hours[:]:
-        if current_hour == hour - 1 and current_minute == 50:
-            await channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
+    if now_time in alert_times:
+        await channel.send("🧠 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
 
-        if current_hour == hour and current_minute == 0:
+    for qt in quiz_times:
+        if now_time == qt and qt not in fired_times_today:
             await run_quiz(channel)
-            quiz_hours.remove(hour)
+            fired_times_today.add(qt)
+
+    if now.hour == 0 and fired_times_today:
+        fired_times_today.clear()
 
 # === KEEP-ALIVE SERVER (dla Render/UptimeRobot) ===
 
@@ -245,9 +256,11 @@ def run_ping_server():
 
 if __name__ == "__main__":
     run_ping_server()
+
     @bot.event
     async def on_ready():
         print(f"Zalogowano jako {bot.user}")
-        daily_quiz_task.start()
+        if not daily_quiz_task.is_running():
+            daily_quiz_task.start()
 
     bot.run(TOKEN)
