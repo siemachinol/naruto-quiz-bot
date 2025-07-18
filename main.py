@@ -30,7 +30,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 # === ŚCIEŻKI DO PLIKÓW ===
 PYTANIA_PATH = "pytania.json"
-RANKING_PATH = "ranking.json"
 
 # === ZMIENNE POMOCNICZE ===
 current_question = None
@@ -40,6 +39,7 @@ supporter_quiz_used_at = None
 fired_times_today = set()
 message_user_answers = {}
 quiz_closed_messages = set()
+quiz_channel = None
 
 # === KOMPONENT PRZYCISKÓW ===
 from discord import ui, ButtonStyle, Interaction
@@ -48,6 +48,10 @@ class QuizView(ui.View):
     def __init__(self, correct_answer):
         super().__init__(timeout=None)
         self.correct_answer = correct_answer
+
+    def disable_all_buttons(self):
+        for child in self.children:
+            child.disabled = True
 
     @ui.button(label="A", style=ButtonStyle.primary, custom_id="answer_a")
     async def answer_a(self, button: ui.Button, interaction: Interaction):
@@ -64,11 +68,6 @@ class QuizView(ui.View):
     @ui.button(label="D", style=ButtonStyle.primary, custom_id="answer_d")
     async def answer_d(self, button: ui.Button, interaction: Interaction):
         await self.handle_answer(interaction, "D")
-
-    async def handle_answer(self, interaction: Interaction, selected_answer: str):
-        user_id = str(interaction.user.id)
-        # ... tu cała logika sprawdzania odpowiedzi, przyznawania punktów itd.
-        await interaction.response.send_message(f"Wybrałeś: {selected_answer}", ephemeral=True)
 
     async def handle_answer(self, interaction, selected_letter):
         global message_user_answers, quiz_closed_messages
@@ -130,12 +129,15 @@ async def run_quiz(channel):
     global current_question, current_message, answered_users, message_user_answers
 
     questions = load_questions()
+    if not questions:
+        await channel.send("Brak dostępnych pytań w bazie danych.")
+        return
+
     current_question = random.choice(questions)
     answered_users = {}
     message_user_answers = {}
 
     content = (
-        "@everyone\n"
         "\U0001F9E0 **Pytanie quizowe:**\n"
         f"{current_question['question']}\n\n"
         f"\U0001F1E6 {current_question['options']['A']}\n"
@@ -148,15 +150,15 @@ async def run_quiz(channel):
     quiz_view = QuizView(current_question["answer"])
     current_message = await channel.send(content, view=quiz_view)
 
+    print("Quiz wystartował, czekam 15 minut...")
     await asyncio.sleep(900)  # 15 minut
+    print("Koniec quizu, podsumowanie...")
 
-    # ⛔ Dezaktywuj przyciski po czasie
     quiz_view.disable_all_buttons()
     await current_message.edit(view=quiz_view)
     quiz_closed_messages.add(str(current_message.id))
 
     await reveal_answer(channel)
-
 
 async def reveal_answer(channel):
     global current_question, current_message, answered_users, message_user_answers
@@ -172,7 +174,7 @@ async def reveal_answer(channel):
         if selected_letter == correct_letter:
             user = await bot.fetch_user(int(user_id))
             user_id_str = str(user.id)
-            today = str(datetime.date.today())
+            today = str(datetime.datetime.utcnow().date())
 
             if user_id_str not in ranking:
                 ranking[user_id_str] = {
@@ -195,12 +197,12 @@ async def reveal_answer(channel):
     if awarded_users:
         await channel.send(f"✅ Punkty otrzymali: {', '.join(awarded_users)}")
 
-# === KOMENDY BOTA ===
+# === KOMENDY ===
 @bot.command()
 async def quiz(ctx):
     global supporter_quiz_used_at
 
-    today = datetime.date.today()
+    today = datetime.datetime.utcnow().date()
     author = ctx.guild.get_member(ctx.author.id)
 
     if author is None:
@@ -244,7 +246,7 @@ async def ranking(ctx):
 @bot.command()
 async def rankingweekly(ctx):
     ranking = load_ranking()
-    week_ago = datetime.date.today() - datetime.timedelta(days=7)
+    week_ago = datetime.datetime.utcnow().date() - datetime.timedelta(days=7)
 
     scores = {}
     for user_id, data in ranking.items():
@@ -263,7 +265,7 @@ async def rankingweekly(ctx):
 @bot.command()
 async def rankingmonthly(ctx):
     ranking = load_ranking()
-    month_ago = datetime.date.today() - datetime.timedelta(days=30)
+    month_ago = datetime.datetime.utcnow().date() - datetime.timedelta(days=30)
 
     scores = {}
     for user_id, data in ranking.items():
@@ -279,36 +281,25 @@ async def rankingmonthly(ctx):
 
     await ctx.send(embed=embed)
 
-# === QUIZY O KONKRETNYCH GODZINACH ===
+# === QUIZ AUTOMATYCZNY ===
 @tasks.loop(minutes=1)
 async def daily_quiz_task():
-    global fired_times_today
+    global fired_times_today, quiz_channel
     now = datetime.datetime.now()
     now_time = now.time().replace(second=0, microsecond=0)
 
-    quiz_times = [
-        datetime.time(hour=12, minute=5),
-        datetime.time(hour=15, minute=35),
-        datetime.time(hour=20, minute=39)
-    ]
+    quiz_times = [datetime.time(12, 5), datetime.time(15, 35), datetime.time(20, 39)]
+    alert_times = [(datetime.datetime.combine(now.date(), qt) - datetime.timedelta(minutes=10)).time() for qt in quiz_times]
 
-    alert_times = [
-        (datetime.datetime.combine(now.date(), qt) - datetime.timedelta(minutes=10)).time()
-        for qt in quiz_times
-    ]
-
-    guild = bot.get_guild(GUILD_ID)
-    channel = discord.utils.get(guild.text_channels, name="quiz")
-
-    if not channel:
+    if quiz_channel is None:
         return
 
     if now_time in alert_times:
-        await channel.send("\U0001F9E0 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
+        await quiz_channel.send("\U0001F9E0 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
 
     for qt in quiz_times:
         if now_time == qt and qt not in fired_times_today:
-            await run_quiz(channel)
+            await run_quiz(quiz_channel)
             fired_times_today.add(qt)
 
     if now.hour == 0 and fired_times_today:
@@ -339,10 +330,12 @@ if __name__ == "__main__":
 
     @bot.event
     async def on_ready():
+        global quiz_channel
         print(f"Zalogowano jako {bot.user}")
         bot.add_view(QuizView("A"))
+        guild = bot.get_guild(GUILD_ID)
+        quiz_channel = discord.utils.get(guild.text_channels, name="quiz")
         if not daily_quiz_task.is_running():
             daily_quiz_task.start()
 
     bot.run(TOKEN)
-
