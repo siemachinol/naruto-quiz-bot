@@ -500,6 +500,406 @@
     "answer": "A"
   },
   {
+    "question": "Który z użytkowników Rinneganu nie miał go od urodzenia, lecz uzyskał go sztucznie?",
+    "options": {
+      "A": "Hagoromo",
+      "B": "Madara",
+      "C": "Nagato",
+      "D": "Urashiki"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Bicie potworów",
+      "D": "Questy"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która z technik pozwalała Tobiemu (Obito) przechodzić przez ataki fizyczne?",
+    "options": {
+      "A": "Kamui",
+      "B": "Izanagi",
+      "C": "Uzumaki Sealing Art",
+      "D": "Susanoo"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Dlaczego Naruto nie mógł używać trybu mędrca (Sage Mode) podczas walki z Nagato (Pain) przez cały czas?",
+    "options": {
+      "A": "Nie był jeszcze wystarczająco wyszkolony",
+      "B": "Potrzebował bezruchu do zbierania naturalnej energii",
+      "C": "Był zbyt zmęczony po walce z Kakuzu",
+      "D": "Nagato zakłócał przepływ chakry w okolicy"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jaką rolę odegrała pieczęć Byakugō na czole Tsunade podczas jej walki z Madarą?",
+    "options": {
+      "A": "Wzmocniła jej genjutsu",
+      "B": "Pozwoliła jej aktywować technikę Yin Release",
+      "C": "Zapewniła ciągłą regenerację bez składania pieczęci",
+      "D": "Zamieniła jej czakrę w chakrę mędrca"
+    },
+    "answer": "C"
+  }
+  {
+    "question": "Dlaczego Yamato był tak cenny dla Kabuto i Madary podczas wojny?",
+    "options": {
+      "A": "Posiadał dojutsu Senju",
+      "B": "Zawierał komórki Hashiramy i mógł wzmocnić Białe Zetsu",
+      "C": "Mógł aktywować kamień Uchiha",
+      "D": "Znał lokalizację wszystkich bijū"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Która z postaci była odpowiedzialna za powstrzymanie Edo Tensei podczas Czwartej Wielkiej Wojny Shinobi?",
+    "options": {
+      "A": "Itachi Uchiha",
+      "B": "Sasuke Uchiha",
+      "C": "Naruto Uzumaki",
+      "D": "Tsunade"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Dlaczego Sharingan Kakashiego znika po zakończeniu Czwartej Wielkiej Wojny Shinobi?",
+    "options": {
+      "A": "Stracił go w walce z Kaguya",
+      "B": "Został zwrócony Obito jako dusza",
+      "C": "Był tymczasowo nadany przez duszę Obito",
+      "D": "Został usunięty przez Sasuke"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie nagrody mogą otrzymać ANBU na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z Kage był pierwszą osobą w historii znaną z posiadania Kekkei Tōta?",
+    "options": {
+      "A": "Mū z Iwagakure",
+      "B": "Onoki z Iwagakure",
+      "C": "Hashirama Senju",
+      "D": "Tobirama Senju"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaką funkcję pełniła pieczęć 'Zabójcza Pieczęć Jastrzębia' umieszczona przez Danzo na członkach organizacji ROOT ANBU?",
+    "options": {
+      "A": "Umożliwiała teleportację do bazy",
+      "B": "Chroniła umysł przed genjutsu",
+      "C": "Zabijała użytkownika przy próbie ujawnienia tajemnic",
+      "D": "Zwiększała odporność na techniki sensoryczne"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Dlaczego Rin Nohara zginęła z rąk Kakashiego?",
+    "options": {
+      "A": "Była szpiegiem Kirigakure",
+      "B": "Została porwana przez Obito i zmanipulowana",
+      "C": "Sama rzuciła się na Chidori, by nie zniszczyć Konohy jako Jinchūriki",
+      "D": "Była pod wpływem techniki genjutsu i zaatakowała Kakashiego"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Kto był pierwszym Jinchūriki Dziesięcioogoniastego (Jūbi)?",
+    "options": {
+      "A": "Madara Uchiha",
+      "B": "Obito Uchiha",
+      "C": "Hagoromo Ōtsutsuki",
+      "D": "Kaguya Ōtsutsuki"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z Hokage zginął w walce, używając techniki samopoświęcenia, aby zapieczętować dusze przeciwników?",
+    "options": {
+      "A": "Minato Namikaze",
+      "B": "Hashirama Senju",
+      "C": "Hiruzen Sarutobi",
+      "D": "Tobirama Senju"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Test #1",
+      "B": "Test #2",
+      "C": "Test #3",
+      "D": "Test #4"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jakim sposobem Itachi przeniósł do Naruto technikę Kotoamatsukami z oka Shisuiego?",
+    "options": {
+      "A": "Poprzez kontakt fizyczny z czakrą",
+      "B": "Używając kruka ukrytego w ciele Naruto",
+      "C": "Poprzez senne genjutsu",
+      "D": "W czasie wspólnego treningu z Jiraiyą"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Dlaczego Killer Bee był w stanie zaprzyjaźnić się z Hachibim (Gyūki), w przeciwieństwie do innych Jinchūriki?",
+    "options": {
+      "A": "Miał specjalną pieczęć, która tłumiła emocje bestii",
+      "B": "Nigdy nie stracił kontroli nad sobą",
+      "C": "Traktował Hachibiego jak partnera, nie broń",
+      "D": "Był trenowany przez Raikage do rozmowy z bijū"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z poniższych faktów o Nagato jest zgodny z mangą i databookami?",
+    "options": {
+      "A": "Był potomkiem klanu Uzumaki",
+      "B": "Miał brata bliźniaka, który zginął w wojnie",
+      "C": "Używał technik klanu Hyuga",
+      "D": "Był uczniem Minato Namikaze"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Dlaczego Kabuto nie był w stanie przywrócić Jiraiyi do życia techniką Edo Tensei?",
+    "options": {
+      "A": "Ciało było niedostępne i zbyt głęboko zatopione",
+      "B": "Nie miał próbki DNA",
+      "C": "Został zapieczętowany przez Shinigamiego",
+      "D": "Był chroniony przez pieczęć Minato"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaką techniką Itachi Uchiha zablokował kontrolę Edo Tensei Kabuto nad swoim ciałem?",
+    "options": {
+      "A": "Izanami",
+      "B": "Tsukuyomi",
+      "C": "Kotoamatsukami Shisui",
+      "D": "Amaterasu na pieczęci kontroli"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Co było bezpośrednią przyczyną aktywacji Mangekyō Sharingana przez Shisui Uchiha?",
+    "options": {
+      "A": "Zobaczył śmierć swojego ojca",
+      "B": "Został zdradzony przez Danzo",
+      "C": "Stracił bliskiego przyjaciela podczas wojny",
+      "D": "Nie jest znana – nie została pokazana ani ujawniona w kanonie"
+    },
+    "answer": "D"
+  },
+  {
+    "question": "Dlaczego Obito Uchiha przeżył zmiażdżenie połowy ciała podczas misji w Kamui?",
+    "options": {
+      "A": "Użył techniki Kamui by uciec",
+      "B": "Został uratowany przez Zetsu i Hashiramowe komórki",
+      "C": "Kakashi zastosował leczenie natychmiastowe",
+      "D": "Miał aktywną technikę Izanagi"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Dlaczego Hiruzen Sarutobi wybrał Minato Namikaze na Czwartego Hokage zamiast swojego ucznia Orochimaru?",
+    "options": {
+      "A": "Minato był silniejszy niż Orochimaru",
+      "B": "Orochimaru był podejrzewany o nieetyczne eksperymenty",
+      "C": "Orochimaru odmówił objęcia stanowiska",
+      "D": "Rada Starszych nie wyraziła zgody"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który z klanów poza Uchiha był zdolny do manipulacji ogniem jako elementem natury, zgodnie z opisami w databookach?",
+    "options": {
+      "A": "Sarutobi",
+      "B": "Inuzuka",
+      "C": "Akimichi",
+      "D": "Yamanaka"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "W jakim celu Danzo Shimura przechowywał DNA Hashiramy w swoim ramieniu?",
+    "options": {
+      "A": "By wzmocnić swoją wytrzymałość",
+      "B": "By używać Wood Release",
+      "C": "By utrzymać aktywność wielu Sharinganów",
+      "D": "By ukrywać klątwę Orochimaru"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jaką konkretną technikę medyczną stosowała Tsunade, by utrzymać młody wygląd przez dziesięciolecia?",
+    "options": {
+      "A": "Genjutsu upiększające",
+      "B": "Stałe odświeżanie komórek pieczęcią mitotyczną",
+      "C": "Zapieczętowanie części energii w pieczęci Byakugō",
+      "D": "Przesunięcie percepcji czasu w układzie nerwowym"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z historycznych Hokage stworzył system edukacji akademii ninja w Konohagakure?",
+    "options": {
+      "A": "Hashirama Senju",
+      "B": "Tobirama Senju",
+      "C": "Hiruzen Sarutobi",
+      "D": "Minato Namikaze"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jakie było prawdziwe imię właściciela ciała, które Kabuto wykorzystał do wskrzeszenia Madary Uchiha jako Edo Tensei, zanim poprawił rytuał?",
+    "options": {
+      "A": "Yamato",
+      "B": "Shisui",
+      "C": "Unknown – ciało zostało całkowicie zmodyfikowane",
+      "D": "Hashirama’s clone"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z poniższych faktów na temat klanu Uzumaki jest fałszywy?",
+    "options": {
+      "A": "Posiadali zdolność do tworzenia pieczęci blokujących Kekkei Genkai",
+      "B": "Ich naturalna żywotność umożliwiała przechowywanie bijū",
+      "C": "Zostali zaatakowani przez wszystkie wielkie wioski w obawie przed ich fūinjutsu",
+      "D": "Mito Uzumaki była siostrą Hashiramy Senju"
+    },
+    "answer": "D"
+  },
+  {
+    "question": "Która technika była potrzebna do aktywacji Edo Tensei?",
+    "options": {
+      "A": "DNA zmarłego i ofiara",
+      "B": "Pieczęć żywiołu i maska",
+      "C": "Rinnegan i chakra ofiary",
+      "D": "Kamui i ciało"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Który z poniższych shinobi nigdy nie był oficjalnym członkiem ANBU, ani też nie został pokazany w jakiejkolwiek retrospekcji jako członek tej jednostki?",
+    "options": {
+      "A": "Yamato",
+      "B": "Itachi Uchiha",
+      "C": "Might Gay",
+      "D": "Kakashi Hatake"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z poniższych Jinchūriki jako jedyny został oficjalnie uznany przez swoją wioskę za bohatera, zanim doszło do Czwartej Wielkiej Wojny Shinobi?",
+    "options": {
+      "A": "Yagura",
+      "B": "Roshi",
+      "C": "Killer Bee",
+      "D": "Han"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z poniższych shinobi nie używał techniki Kuchiyose no Jutsu (techniki przyzwania) w żadnej formie w anime ani mandze?",
+    "options": {
+      "A": "Iruka Umino",
+      "B": "Anko Mitarashi",
+      "C": "Jiraiya",
+      "D": "Temari"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Podczas ataku Orochimaru na Konohę (egzamin chūnina), Bariera Czwórki Dźwięku miała za zadanie odciąć Hiruzenowi możliwość wsparcia. Jak nazywała się konkretna technika bariery, której użyli?",
+    "options": {
+      "A": "Shishienjin",
+      "B": "Kekkai Tengai Hōjin",
+      "C": "Shikokumujin",
+      "D": "Gofū Kekkai"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "W serii pojawia się unikalna pieczęć użyta przez klan Uzumaki do zabezpieczenia wejścia do świątyni maski śmierci, gdzie przechowywano maski Shinigamiego. Jak nazywała się ta specjalna technika pieczętująca?",
+    "options": {
+      "A": "Fūin Kekkai: Uzushio no Kōkai",
+      "B": "Uzumaki Kongō Fūin",
+      "C": "Shiki Kekkai: Fūin no Kōshin",
+      "D": "Gogyō Kaiin"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "W archiwach Konohy znajdowały się zwoje zakazanych technik (kinjutsu), w tym jeden, z którego Naruto nauczył się Tajnej Techniki Cienia (Kage Bunshin). Jaką technikę, opisaną w tym samym zwoju, uważa się za najbardziej niebezpieczną i zakazaną przez Hashiramę Senju osobiście?",
+    "options": {
+      "A": "Tajū Kage Bunshin no Jutsu",
+      "B": "Edo Tensei",
+      "C": "Hiraishin no Jutsu",
+      "D": "Shiki Fūjin"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "W oryginalnym kanonie, zanim system drużyn shinobi (np. trójki geninów z jōninem) został oficjalnie przyjęty w Konohagakure, istniał eksperymentalny zespół, który jako pierwszy sprawdzono w tej formule. Kto był jego liderem?",
+    "options": {
+      "A": "Kagami Uchiha",
+      "B": "Tobirama Senju",
+      "C": "Hiruzen Sarutobi",
+      "D": "Torifu Akimichi"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "W mandze oraz oficjalnych materiałach wspomniano o specjalnym stylu walki, z którego korzystał Sakumo Hatake (ojciec Kakashiego), znanym jako „Biały Kieł Konohy”. Jak nazywała się broń, z której słynął Sakumo i która nadawała mu ten przydomek?",
+    "options": {
+      "A": "Shiroi Tōken - Biały Miecz",
+      "B": "Hakuhō - Biały Lotos",
+      "C": "Ōkami no Yaiba - Wilczy Kieł",
+      "D": "Jintō - Miecz Lojalności"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Podczas Pierwszej Wielkiej Wojny Shinobi, klan Uzumaki został niemal całkowicie zniszczony. Wśród krajów, które brały udział w zniszczeniu Uzushiogakure, który kraj jako pierwszy zainicjował atak, obawiając się pieczętujących technik klanu Uzumaki?",
+    "options": {
+      "A": "Kraj Ziemi - Iwagakure",
+      "B": "Kraj Wody - Kirigakure",
+      "C": "Kraj Chmury - Kumogakure",
+      "D": "Kraj Pioruna - Hoshigakure"
+    },
+    "answer": "B"
+  },
+  {
     "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia na naszym serwerze?",
     "options": {
       "A": "Genjutsu",
@@ -550,14 +950,14 @@
     "answer": "C"
   },
   {
-    "question": "Który z testów służy do sprawdzenia walki i balansu PvP na naszym serwerze?",
+    "question": "W mandze i databookach opisano, że technika "Izanami" klanu Uchiha została stworzona w odpowiedzi na nadużywanie Izanagi. Jak nazywała się Uchiha, która jako pierwsza skutecznie użyła Izanami, by zakończyć konflikt w klanie?",
     "options": {
-      "A": "Test #1",
-      "B": "Test #2",
-      "C": "Test #3",
-      "D": "Test #4"
+      "A": "Naori Uchiha",
+      "B": "Yuriko Uchiha",
+      "C": "Shisui Uchiha",
+      "D": "Mikoto Uchiha"
     },
-    "answer": "B"
+    "answer": "A"
   },
   {
     "question": "Jak można zregenerować zdrowie poza walką na naszym serwerze?",
@@ -590,407 +990,7 @@
     "answer": "C"
   },
   {
-    "question": "Jakie nagrody mogą otrzymać ANBU na naszym serwerze?",
-    "options": {
-      "A": "Za niszczenie pułapek",
-      "B": "Za leczenie graczy",
-      "C": "Za eliminowanie morderców (PK)",
-      "D": "Za największy poziom"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Genjutsu",
-      "B": "Resist",
-      "C": "Fuinjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "PvP",
-      "B": "Taski",
-      "C": "Bicie potworów",
-      "D": "Questy"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Utrata doświadczenia",
-      "B": "Permadeath",
-      "C": "Brak strat w expie, ale inne konsekwencje",
-      "D": "Reset postaci"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Taijutsu",
-      "B": "Strength",
-      "C": "Bukijutsu",
-      "D": "Ninjutsu"
-    },
-    "answer": "A"
-  },
-  {
-    "question": "Jaką rolę pełni system reputacji? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Wpływa na liczbę questów dziennie",
-      "B": "Zwiększa szansę na unik",
-      "C": "Wpływa na dostęp do technik i reakcje NPC",
-      "D": "Zwiększa ilość zdobywanego expa"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Test #1",
-      "B": "Test #2",
-      "C": "Test #3",
-      "D": "Test #4"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Jak można zregenerować zdrowie poza walką? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Używając spelli leczniczych",
-      "B": "Spamując chakrą",
-      "C": "Używając bandaży i ognisk",
-      "D": "Poprzez odpoczynek w dojo"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Fuinjutsu",
-      "B": "Genjutsu",
-      "C": "Ninjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Ability Points",
-      "B": "Reputacja",
-      "C": "Cooldown Points",
-      "D": "Statystyki jak Ninjutsu i Genjutsu"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 2) na naszym serwerze?",
-    "options": {
-      "A": "Za niszczenie pułapek",
-      "B": "Za leczenie graczy",
-      "C": "Za eliminowanie morderców (PK)",
-      "D": "Za największy poziom"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Genjutsu",
-      "B": "Resist",
-      "C": "Fuinjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "PvP",
-      "B": "Taski",
-      "C": "Bicie potworów",
-      "D": "Questy"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Utrata doświadczenia",
-      "B": "Permadeath",
-      "C": "Brak strat w expie, ale inne konsekwencje",
-      "D": "Reset postaci"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Taijutsu",
-      "B": "Strength",
-      "C": "Bukijutsu",
-      "D": "Ninjutsu"
-    },
-    "answer": "A"
-  },
-  {
-    "question": "Jaką rolę pełni system reputacji? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Wpływa na liczbę questów dziennie",
-      "B": "Zwiększa szansę na unik",
-      "C": "Wpływa na dostęp do technik i reakcje NPC",
-      "D": "Zwiększa ilość zdobywanego expa"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Test #1",
-      "B": "Test #2",
-      "C": "Test #3",
-      "D": "Test #4"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Jak można zregenerować zdrowie poza walką? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Używając spelli leczniczych",
-      "B": "Spamując chakrą",
-      "C": "Używając bandaży i ognisk",
-      "D": "Poprzez odpoczynek w dojo"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Fuinjutsu",
-      "B": "Genjutsu",
-      "C": "Ninjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Ability Points",
-      "B": "Reputacja",
-      "C": "Cooldown Points",
-      "D": "Statystyki jak Ninjutsu i Genjutsu"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 3) na naszym serwerze?",
-    "options": {
-      "A": "Za niszczenie pułapek",
-      "B": "Za leczenie graczy",
-      "C": "Za eliminowanie morderców (PK)",
-      "D": "Za największy poziom"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Genjutsu",
-      "B": "Resist",
-      "C": "Fuinjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "PvP",
-      "B": "Taski",
-      "C": "Bicie potworów",
-      "D": "Questy"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Utrata doświadczenia",
-      "B": "Permadeath",
-      "C": "Brak strat w expie, ale inne konsekwencje",
-      "D": "Reset postaci"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Taijutsu",
-      "B": "Strength",
-      "C": "Bukijutsu",
-      "D": "Ninjutsu"
-    },
-    "answer": "A"
-  },
-  {
-    "question": "Jaką rolę pełni system reputacji? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Wpływa na liczbę questów dziennie",
-      "B": "Zwiększa szansę na unik",
-      "C": "Wpływa na dostęp do technik i reakcje NPC",
-      "D": "Zwiększa ilość zdobywanego expa"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Test #1",
-      "B": "Test #2",
-      "C": "Test #3",
-      "D": "Test #4"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Jak można zregenerować zdrowie poza walką? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Używając spelli leczniczych",
-      "B": "Spamując chakrą",
-      "C": "Używając bandaży i ognisk",
-      "D": "Poprzez odpoczynek w dojo"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Fuinjutsu",
-      "B": "Genjutsu",
-      "C": "Ninjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Ability Points",
-      "B": "Reputacja",
-      "C": "Cooldown Points",
-      "D": "Statystyki jak Ninjutsu i Genjutsu"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 4) na naszym serwerze?",
-    "options": {
-      "A": "Za niszczenie pułapek",
-      "B": "Za leczenie graczy",
-      "C": "Za eliminowanie morderców (PK)",
-      "D": "Za największy poziom"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Genjutsu",
-      "B": "Resist",
-      "C": "Fuinjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "PvP",
-      "B": "Taski",
-      "C": "Bicie potworów",
-      "D": "Questy"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Utrata doświadczenia",
-      "B": "Permadeath",
-      "C": "Brak strat w expie, ale inne konsekwencje",
-      "D": "Reset postaci"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Taijutsu",
-      "B": "Strength",
-      "C": "Bukijutsu",
-      "D": "Ninjutsu"
-    },
-    "answer": "A"
-  },
-  {
-    "question": "Jaką rolę pełni system reputacji? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Wpływa na liczbę questów dziennie",
-      "B": "Zwiększa szansę na unik",
-      "C": "Wpływa na dostęp do technik i reakcje NPC",
-      "D": "Zwiększa ilość zdobywanego expa"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Test #1",
-      "B": "Test #2",
-      "C": "Test #3",
-      "D": "Test #4"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Jak można zregenerować zdrowie poza walką? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Używając spelli leczniczych",
-      "B": "Spamując chakrą",
-      "C": "Używając bandaży i ognisk",
-      "D": "Poprzez odpoczynek w dojo"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Fuinjutsu",
-      "B": "Genjutsu",
-      "C": "Ninjutsu",
-      "D": "Taijutsu"
-    },
-    "answer": "B"
-  },
-  {
-    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 5) na naszym serwerze?",
-    "options": {
-      "A": "Ability Points",
-      "B": "Reputacja",
-      "C": "Cooldown Points",
-      "D": "Statystyki jak Ninjutsu i Genjutsu"
-    },
-    "answer": "C"
-  },
-  {
-    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 5) na naszym serwerze?",
+    "question": "Za jakie czynności ANBU mogą otrzymać nagrody na naszym serwerze?",
     "options": {
       "A": "Za niszczenie pułapek",
       "B": "Za leczenie graczy",
