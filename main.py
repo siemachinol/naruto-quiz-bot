@@ -150,9 +150,9 @@ async def run_quiz(channel):
     quiz_view = QuizView(current_question["answer"])
     current_message = await channel.send(content, view=quiz_view)
 
-    print("Quiz wystartował, czekam 15 minut...")
+    print("[QUIZ] Quiz wystartował, czekam 15 minut...")
     await asyncio.sleep(900)  # 15 minut
-    print("Koniec quizu, podsumowanie...")
+    print("[QUIZ] Koniec quizu, podsumowanie...")
 
     quiz_view.disable_all_buttons()
     await current_message.edit(view=quiz_view)
@@ -292,6 +292,7 @@ async def daily_quiz_task():
     alert_times = [(datetime.datetime.combine(now.date(), qt) - datetime.timedelta(minutes=10)).time() for qt in quiz_times]
 
     if quiz_channel is None:
+        print("[WARNING] quiz_channel == None")
         return
 
     if now_time in alert_times:
@@ -299,11 +300,13 @@ async def daily_quiz_task():
 
     for qt in quiz_times:
         if now_time == qt and qt not in fired_times_today:
+            print(f"[QUIZ] Wywołuję quiz o godzinie {qt}")
             await run_quiz(quiz_channel)
             fired_times_today.add(qt)
 
     if now.hour == 0 and fired_times_today:
         fired_times_today.clear()
+        print("[INFO] Wyczyściłem fired_times_today na nowy dzień")
 
 # === KEEP-ALIVE SERVER ===
 class PingHandler(BaseHTTPRequestHandler):
@@ -331,11 +334,22 @@ if __name__ == "__main__":
     @bot.event
     async def on_ready():
         global quiz_channel
-        print(f"Zalogowano jako {bot.user}")
-        bot.add_view(QuizView("A"))
+        print(f"[INFO] Bot online jako: {bot.user}")
         guild = bot.get_guild(GUILD_ID)
+        if guild:
+            print(f"[INFO] Połączono z serwerem: {guild.name}")
+        else:
+            print(f"[ERROR] Nie znaleziono serwera o ID: {GUILD_ID}")
+
         quiz_channel = discord.utils.get(guild.text_channels, name="quiz")
+        if quiz_channel:
+            print(f"[INFO] Kanał #quiz znaleziony: {quiz_channel.id}")
+        else:
+            print(f"[ERROR] Nie znaleziono kanału #quiz")
+
+        bot.add_view(QuizView("A"))
         if not daily_quiz_task.is_running():
+            print("[INFO] Uruchamiam automatyczne quizy...")
             daily_quiz_task.start()
 
     bot.run(TOKEN)
