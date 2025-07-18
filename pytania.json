@@ -498,5 +498,705 @@
       "D": "Orochimaru"
     },
     "answer": "A"
+  },
+  {
+    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia na naszym serwerze?",
+    "options": {
+      "A": "Genjutsu",
+      "B": "Resist",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Bicie potworów",
+      "D": "Questy"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie są konsekwencje śmierci na serwerze na naszym serwerze?",
+    "options": {
+      "A": "Utrata doświadczenia",
+      "B": "Permadeath",
+      "C": "Brak strat w expie, ale inne konsekwencje",
+      "D": "Reset postaci"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki na naszym serwerze?",
+    "options": {
+      "A": "Taijutsu",
+      "B": "Strength",
+      "C": "Bukijutsu",
+      "D": "Ninjutsu"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaką rolę pełni system reputacji na naszym serwerze?",
+    "options": {
+      "A": "Wpływa na liczbę questów dziennie",
+      "B": "Zwiększa szansę na unik",
+      "C": "Wpływa na dostęp do technik i reakcje NPC",
+      "D": "Zwiększa ilość zdobywanego expa"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z testów służy do sprawdzenia walki i balansu PvP na naszym serwerze?",
+    "options": {
+      "A": "Test #1",
+      "B": "Test #2",
+      "C": "Test #3",
+      "D": "Test #4"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jak można zregenerować zdrowie poza walką na naszym serwerze?",
+    "options": {
+      "A": "Używając spelli leczniczych",
+      "B": "Spamując chakrą",
+      "C": "Używając bandaży i ognisk",
+      "D": "Poprzez odpoczynek w dojo"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który z poniższych systemów NIE jest częścią progresji postaci na naszym serwerze?",
+    "options": {
+      "A": "Ability Points",
+      "B": "Reputacja",
+      "C": "Cooldown Points",
+      "D": "Statystyki jak Ninjutsu i Genjutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie nagrody mogą otrzymać ANBU na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Genjutsu",
+      "B": "Resist",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Bicie potworów",
+      "D": "Questy"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Utrata doświadczenia",
+      "B": "Permadeath",
+      "C": "Brak strat w expie, ale inne konsekwencje",
+      "D": "Reset postaci"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Taijutsu",
+      "B": "Strength",
+      "C": "Bukijutsu",
+      "D": "Ninjutsu"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaką rolę pełni system reputacji? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Wpływa na liczbę questów dziennie",
+      "B": "Zwiększa szansę na unik",
+      "C": "Wpływa na dostęp do technik i reakcje NPC",
+      "D": "Zwiększa ilość zdobywanego expa"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Test #1",
+      "B": "Test #2",
+      "C": "Test #3",
+      "D": "Test #4"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jak można zregenerować zdrowie poza walką? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Używając spelli leczniczych",
+      "B": "Spamując chakrą",
+      "C": "Używając bandaży i ognisk",
+      "D": "Poprzez odpoczynek w dojo"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Ability Points",
+      "B": "Reputacja",
+      "C": "Cooldown Points",
+      "D": "Statystyki jak Ninjutsu i Genjutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 2) na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Genjutsu",
+      "B": "Resist",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Bicie potworów",
+      "D": "Questy"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Utrata doświadczenia",
+      "B": "Permadeath",
+      "C": "Brak strat w expie, ale inne konsekwencje",
+      "D": "Reset postaci"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Taijutsu",
+      "B": "Strength",
+      "C": "Bukijutsu",
+      "D": "Ninjutsu"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaką rolę pełni system reputacji? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Wpływa na liczbę questów dziennie",
+      "B": "Zwiększa szansę na unik",
+      "C": "Wpływa na dostęp do technik i reakcje NPC",
+      "D": "Zwiększa ilość zdobywanego expa"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Test #1",
+      "B": "Test #2",
+      "C": "Test #3",
+      "D": "Test #4"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jak można zregenerować zdrowie poza walką? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Używając spelli leczniczych",
+      "B": "Spamując chakrą",
+      "C": "Używając bandaży i ognisk",
+      "D": "Poprzez odpoczynek w dojo"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Ability Points",
+      "B": "Reputacja",
+      "C": "Cooldown Points",
+      "D": "Statystyki jak Ninjutsu i Genjutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 3) na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Genjutsu",
+      "B": "Resist",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Bicie potworów",
+      "D": "Questy"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Utrata doświadczenia",
+      "B": "Permadeath",
+      "C": "Brak strat w expie, ale inne konsekwencje",
+      "D": "Reset postaci"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Taijutsu",
+      "B": "Strength",
+      "C": "Bukijutsu",
+      "D": "Ninjutsu"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaką rolę pełni system reputacji? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Wpływa na liczbę questów dziennie",
+      "B": "Zwiększa szansę na unik",
+      "C": "Wpływa na dostęp do technik i reakcje NPC",
+      "D": "Zwiększa ilość zdobywanego expa"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Test #1",
+      "B": "Test #2",
+      "C": "Test #3",
+      "D": "Test #4"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jak można zregenerować zdrowie poza walką? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Używając spelli leczniczych",
+      "B": "Spamując chakrą",
+      "C": "Używając bandaży i ognisk",
+      "D": "Poprzez odpoczynek w dojo"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Ability Points",
+      "B": "Reputacja",
+      "C": "Cooldown Points",
+      "D": "Statystyki jak Ninjutsu i Genjutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 4) na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Genjutsu",
+      "B": "Resist",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Bicie potworów",
+      "D": "Questy"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie są konsekwencje śmierci na serwerze? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Utrata doświadczenia",
+      "B": "Permadeath",
+      "C": "Brak strat w expie, ale inne konsekwencje",
+      "D": "Reset postaci"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Taijutsu",
+      "B": "Strength",
+      "C": "Bukijutsu",
+      "D": "Ninjutsu"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaką rolę pełni system reputacji? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Wpływa na liczbę questów dziennie",
+      "B": "Zwiększa szansę na unik",
+      "C": "Wpływa na dostęp do technik i reakcje NPC",
+      "D": "Zwiększa ilość zdobywanego expa"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Test #1",
+      "B": "Test #2",
+      "C": "Test #3",
+      "D": "Test #4"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jak można zregenerować zdrowie poza walką? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Używając spelli leczniczych",
+      "B": "Spamując chakrą",
+      "C": "Używając bandaży i ognisk",
+      "D": "Poprzez odpoczynek w dojo"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który z poniższych systemów NIE jest częścią progresji postaci? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Ability Points",
+      "B": "Reputacja",
+      "C": "Cooldown Points",
+      "D": "Statystyki jak Ninjutsu i Genjutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie nagrody mogą otrzymać ANBU? (wariant 5) na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który klan na naszym serwerze ma pasywną zdolność 'Sharingan – Przenikliwe Oczy'?",
+    "options": {
+      "A": "Hyuga",
+      "B": "Uchiha",
+      "C": "Yamanaka",
+      "D": "Aburame"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jaki debuff balansujący posiada klan Uzumaki na naszym serwerze?",
+    "options": {
+      "A": "Opóźniona Kontrola Natury",
+      "B": "Marnotrawstwo Chakry",
+      "C": "Pasożytnicza Izolacja",
+      "D": "Delikatna Struktura Ciała"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który klan na naszym serwerze regeneruje się automatycznie, jeśli wróg miałby zadać śmiertelny cios?",
+    "options": {
+      "A": "Senju",
+      "B": "Uchiha",
+      "C": "Uzumaki",
+      "D": "Inuzuka"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jaki bonus pasywny uzyskuje klan Hyuga dzięki aktywnemu Byakuganowi na naszym serwerze?",
+    "options": {
+      "A": "+15% do prędkości",
+      "B": "+10% do szansy na unik",
+      "C": "+5% obrażeń i 25% szansy na blok regeneracji chakry",
+      "D": "+1 kratka zasięgu Genjutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który klan otrzymuje +1 Ability Point co poziom na naszym serwerze?",
+    "options": {
+      "A": "Uzumaki",
+      "B": "Yamanaka",
+      "C": "No Clan",
+      "D": "Senju"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jaki debuff posiadają członkowie klanu Akimichi na naszym serwerze?",
+    "options": {
+      "A": "Psychic Recoil",
+      "B": "Brak Siły Bez Planu",
+      "C": "Przeklęty Metabolizm",
+      "D": "Dzika Natura"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który klan ma styl walki Jūken skalujący się z Intelligence + Taijutsu na naszym serwerze?",
+    "options": {
+      "A": "Uchiha",
+      "B": "Hyuga",
+      "C": "Senju",
+      "D": "Inuzuka"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jaka pasywna zdolność klanu Yamanaka pozwala widzieć statystyki innych graczy na naszym serwerze?",
+    "options": {
+      "A": "Mental Sync",
+      "B": "Cień Kontroli",
+      "C": "Mental Link",
+      "D": "Adaptacja"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który klan na naszym serwerze traci bonusy pasywne, jeśli ich pies zostanie pokonany?",
+    "options": {
+      "A": "Inuzuka",
+      "B": "Akimichi",
+      "C": "Uchiha",
+      "D": "Aburame"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaki efekt powoduje debuff 'Psychic Recoil' u klanu Yamanaka na naszym serwerze?",
+    "options": {
+      "A": "-10% prędkości",
+      "B": "-20% regeneracji chakry przez 5 sek. po nieudanym Genjutsu",
+      "C": "+15% koszt chakry",
+      "D": "-10% do HP"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jaki efekt uboczny posiada debuff 'Brak Siły Bez Planu' w klanie Nara na naszym serwerze?",
+    "options": {
+      "A": "Techniki kosztują więcej chakry",
+      "B": "Zwiększona podatność na kontrolę",
+      "C": "Ataki fizyczne zadają -20% mniej obrażeń",
+      "D": "Brak dostępu do technik Genjutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który klan zaczyna z dwiema naturami chakry (ziemia i woda) na naszym serwerze?",
+    "options": {
+      "A": "Senju",
+      "B": "Uzumaki",
+      "C": "Yamanaka",
+      "D": "Nara"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Który klan ma najniższy przyrost chakry na poziom na naszym serwerze?",
+    "options": {
+      "A": "Akimichi",
+      "B": "Inuzuka",
+      "C": "Hyuga",
+      "D": "Uchiha"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Jaka jest rola psa towarzysza w mechanice klanu Inuzuka na naszym serwerze?",
+    "options": {
+      "A": "Zwiększa obrażenia Genjutsu",
+      "B": "Może przyjmować debuffy właściciela",
+      "C": "Ostrzega przed pułapkami i zwiększa statystyki gracza",
+      "D": "Zwiększa regenerację HP gracza"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Jakie korzyści daje zdolność 'Mental Sync' u klanu Yamanaka na naszym serwerze?",
+    "options": {
+      "A": "Zwiększa obrażenia Genjutsu o 15%",
+      "B": "Obniża cooldowny technik twoich i najbliższego sojusznika",
+      "C": "Zwiększa zasięg Ninjutsu",
+      "D": "Redukuje zużycie chakry o 20%"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jak działa efekt 'Ciało Roju' u klanu Aburame na naszym serwerze?",
+    "options": {
+      "A": "Zmniejsza obrażenia od broni dystansowych",
+      "B": "Chroni przed iluzjami na 10 sekund",
+      "C": "Zwiększa odporność na techniki chakryczne, gdy HP > 70%",
+      "D": "Przyspiesza ataki autoataków"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który klan ma styl walki, w którym melee ataki skalują się z Intelligence i Taijutsu na naszym serwerze?",
+    "options": {
+      "A": "Yamanaka",
+      "B": "Hyuga",
+      "C": "Nara",
+      "D": "Aburame"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Który klan zużywa sytość 2x szybciej niż inne postacie na naszym serwerze?",
+    "options": {
+      "A": "Uchiha",
+      "B": "Akimichi",
+      "C": "Senju",
+      "D": "Aburame"
+    },
+    "answer": "B"
+  },
+  {
+    "question": "Jaka statystyka u klanu Uchiha oceniana jest jako 'bardzo słaba' na naszym serwerze?",
+    "options": {
+      "A": "Bukijutsu",
+      "B": "Strength",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "question": "Który klan traci wszystkie swoje pasywne zdolności po śmierci kompana na naszym serwerze?",
+    "options": {
+      "A": "Yamanaka",
+      "B": "Inuzuka",
+      "C": "Senju",
+      "D": "Uzumaki"
+    },
+    "answer": "B"
   }
 ]
