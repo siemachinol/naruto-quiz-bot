@@ -347,7 +347,7 @@ if __name__ == "__main__":
         else:
             print(f"[ERROR] Nie znaleziono serwera o ID: {GUILD_ID}")
 
-        quiz_channel = discord.utils.get(guild.text_channels, name="quiz")
+        quiz_channel = discord.utils.get(guild.text_channels, name="quiz-naruto")
         if quiz_channel:
             print(f"[INFO] Kanał #quiz znaleziony: {quiz_channel.id}")
         else:
