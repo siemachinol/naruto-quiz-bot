@@ -83,11 +83,11 @@ class QuizView(ui.View):
             message_user_answers[message_id] = {}
 
         if user_id in message_user_answers[message_id]:
-            await interaction.response.send_message("✅ Już odpowiedziałeś na to pytanie!", ephemeral=True)
+            await interaction.response.send_message("\u2705 Już odpowiedziałeś na to pytanie!", ephemeral=True)
             return
 
         message_user_answers[message_id][user_id] = selected_letter
-        await interaction.response.send_message(f"📝 Zapisano Twoją odpowiedź: **{selected_letter}**", ephemeral=True)
+        await interaction.response.send_message(f"\ud83d\udcdd Zapisano Twoją odpowiedź: **{selected_letter}**", ephemeral=True)
 
 # === FUNKCJE QUIZOWE ===
 def load_questions():
@@ -138,7 +138,6 @@ async def run_quiz(channel):
     message_user_answers = {}
 
     content = (
-        "@everyone\n\n"
         "\U0001F9E0 **Pytanie quizowe:**\n"
         f"{current_question['question']}\n\n"
         f"\U0001F1E6 {current_question['options']['A']}\n"
@@ -196,7 +195,7 @@ async def reveal_answer(channel):
     await channel.send(f"Prawidłowa odpowiedź to: **{correct_letter}**")
 
     if awarded_users:
-        await channel.send(f"✅ Punkty otrzymali: {', '.join(awarded_users)}")
+        await channel.send(f"\u2705 Punkty otrzymali: {', '.join(awarded_users)}")
 
 # === KOMENDY ===
 @bot.command()
@@ -286,22 +285,28 @@ async def rankingmonthly(ctx):
 @tasks.loop(minutes=1)
 async def daily_quiz_task():
     global fired_times_today, quiz_channel
-    now = datetime.datetime.now()
+    now = datetime.datetime.utcnow()
     now_time = now.time().replace(second=0, microsecond=0)
 
-    quiz_times = [datetime.time(12, 5), datetime.time(15, 35), datetime.time(20, 39)]
+    quiz_times = [datetime.time(10, 5), datetime.time(13, 35), datetime.time(18, 39)]
     alert_times = [(datetime.datetime.combine(now.date(), qt) - datetime.timedelta(minutes=10)).time() for qt in quiz_times]
+
+    print(f"[DEBUG] Teraz jest: {now_time.strftime('%H:%M')} UTC")
+    print(f"[DEBUG] Zaplanowane quizy: {[qt.strftime('%H:%M') for qt in quiz_times]}")
+    print(f"[DEBUG] Zaplanowane alerty: {[a.strftime('%H:%M') for a in alert_times]}")
+    print(f"[DEBUG] Już dziś uruchomione: {[qt.strftime('%H:%M') for qt in fired_times_today]}")
 
     if quiz_channel is None:
         print("[WARNING] quiz_channel == None")
         return
 
     if now_time in alert_times:
+        print("[DEBUG] Wysyłam alert: za 10 minut quiz")
         await quiz_channel.send("\U0001F9E0 Za 10 minut pojawi się pytanie quizowe! Bądźcie w gotowości!")
 
     for qt in quiz_times:
         if now_time == qt and qt not in fired_times_today:
-            print(f"[QUIZ] Wywołuję quiz o godzinie {qt}")
+            print(f"[QUIZ] Wywołuję quiz o godzinie {qt.strftime('%H:%M')}")
             await run_quiz(quiz_channel)
             fired_times_today.add(qt)
 
@@ -349,6 +354,7 @@ if __name__ == "__main__":
             print(f"[ERROR] Nie znaleziono kanału #quiz")
 
         bot.add_view(QuizView("A"))
+
         if not daily_quiz_task.is_running():
             print("[INFO] Uruchamiam automatyczne quizy...")
             daily_quiz_task.start()
