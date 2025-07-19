@@ -137,8 +137,11 @@ async def run_quiz(channel):
     answered_users = {}
     message_user_answers = {}
 
+    quizowicz_role = discord.utils.get(channel.guild.roles, name="Quizowicz")
+    mention = quizowicz_role.mention if quizowicz_role else "@Quizowicz"
+
     content = (
-        "@Quizowicz\n"
+        f"{mention}\n"
         "\U0001F9E0 **Pytanie quizowe:**\n"
         f"{current_question['question']}\n\n"
         f"\U0001F1E6 {current_question['options']['A']}\n"
