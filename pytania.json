@@ -650,7 +650,7 @@
     "answer": "C"
   },
   {
-    "question": "Który z testów służy do sprawdzenia walki i balansu PvP? (wariant 2) na naszym serwerze?",
+    "question": "Który z \(beta)\testów będzie służy do sprawdzenia walki i balansu PvP na naszym serwerze?",
     "options": {
       "A": "Test #1",
       "B": "Test #2",
@@ -717,7 +717,7 @@
       "C": "Stracił bliskiego przyjaciela podczas wojny",
       "D": "Nie jest znana – nie została pokazana ani ujawniona w kanonie"
     },
-    "answer": "D"
+    "answer": "C"
   },
   {
     "question": "Dlaczego Obito Uchiha przeżył zmiażdżenie połowy ciała podczas misji w Kamui?",
