@@ -910,7 +910,7 @@
     "answer": "B"
   },
   {
-    "question": "Co NIE jest głównym źródłem doświadczenia na serwerze na naszym serwerze?",
+    "question": "Co NIE jest głównym źródłem doświadczenia na naszym serwerze?",
     "options": {
       "A": "PvP",
       "B": "Taski",
@@ -920,7 +920,7 @@
     "answer": "C"
   },
   {
-    "question": "Jakie są konsekwencje śmierci na serwerze na naszym serwerze?",
+    "question": "Jakie są konsekwencje śmierci na naszym serwerze?",
     "options": {
       "A": "Utrata doświadczenia",
       "B": "Permadeath",
