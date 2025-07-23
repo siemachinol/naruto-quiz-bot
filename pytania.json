@@ -102,10 +102,10 @@
   {
     "question": "Jaką techniką Shikamaru ostatecznie unieruchomił Hidana w lesie?",
     "options": {
-      "A": "Kagemane no Jutsu",
+      "A": "Kagemanedem no Jutsu",
       "B": "Kagemane Shuriken",
       "C": "Kage Nui",
-      "D": "Pułapka i detonacja"
+      "D": "Kagemane no Jutsu, pułapka i detonacja"
     },
     "answer": "D"
   },
@@ -120,7 +120,7 @@
     "answer": "D"
   },
   {
-    "question": "Jakie było prawdziwe imię Tobi przed ujawnieniem swojej tożsamości?",
+    "question": "Jakie było PRAWDZIWE imię Tobiego przed ujawnieniem swojej tożsamości?",
     "options": {
       "A": "Madara",
       "B": "Obito",
@@ -130,7 +130,7 @@
     "answer": "B"
   },
   {
-    "question": "Kto był mistrzem Hiruzen Sarutobi?",
+    "question": "Kto był mistrzem Hiruzena Sarutobi?",
     "options": {
       "A": "Tobirama Senju",
       "B": "Hashirama Senju",
@@ -160,7 +160,7 @@
     "answer": "A"
   },
   {
-    "question": "Jaką rangę miał Kakashi w czasie egzaminu Chuunin Naruto?",
+    "question": "Jaką rangę miał Kakashi w czasie egzaminu na Chunina Naruto?",
     "options": {
       "A": "Jounin",
       "B": "Tokubetsu Jounin",
@@ -180,14 +180,14 @@
     "answer": "B"
   },
   {
-    "question": "Kto był pierwszym właścicielem Rinnegan po Rikudou Sennin?",
+    "question": "Kto był pierwszym właścicielem Rinnegana po Rikudou Sennin?",
     "options": {
       "A": "Nagato",
       "B": "Madara",
       "C": "Obito",
       "D": "Indra"
     },
-    "answer": "A"
+    "answer": "B"
   },
   {
     "question": "Jaką specjalizację miał klan Aburame?",
@@ -240,7 +240,7 @@
     "answer": "B"
   },
   {
-    "question": "Jakie bijuu miała Yugito Nii?",
+    "question": "Jakie bijuu miała w sobie Yugito?",
     "options": {
       "A": "Nibi (Dwa Ogony)",
       "B": "Sanbi (Trzy Ogony)",
@@ -260,7 +260,7 @@
     "answer": "B"
   },
   {
-    "question": "Jaką zdolność miał Mangekyou Sharingan Shisui?",
+    "question": "Jaką unikalną zdolność miał Mangekyou Sharingan Shisuiego?",
     "options": {
       "A": "Amaterasu",
       "B": "Tsukuyomi",
@@ -950,7 +950,7 @@
     "answer": "C"
   },
   {
-    "question": "W mandze i databookach opisano, że technika \"Izanami\" klanu Uchiha została stworzona w odpowiedzi na nadużywanie Izanagi. Jak nazywała się Uchiha, która jako pierwsza skutecznie użyła Izanami, by zakończyć konflikt w klanie?",
+    "question": "W mandze i databookach opisano, że technika Izanami klanu Uchiha została stworzona w odpowiedzi na nadużywanie Izanagi. Jak nazywała się Uchiha, która jako pierwsza skutecznie użyła Izanami, by zakończyć konflikt w klanie?",
     "options": {
       "A": "Naori Uchiha",
       "B": "Yuriko Uchiha",
@@ -1080,7 +1080,7 @@
     "answer": "C"
   },
   {
-    "question": "Który klan na naszym serwerze traci bonusy pasywne, jeśli ich pies zostanie pokonany?",
+    "question": "Który klan na naszym serwerze traci bonusy pasywne, jeśli ich kompan zostanie pokonany?",
     "options": {
       "A": "Inuzuka",
       "B": "Akimichi",
