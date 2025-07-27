@@ -128,14 +128,28 @@ def save_ranking(data):
 async def run_quiz(channel):
     global current_question, current_message, answered_users, message_user_answers
 
+    # Pobierz użyte ID pytań z Supabase
+    used_response = supabase.table("used_questions").select("question_id").execute()
+    used_ids = {item["question_id"] for item in used_response.data}
+
+    # Załaduj wszystkie pytania
     questions = load_questions()
-    if not questions:
-        await channel.send("Brak dostępnych pytań w bazie danych.")
+
+    # Odfiltruj użyte pytania
+    available_questions = [q for q in questions if q["id"] not in used_ids]
+
+    if not available_questions:
+        await channel.send("Brak nowych pytań do wyświetlenia. Wszystkie zostały już użyte.")
         return
 
-    current_question = random.choice(questions)
+    current_question = random.choice(available_questions)
     answered_users = {}
     message_user_answers = {}
+
+    # Zapisz użyte pytanie do Supabase
+    supabase.table("used_questions").insert({
+        "question_id": current_question["id"]
+    }).execute()
 
     quizowicz_role = discord.utils.get(channel.guild.roles, name="Quizowicz")
     mention = quizowicz_role.mention if quizowicz_role else "@Quizowicz"
