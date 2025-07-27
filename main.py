@@ -59,6 +59,17 @@ def add_used_question_id(question_id):
     except Exception as e:
         print(f"[ERROR] Nie udało się dodać ID {question_id} do used_questions: {e}")
 
+def clear_used_questions_if_needed():
+    questions = load_questions()
+    used_ids = get_used_question_ids()
+    if len(used_ids) >= len(questions):
+        print("[INFO] Wszystkie pytania zostały wykorzystane – czyszczę tabelę used_questions...")
+        try:
+            delete_response = supabase.table("used_questions").delete().neq("id", 0).execute()
+            print("[INFO] Tabela used_questions została wyczyszczona ✅")
+        except Exception as e:
+            print(f"[ERROR] Wyjątek podczas czyszczenia tabeli: {e}")
+
 # === KOMPONENT PRZYCISKÓW ===
 from discord import ui, ButtonStyle, Interaction
 
@@ -145,6 +156,8 @@ def save_ranking(data):
 
 async def run_quiz(channel):
     global current_question, current_message, answered_users, message_user_answers
+
+    clear_used_questions_if_needed()
 
     questions = load_questions()
     used_ids = get_used_question_ids()
