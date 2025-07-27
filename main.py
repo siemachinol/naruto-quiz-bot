@@ -41,6 +41,24 @@ message_user_answers = {}
 quiz_closed_messages = set()
 quiz_channel = None
 
+# === FUNKCJE SUPABASE: USED_QUESTIONS ===
+def get_used_question_ids():
+    try:
+        response = supabase.table("used_questions").select("question_id").execute()
+        used_ids = [item["question_id"] for item in response.data]
+        print(f"[DB] Pobrano {len(used_ids)} użytych pytań z Supabase")
+        return used_ids
+    except Exception as e:
+        print(f"[ERROR] Nie udało się pobrać użytych pytań: {e}")
+        return []
+
+def add_used_question_id(question_id):
+    try:
+        supabase.table("used_questions").insert({"question_id": question_id}).execute()
+        print(f"[DB] Dodano pytanie ID {question_id} do used_questions")
+    except Exception as e:
+        print(f"[ERROR] Nie udało się dodać ID {question_id} do used_questions: {e}")
+
 # === KOMPONENT PRZYCISKÓW ===
 from discord import ui, ButtonStyle, Interaction
 
@@ -128,28 +146,21 @@ def save_ranking(data):
 async def run_quiz(channel):
     global current_question, current_message, answered_users, message_user_answers
 
-    # Pobierz użyte ID pytań z Supabase
-    used_response = supabase.table("used_questions").select("question_id").execute()
-    used_ids = {item["question_id"] for item in used_response.data}
-
-    # Załaduj wszystkie pytania
     questions = load_questions()
-
-    # Odfiltruj użyte pytania
+    used_ids = get_used_question_ids()
     available_questions = [q for q in questions if q["id"] not in used_ids]
 
     if not available_questions:
         await channel.send("Brak nowych pytań do wyświetlenia. Wszystkie zostały już użyte.")
+        print("[INFO] Brak dostępnych pytań – wszystkie zostały wykorzystane.")
         return
 
     current_question = random.choice(available_questions)
+    add_used_question_id(current_question["id"])
+    print(f"[QUIZ] Wybrano pytanie ID: {current_question['id']}")
+
     answered_users = {}
     message_user_answers = {}
-
-    # Zapisz użyte pytanie do Supabase
-    supabase.table("used_questions").insert({
-        "question_id": current_question["id"]
-    }).execute()
 
     quizowicz_role = discord.utils.get(channel.guild.roles, name="Quizowicz")
     mention = quizowicz_role.mention if quizowicz_role else "@Quizowicz"
@@ -169,7 +180,7 @@ async def run_quiz(channel):
     current_message = await channel.send(content, view=quiz_view)
 
     print("[QUIZ] Quiz wystartował, czekam 15 minut...")
-    await asyncio.sleep(900)  # 15 minut
+    await asyncio.sleep(900)
     print("[QUIZ] Koniec quizu, podsumowanie...")
 
     quiz_view.disable_all_buttons()
