@@ -366,9 +366,9 @@
     "question": "Która postać miała bezpośredni kontakt z Rikudou Senninem według historii w anime?",
     "options": {
       "A": "Naruto",
-      "B": "Hagoromo",
-      "C": "Hamura",
-      "D": "Asura"
+      "B": "Sakura",
+      "C": "Itachi Uchiha",
+      "D": "Kakashi Hatake"
     },
     "answer": "A",
     "id": 34
@@ -774,7 +774,7 @@
     "options": {
       "A": "Izanami",
       "B": "Tsukuyomi",
-      "C": "Kotoamatsukami Shisui",
+      "C": "Kotoamatsukami Shisuiego",
       "D": "Amaterasu na pieczęci kontroli"
     },
     "answer": "C",
