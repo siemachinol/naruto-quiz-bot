@@ -409,12 +409,12 @@
   {
     "question": "Kto jako pierwszy zrezygnował z walki z Naruto podczas Wielkiej Wojny Ninja?",
     "options": {
-      "A": "Nagato",
+      "A": "Madara",
       "B": "Obito",
       "C": "Zetsu",
       "D": "Itachi"
     },
-    "answer": "B",
+    "answer": "D",
     "id": 38
   },
   {
@@ -550,14 +550,14 @@
     "id": 50
   },
   {
-    "question": "Który z użytkowników Rinneganu nie miał go od urodzenia, lecz uzyskał go sztucznie?",
+    "question": "Który z użytkowników Rinnegana nie miał go od urodzenia, lecz uzyskał go sztucznie?",
     "options": {
       "A": "Hagoromo",
-      "B": "Madara",
+      "B": "Momoshiki",
       "C": "Nagato",
       "D": "Urashiki"
     },
-    "answer": "C",
+    "answer": "B",
     "id": 51
   },
   {
@@ -1958,7 +1958,7 @@
     "id": 178
   },
   {
-    "question": "Która technika pozwala Orochimarowi przenieść duszę do nowego ciała?",
+    "question": "Która technika pozwala Orochimaru przenieść duszę do nowego ciała?",
     "options": {
       "A": "Fushi Tensei",
       "B": "Souma no Kou",
