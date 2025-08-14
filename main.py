@@ -17,6 +17,12 @@ GUILD_ID = int(os.getenv("GUILD_ID"))
 SUPPORTER_ROLE_ID = 1377326388415299777
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+# 🔌 KILL-SWITCH — ustaw w Render ENV: BOT_DISABLED=true, żeby uśpić bota
+if os.environ.get("BOT_DISABLED", "").lower() == "true":
+    print("Bot is disabled temporarily.")
+    raise SystemExit(0)
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # === INTENCJE DISCORDA ===
