@@ -357,9 +357,9 @@
       "A": "Mokuton: Mokuryuu",
       "B": "Mokuton: Kajukai Kōrin",
       "C": "Mokuton: Hotei no Jutsu",
-      "D": "Mokuton: Susanoo Golem"
+      "D": "Mokuton: Mokujin no Jutsu"
     },
-    "answer": "A",
+    "answer": "D",
     "id": 33
   },
   {
@@ -1470,7 +1470,7 @@
       "C": "Garouga",
       "D": "Dynamic Marking"
     },
-    "answer": "B",
+    "answer": "C",
     "id": 134
   },
   {
