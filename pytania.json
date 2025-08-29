@@ -279,10 +279,10 @@
     "options": {
       "A": "Kraj Ognia",
       "B": "Kraj Chmur",
-      "C": "Kraj Ziemi",
+      "C": "Kraj Błyskawic",
       "D": "Kraj Wody"
     },
-    "answer": "B",
+    "answer": "C",
     "id": 26
   },
   {
