@@ -2,6 +2,37 @@ services:
   - type: web
     name: naruto-quiz-bot
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python main.py"
-    pythonVersion: 3.11.9
+    plan: free
+    autoDeploy: true
+
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+
+    startCommand: |
+      python main.py
+
+    healthCheckPath: /healthz
+    healthCheckTimeout: 5
+    envVars:
+      - key: BOT_DISABLED
+        value: false
+      - key: TOKEN
+        sync: false         # ustaw w Dashboard → osobiście
+      - key: GUILD_ID
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      # opcjonalne:
+      - key: QUIZ_CHANNEL_NAME
+        value: quiz-naruto
+      - key: QUIZ_TIMES          # UTC, przecinkami
+        value: 10:05,13:35,18:39
+      - key: QUIZ_DURATION_SECONDS
+        value: "900"             # 15 min
+      - key: QUESTIONS_FILE
+        value: pytania.json
+      - key: LOG_LEVEL
+        value: INFO
