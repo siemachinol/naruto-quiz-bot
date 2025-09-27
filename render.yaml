@@ -29,7 +29,7 @@ services:
       - key: QUIZ_CHANNEL_NAME
         value: quiz-naruto
       - key: QUIZ_TIMES          # UTC, przecinkami
-        value: 10:05,13:35,18:39
+        value: 7:00,13:00,18:00, 21:00
       - key: QUIZ_DURATION_SECONDS
         value: "900"             # 15 min
       - key: QUESTIONS_FILE
