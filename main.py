@@ -53,7 +53,12 @@ ALERT_MINUTES_BEFORE = int(os.getenv("ALERT_MINUTES_BEFORE", "10"))
 # Godziny w UTC, np. "10:05,13:35,18:39"
 QUIZ_TIMES_ENV = os.getenv("QUIZ_TIMES", "10:05,13:35,18:39")
 
-# >>> LIFELINES PATCH START: stałe i pomocniki
+# --- Ping roli (@Quizowicz) ---
+QUIZ_ROLE_ID = os.getenv("QUIZ_ROLE_ID")  # np. "123456789012345678" (polecane)
+QUIZ_ROLE_NAME = os.getenv("QUIZ_ROLE_NAME", "Quizowicz")  # fallback po nazwie
+PING_ROLE_IN_ALERTS = os.getenv("PING_ROLE_IN_ALERTS", "true").lower() == "true"
+
+# --- Lifelines / cooldown ---
 COOLDOWN_HOURS = 168  # 7 dni cooldownu – osobno dla każdego koła i użytkownika
 LIFELINE_TYPES = {"5050", "publika", "telefon"}
 
@@ -83,7 +88,6 @@ def get_state_for_channel(channel_id: int) -> Optional["QuizState"]:
     if not mid:
         return None
     return active_quizzes.get(mid)
-# >>> LIFELINES PATCH END
 
 # -------------- Discord setup --------------
 intents = discord.Intents.default()
@@ -165,7 +169,7 @@ async def db_save_ranking(data: Dict[str, Dict[str, Any]]) -> None:
     except Exception as e:
         log.error("DB save ranking error: %r", e)
 
-# >>> LIFELINES PATCH START: DB helpers dla cooldownów
+# --- Lifelines: DB helpers (cooldown) ---
 async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[datetime.datetime]:
     """Zwraca ostatni timestamp użycia koła (UTC naive) albo None."""
     try:
@@ -214,7 +218,6 @@ async def lifeline_check_cooldown(user_id: int, lifeline_type: str) -> Optional[
     if rem.total_seconds() > 0:
         return _fmt_td(rem)
     return None
-# >>> LIFELINES PATCH END
 
 # -------------- Pytania ----------------------
 
@@ -269,17 +272,12 @@ class QuizPersistentView(ui.View):
     def __init__(self, disabled: bool=False):
         super().__init__(timeout=None)
         self._disabled = disabled
-        # jeśli disabled=True, wyłącz przyciski w tym widoku
         if disabled:
             for child in self.children:
                 try:
                     child.disabled = True
                 except Exception:
                     pass
-
-    def _maybe_disable(self, button: ui.Button) -> ui.Button:
-        button.disabled = self._disabled
-        return button
 
     @ui.button(label="A", custom_id="quiz_A", style=ButtonStyle.secondary)
     async def _a(self, interaction: Interaction, button: ui.Button):
@@ -383,6 +381,18 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
 
 # -------------- Uruchamianie quizu ------------
 
+def get_quiz_role(guild: discord.Guild) -> Optional[discord.Role]:
+    """Zwraca rolę do pingowania: najpierw po ID, potem po nazwie."""
+    role = None
+    if QUIZ_ROLE_ID:
+        try:
+            role = guild.get_role(int(QUIZ_ROLE_ID))
+        except Exception:
+            role = None
+    if not role:
+        role = discord.utils.get(guild.roles, name=QUIZ_ROLE_NAME)
+    return role
+
 async def run_quiz(channel: discord.TextChannel):
     async with quiz_lock:
         questions = load_questions()
@@ -398,28 +408,36 @@ async def run_quiz(channel: discord.TextChannel):
 
         content = build_question_message(question)
         view = QuizPersistentView()
-        msg = await channel.send(content, view=view)
 
-        # >>> LIFELINES PATCH START: mapowanie kanał -> ostatni quiz
+        # Ping roli @Quizowicz (jeśli istnieje)
+        role = get_quiz_role(channel.guild)
+        if role:
+            msg = await channel.send(
+                f"{role.mention} " + content,
+                view=view,
+                allowed_mentions=discord.AllowedMentions(roles=[role])
+            )
+        else:
+            msg = await channel.send(content, view=view)
+
+        # mapowanie kanał -> ostatni quiz
         try:
             last_quiz_id_per_channel[channel.id] = msg.id
         except Exception:
             pass
-        # >>> LIFELINES PATCH END
 
         end_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=QUIZ_DURATION_SECONDS)
         state = QuizState(question=question, message_id=msg.id, end_time=end_time)
         active_quizzes[msg.id] = state
 
         log.info("Quiz wystartował (id=%s). Koniec: %s", qid, fmt_timestr(end_time))
-        # po czasie – ogłoś wynik
+
         async def _finish():
             try:
                 await asyncio.sleep(QUIZ_DURATION_SECONDS)
                 await conclude_quiz(channel, state)
                 await db_add_used_id(qid)
             finally:
-                # porządek
                 active_quizzes.pop(msg.id, None)
         asyncio.create_task(_finish())
 
@@ -492,13 +510,13 @@ async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None)
         return await ctx.reply(f"{member.display_name} ma 0 pkt.")
     await ctx.reply(f"{d.get('name') or member.display_name} ma **{int(d.get('points',0))}** pkt.")
 
-# >>> LIFELINES PATCH START: 3 komendy kół (wynik w DM, cooldown 168h)
+# --- Lifelines: 3 komendy (DM + cooldown 168h) ---
 
 @bot.command(name="5050")
 async def lifeline_5050(ctx: commands.Context):
     """Pół na pół – DM do używającego. Cooldown 168h per user."""
     if not isinstance(ctx.channel, discord.TextChannel):
-        return await ctx.reply("Użyj na kanale tekstowym.", delete_after=8)
+        return await ctx.reply("Użyj na kanałach tekstowych.", delete_after=8)
     state = get_state_for_channel(ctx.channel.id)
     if not state:
         return await ctx.reply("Brak aktywnego pytania.", delete_after=8)
@@ -526,7 +544,7 @@ async def lifeline_5050(ctx: commands.Context):
 async def lifeline_audience(ctx: commands.Context):
     """Pytanie do publiczności – procenty aktualnych głosów. DM + cooldown 168h."""
     if not isinstance(ctx.channel, discord.TextChannel):
-        return await ctx.reply("Użyj na kanale tekstowym.", delete_after=8)
+        return await ctx.reply("Użyj na kanałach tekstowych.", delete_after=8)
     state = get_state_for_channel(ctx.channel.id)
     if not state:
         return await ctx.reply("Brak aktywnego pytania.", delete_after=8)
@@ -563,7 +581,7 @@ async def lifeline_audience(ctx: commands.Context):
 async def lifeline_phone(ctx: commands.Context, friend: Optional[discord.Member] = None):
     """Telefon do przyjaciela – pokaż w DM jaką literę zaznaczył wskazany gracz (jeśli już odpowiedział)."""
     if not isinstance(ctx.channel, discord.TextChannel):
-        return await ctx.reply("Użyj na kanale tekstowym.", delete_after=8)
+        return await ctx.reply("Użyj na kanałach tekstowych.", delete_after=8)
     state = get_state_for_channel(ctx.channel.id)
     if not state:
         return await ctx.reply("Brak aktywnego pytania.", delete_after=8)
@@ -588,8 +606,6 @@ async def lifeline_phone(ctx: commands.Context, friend: Optional[discord.Member]
     except discord.Forbidden:
         return await ctx.reply("Nie mogę wysłać Ci DM (włącz prywatne wiadomości).", delete_after=10)
     await ctx.reply("Wysłałem szczegóły w DM. 📩", delete_after=6)
-
-# >>> LIFELINES PATCH END
 
 # -------------- Scheduler ---------------------
 
@@ -624,7 +640,14 @@ async def daily_quiz_task():
         if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
             ch = await get_quiz_channel()
             if ch:
-                await ch.send("🧠 Za {} minut pojawi się pytanie quizowe!".format(ALERT_MINUTES_BEFORE))
+                role = get_quiz_role(ch.guild)
+                if role and PING_ROLE_IN_ALERTS:
+                    await ch.send(
+                        f"{role.mention} " + "🧠 Za {} minut pojawi się pytanie quizowe!".format(ALERT_MINUTES_BEFORE),
+                        allowed_mentions=discord.AllowedMentions(roles=[role])
+                    )
+                else:
+                    await ch.send("🧠 Za {} minut pojawi się pytanie quizowe!".format(ALERT_MINUTES_BEFORE))
     # okno 2 minut
     for t in times:
         key = f"{t.hour:02d}:{t.minute:02d}"
