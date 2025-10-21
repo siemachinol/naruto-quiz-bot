@@ -231,7 +231,7 @@ class QuizState:
     def __init__(self, question: Dict[str, Any], message_id: int, end_time: datetime.datetime):
         self.question = question
         self.message_id = message_id
-               self.end_time = end_time  # UTC
+        self.end_time = end_time  # UTC
         self.answers: Dict[int, str] = {}
 
 active_quizzes: Dict[int, QuizState] = {}
@@ -476,7 +476,7 @@ async def sync_slash(ctx: commands.Context):
     try:
         # global
         await bot.tree.sync()
-        # kopiuj globalne na gildię (instant widoczność) i synchronizuj gildię
+        # instant dla Twojej gildii
         guild_obj = discord.Object(id=GUILD_ID)
         bot.tree.copy_global_to(guild=guild_obj)
         await bot.tree.sync(guild=guild_obj)
@@ -711,7 +711,7 @@ async def on_ready():
     try:
         # 1) global sync
         await bot.tree.sync()
-        # 2) instant dla Twojej gildii (kopiuj globalne do gildii i zsynchronizuj gildię)
+        # 2) instant dla Twojej gildii (kopiuj globalne → gildia) i zsynchronizuj gildię
         guild_obj = discord.Object(id=GUILD_ID)
         bot.tree.copy_global_to(guild=guild_obj)
         await bot.tree.sync(guild=guild_obj)
