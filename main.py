@@ -10,7 +10,7 @@ from typing import Dict, Any, Optional, List, Set
 
 import discord
 from discord.ext import commands, tasks
-from discord import ButtonStyle, Interaction, ui
+from discord import ButtonStyle, Interaction, ui, app_commands
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 # --- optional for local dev ---
@@ -62,7 +62,7 @@ PING_ROLE_IN_ALERTS = os.getenv("PING_ROLE_IN_ALERTS", "true").lower() == "true"
 COOLDOWN_HOURS = 168  # 7 dni cooldownu – osobno dla każdego koła i użytkownika
 LIFELINE_TYPES = {"5050", "publika", "telefon"}
 
-# ostatni aktywny quiz na każdym kanale (żeby komendy wiedziały, którego quizu dotyczą)
+# ostatni aktywny quiz na każdym kanale (żeby slashy wiedziały, którego quizu dotyczą)
 last_quiz_id_per_channel: Dict[int, int] = {}
 
 def _fmt_td(td: datetime.timedelta) -> str:
@@ -76,7 +76,7 @@ def _fmt_td(td: datetime.timedelta) -> str:
     if d: parts.append(f"{d}d")
     if h: parts.append(f"{h}h")
     if m: parts.append(f"{m}m")
-    if s and not d: parts.append(f"{s}s")  # sekundy pokazuj tylko gdy < 1 dzień
+    if s and not d: parts.append(f"{s}s")  # sekundy tylko gdy < 1 dzień
     return " ".join(parts) or "0s"
 
 def _cooldown_remaining(last_used: datetime.datetime, hours: int) -> datetime.timedelta:
@@ -226,7 +226,7 @@ def load_questions() -> List[Dict[str, Any]]:
         raise FileNotFoundError(f"Brak pliku z pytaniami: {QUESTIONS_FILE}")
     with open(QUESTIONS_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
-    # spodziewany format:
+    # format:
     # [{ "id": 1, "question": "...", "options": {"A":"...", "B":"...", "C":"...", "D":"..."}, "answer": "B" }, ...]
     normalized = []
     for q in data:
@@ -441,7 +441,7 @@ async def run_quiz(channel: discord.TextChannel):
                 active_quizzes.pop(msg.id, None)
         asyncio.create_task(_finish())
 
-# -------------- Komendy -----------------------
+# -------------- Komendy (prefix – tylko quiz/ranking) -----------------------
 
 def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
     embed = discord.Embed(title=title, colour=0x2b7cff)
@@ -510,50 +510,50 @@ async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None)
         return await ctx.reply(f"{member.display_name} ma 0 pkt.")
     await ctx.reply(f"{d.get('name') or member.display_name} ma **{int(d.get('points',0))}** pkt.")
 
-# --- Lifelines: 3 komendy (DM + cooldown 168h) ---
+# -------------- Slash commands (EPHEMERAL KOŁA) -----------------------------
 
-@bot.command(name="5050")
-async def lifeline_5050(ctx: commands.Context):
-    """Pół na pół – DM do używającego. Cooldown 168h per user."""
-    if not isinstance(ctx.channel, discord.TextChannel):
-        return await ctx.reply("Użyj na kanałach tekstowych.", delete_after=8)
-    state = get_state_for_channel(ctx.channel.id)
+@app_commands.guilds(discord.Object(id=GUILD_ID))
+@bot.tree.command(name="5050", description="Pół na pół – widoczne tylko dla Ciebie (ephemeral).")
+async def slash_5050(interaction: discord.Interaction):
+    ch = interaction.channel
+    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+        return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+    state = get_state_for_channel(ch.id)
     if not state:
-        return await ctx.reply("Brak aktywnego pytania.", delete_after=8)
+        return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
     if datetime.datetime.utcnow() > state.end_time:
-        return await ctx.reply("Czas na to pytanie już minął.", delete_after=8)
+        return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-    cd = await lifeline_check_cooldown(ctx.author.id, "5050")
+    cd = await lifeline_check_cooldown(interaction.user.id, "5050")
     if cd:
-        return await ctx.reply(f"50/50 w cooldownie jeszcze {cd}.", delete_after=10)
+        return await interaction.response.send_message(f"50/50 w cooldownie jeszcze {cd}.", ephemeral=True)
 
     correct = state.question["answer"]
     wrong = [x for x in ["A","B","C","D"] if x != correct]
     kept = [correct, random.choice(wrong)]
     random.shuffle(kept)
 
-    await db_lifeline_mark_use(ctx.author.id, "5050")
-    try:
-        await ctx.author.send(f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**")
-    except discord.Forbidden:
-        return await ctx.reply("Nie mogę wysłać Ci DM (włącz prywatne wiadomości).", delete_after=10)
-    await ctx.reply("Wysłałem szczegóły w DM. 📩", delete_after=6)
+    await db_lifeline_mark_use(interaction.user.id, "5050")
+    await interaction.response.send_message(
+        f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**",
+        ephemeral=True
+    )
 
-
-@bot.command(name="publika")
-async def lifeline_audience(ctx: commands.Context):
-    """Pytanie do publiczności – procenty aktualnych głosów. DM + cooldown 168h."""
-    if not isinstance(ctx.channel, discord.TextChannel):
-        return await ctx.reply("Użyj na kanałach tekstowych.", delete_after=8)
-    state = get_state_for_channel(ctx.channel.id)
+@app_commands.guilds(discord.Object(id=GUILD_ID))
+@bot.tree.command(name="publika", description="Pytanie do publiczności – procentowy rozkład głosów (ephemeral).")
+async def slash_publika(interaction: discord.Interaction):
+    ch = interaction.channel
+    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+        return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+    state = get_state_for_channel(ch.id)
     if not state:
-        return await ctx.reply("Brak aktywnego pytania.", delete_after=8)
+        return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
     if datetime.datetime.utcnow() > state.end_time:
-        return await ctx.reply("Czas na to pytanie już minął.", delete_after=8)
+        return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-    cd = await lifeline_check_cooldown(ctx.author.id, "publika")
+    cd = await lifeline_check_cooldown(interaction.user.id, "publika")
     if cd:
-        return await ctx.reply(f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.", delete_after=10)
+        return await interaction.response.send_message(f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.", ephemeral=True)
 
     counts = {k: 0 for k in ["A", "B", "C", "D"]}
     for letter in state.answers.values():
@@ -562,50 +562,60 @@ async def lifeline_audience(ctx: commands.Context):
     total = sum(counts.values()) or 1
     perc = {k: round(v * 100 / total) for k, v in counts.items()}
 
-    await db_lifeline_mark_use(ctx.author.id, "publika")
-    text = (
+    await db_lifeline_mark_use(interaction.user.id, "publika")
+    msg = (
         "📊 Głosy do tej pory:\n"
         f"A: {counts['A']} ({perc['A']}%)\n"
         f"B: {counts['B']} ({perc['B']}%)\n"
         f"C: {counts['C']} ({perc['C']}%)\n"
         f"D: {counts['D']} ({perc['D']}%)"
     )
-    try:
-        await ctx.author.send(text)
-    except discord.Forbidden:
-        return await ctx.reply("Nie mogę wysłać Ci DM (włącz prywatne wiadomości).", delete_after=10)
-    await ctx.reply("Wysłałem szczegóły w DM. 📩", delete_after=6)
+    await interaction.response.send_message(msg, ephemeral=True)
 
-
-@bot.command(name="telefon")
-async def lifeline_phone(ctx: commands.Context, friend: Optional[discord.Member] = None):
-    """Telefon do przyjaciela – pokaż w DM jaką literę zaznaczył wskazany gracz (jeśli już odpowiedział)."""
-    if not isinstance(ctx.channel, discord.TextChannel):
-        return await ctx.reply("Użyj na kanałach tekstowych.", delete_after=8)
-    state = get_state_for_channel(ctx.channel.id)
+@app_commands.describe(friend="Wskaż gracza, którego odpowiedź chcesz podejrzeć")
+@app_commands.guilds(discord.Object(id=GUILD_ID))
+@bot.tree.command(name="telefon", description="Telefon do przyjaciela – pokaż odpowiedź wskazanego gracza (ephemeral).")
+async def slash_telefon(interaction: discord.Interaction, friend: discord.Member):
+    ch = interaction.channel
+    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+        return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+    state = get_state_for_channel(ch.id)
     if not state:
-        return await ctx.reply("Brak aktywnego pytania.", delete_after=8)
+        return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
     if datetime.datetime.utcnow() > state.end_time:
-        return await ctx.reply("Czas na to pytanie już minął.", delete_after=8)
-    if not friend:
-        return await ctx.reply("Użycie: `!telefon @nick`", delete_after=8)
+        return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-    cd = await lifeline_check_cooldown(ctx.author.id, "telefon")
+    cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
     if cd:
-        return await ctx.reply(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", delete_after=10)
+        return await interaction.response.send_message(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", ephemeral=True)
 
     letter = state.answers.get(friend.id)
-    await db_lifeline_mark_use(ctx.author.id, "telefon")
+    await db_lifeline_mark_use(interaction.user.id, "telefon")
     msg = (
         f"{friend.display_name} **jeszcze nie odpowiedział(a)**."
         if not letter else
         f"{friend.display_name} zaznaczył(a): **{letter}**"
     )
-    try:
-        await ctx.author.send(f"📞 Telefon do przyjaciela → {msg}")
-    except discord.Forbidden:
-        return await ctx.reply("Nie mogę wysłać Ci DM (włącz prywatne wiadomości).", delete_after=10)
-    await ctx.reply("Wysłałem szczegóły w DM. 📩", delete_after=6)
+    await interaction.response.send_message(f"📞 Telefon do przyjaciela → {msg}", ephemeral=True)
+
+# NEW: /mojekola – podgląd własnych cooldownów (ephemeral)
+@app_commands.guilds(discord.Object(id=GUILD_ID))
+@bot.tree.command(name="mojekola", description="Pokaż stan swoich kół ratunkowych (cooldowny).")
+async def slash_mojekola(interaction: discord.Interaction):
+    types = [("5050", "🌓 50/50"), ("publika", "📊 Publika"), ("telefon", "📞 Telefon")]
+    lines = []
+    for t_key, t_label in types:
+        last = await db_lifeline_last_used(interaction.user.id, t_key)
+        if not last:
+            lines.append(f"{t_label}: **dostępne** ✅")
+            continue
+        rem = _cooldown_remaining(last, COOLDOWN_HOURS)
+        if rem.total_seconds() > 0:
+            lines.append(f"{t_label}: cooldown **{_fmt_td(rem)}**")
+        else:
+            lines.append(f"{t_label}: **dostępne** ✅")
+    msg = "🔎 **Twoje koła ratunkowe**\n" + "\n".join(lines)
+    await interaction.response.send_message(msg, ephemeral=True)
 
 # -------------- Scheduler ---------------------
 
@@ -734,6 +744,12 @@ async def on_ready():
         daily_quiz_task.start()
     if not watchdog.is_running():
         watchdog.start()
+    # sync slashy (tylko na Twój serwer – szybki rollout)
+    try:
+        await bot.tree.sync(guild=discord.Object(id=GUILD_ID))
+        log.info("Slash commands synced for guild %s", GUILD_ID)
+    except Exception as e:
+        log.exception("Slash sync error: %r", e)
 
 def main():
     # health server
