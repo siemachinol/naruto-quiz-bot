@@ -512,9 +512,16 @@ async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None)
 
 # -------------- Slash commands (EPHEMERAL KOŁA) -----------------------------
 
+# TEST: /ping
 @app_commands.guilds(discord.Object(id=GUILD_ID))
-@bot.tree.command(name="5050", description="Pół na pół – widoczne tylko dla Ciebie (ephemeral).")
-async def slash_5050(interaction: discord.Interaction):
+@bot.tree.command(name="ping", description="Sprawdź, czy slash-komendy działają (ephemeral).")
+async def slash_ping(interaction: discord.Interaction):
+    await interaction.response.send_message("🏓 Działam!", ephemeral=True)
+
+# 50/50 jako /polnapol (bez wiodącej cyfry)
+@app_commands.guilds(discord.Object(id=GUILD_ID))
+@bot.tree.command(name="polnapol", description="Pół na pół – widoczne tylko dla Ciebie (ephemeral).")
+async def slash_polnapol(interaction: discord.Interaction):
     ch = interaction.channel
     if not isinstance(ch, (discord.TextChannel, discord.Thread)):
         return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
@@ -750,6 +757,18 @@ async def on_ready():
         log.info("Slash commands synced for guild %s", GUILD_ID)
     except Exception as e:
         log.exception("Slash sync error: %r", e)
+
+# Globalny handler błędów dla slashy
+@bot.tree.error
+async def on_app_command_error(interaction: discord.Interaction, error: Exception):
+    try:
+        if interaction.response.is_done():
+            await interaction.followup.send("⚠️ Wystąpił błąd przy tej komendzie.", ephemeral=True)
+        else:
+            await interaction.response.send_message("⚠️ Wystąpił błąd przy tej komendzie.", ephemeral=True)
+    except Exception:
+        pass
+    log.exception("Slash command error: %r", error)
 
 def main():
     # health server
