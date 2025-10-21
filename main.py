@@ -568,11 +568,22 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
 
     letter = state.answers.get(friend.id)
     await db_lifeline_mark_use(interaction.user.id, "telefon")
-    msg = (
-        f"{friend.display_name} **jeszcze nie odpowiedział(a)**."
-        if not letter else
-        f"{friend.display_name} zaznaczył(a): **{letter}**"
-    )
+
+    if not letter:
+        msg = f"{friend.display_name} **jeszcze nie odpowiedział(a)**."
+    else:
+        # >>> LOSOWY TEKST NARRACYJNY <<<
+        responses = [
+            "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
+            "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
+            "Hmm... strzelam, że to **{answer}**.",
+            "Myślę, że to może być **{answer}**, ale nie dam sobie ręki uciąć.",
+            "Nie jestem ekspertem, ale obstawiam **{answer}**.",
+            "Nie wiem na 100%, ale wydaje mi się, że chodzi o **{answer}**.",
+            "Kurczę... mam przeczucie, że to **{answer}**.",
+        ]
+        msg = random.choice(responses).format(answer=letter)
+
     await interaction.response.send_message(f"📞 Telefon do przyjaciela → {msg}", ephemeral=True)
 
 @bot.tree.command(name="mojekola", description="Pokaż stan swoich kół ratunkowych (cooldowny).")
