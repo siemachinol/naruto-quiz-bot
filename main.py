@@ -48,21 +48,20 @@ SUPABASE_KEY = require_env("SUPABASE_KEY")
 
 QUIZ_CHANNEL_NAME = os.getenv("QUIZ_CHANNEL_NAME", "quiz-naruto")
 QUESTIONS_FILE = os.getenv("QUESTIONS_FILE", "pytania.json")
-QUIZ_DURATION_SECONDS = int(os.getenv("QUIZ_DURATION_SECONDS", "900"))  # domyślnie 15 min
+QUIZ_DURATION_SECONDS = int(os.getenv("QUIZ_DURATION_SECONDS", "900"))  # 15 min
 ALERT_MINUTES_BEFORE = int(os.getenv("ALERT_MINUTES_BEFORE", "10"))
-# Godziny w UTC, np. "10:05,13:35,18:39"
 QUIZ_TIMES_ENV = os.getenv("QUIZ_TIMES", "10:05,13:35,18:39")
 
 # --- Ping roli (@Quizowicz) ---
-QUIZ_ROLE_ID = os.getenv("QUIZ_ROLE_ID")  # np. "123456789012345678" (polecane)
-QUIZ_ROLE_NAME = os.getenv("QUIZ_ROLE_NAME", "Quizowicz")  # fallback po nazwie
+QUIZ_ROLE_ID = os.getenv("QUIZ_ROLE_ID")
+QUIZ_ROLE_NAME = os.getenv("QUIZ_ROLE_NAME", "Quizowicz")
 PING_ROLE_IN_ALERTS = os.getenv("PING_ROLE_IN_ALERTS", "true").lower() == "true"
 
 # --- Lifelines / cooldown ---
-COOLDOWN_HOURS = 168  # 7 dni cooldownu – osobno dla każdego koła i użytkownika
+COOLDOWN_HOURS = 168  # 7 dni
 LIFELINE_TYPES = {"5050", "publika", "telefon"}
 
-# ostatni aktywny quiz na każdym kanale (żeby slashy wiedziały, którego quizu dotyczą)
+# ostatni aktywny quiz per kanał
 last_quiz_id_per_channel: Dict[int, int] = {}
 
 def _fmt_td(td: datetime.timedelta) -> str:
@@ -76,7 +75,7 @@ def _fmt_td(td: datetime.timedelta) -> str:
     if d: parts.append(f"{d}d")
     if h: parts.append(f"{h}h")
     if m: parts.append(f"{m}m")
-    if s and not d: parts.append(f"{s}s")  # sekundy tylko gdy < 1 dzień
+    if s and not d: parts.append(f"{s}s")
     return " ".join(parts) or "0s"
 
 def _cooldown_remaining(last_used: datetime.datetime, hours: int) -> datetime.timedelta:
@@ -101,19 +100,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 from supabase import create_client, Client  # type: ignore
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Async wrapper, bo supabase-py jest synchroniczny
-async def sb_call(fn, *args, **kwargs):
-    """Run a supabase-py chain with .execute() in a thread."""
-    def _runner():
-        q = fn(*args, **kwargs)
-        if hasattr(q, "execute"):
-            return q.execute()
-        res = q
-        if hasattr(res, "execute"):
-            return res.execute()
-        return res
-    return await asyncio.to_thread(_runner)
-
 # -------------- DB helpers -------------------
 async def db_get_used_ids() -> Set[int]:
     try:
@@ -136,7 +122,6 @@ async def db_clear_used_questions() -> None:
         log.error("DB clear used error: %r", e)
 
 async def db_load_ranking() -> Dict[str, Dict[str, Any]]:
-    """Zwraca słownik: user_id -> {name, points, weekly, monthly}"""
     try:
         resp = await asyncio.to_thread(lambda: supabase.table("ranking").select("*").execute())
         out: Dict[str, Dict[str, Any]] = {}
@@ -154,7 +139,6 @@ async def db_load_ranking() -> Dict[str, Dict[str, Any]]:
         return {}
 
 async def db_save_ranking(data: Dict[str, Dict[str, Any]]) -> None:
-    """Upsert całego słownika rankingowego."""
     try:
         payload = []
         for uid, d in data.items():
@@ -171,7 +155,6 @@ async def db_save_ranking(data: Dict[str, Dict[str, Any]]) -> None:
 
 # --- Lifelines: DB helpers (cooldown) ---
 async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[datetime.datetime]:
-    """Zwraca ostatni timestamp użycia koła (UTC naive) albo None."""
     try:
         resp = await asyncio.to_thread(
             lambda: supabase.table("lifelines_usage")
@@ -182,7 +165,7 @@ async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[da
             .limit(1)
             .execute()
         )
-        data = getattr(resp, "data", None) or (resp.get("data", []) if isinstance(resp, dict) else [])
+        data = getattr(resp, "data", None) or []
         if data:
             iso = data[0]["used_at"]
             if isinstance(iso, str):
@@ -195,7 +178,6 @@ async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[da
     return None
 
 async def db_lifeline_mark_use(user_id: int, lifeline_type: str) -> None:
-    """Zapisuje użycie koła w DB."""
     try:
         await asyncio.to_thread(
             lambda: supabase.table("lifelines_usage")
@@ -210,7 +192,6 @@ async def db_lifeline_mark_use(user_id: int, lifeline_type: str) -> None:
         log.exception("db_lifeline_mark_use error: %r", e)
 
 async def lifeline_check_cooldown(user_id: int, lifeline_type: str) -> Optional[str]:
-    """Jeśli cooldown trwa, zwraca tekst (np. '6d 3h'); jeśli można użyć — None."""
     last = await db_lifeline_last_used(user_id, lifeline_type)
     if not last:
         return None
@@ -226,8 +207,6 @@ def load_questions() -> List[Dict[str, Any]]:
         raise FileNotFoundError(f"Brak pliku z pytaniami: {QUESTIONS_FILE}")
     with open(QUESTIONS_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
-    # format:
-    # [{ "id": 1, "question": "...", "options": {"A":"...", "B":"...", "C":"...", "D":"..."}, "answer": "B" }, ...]
     normalized = []
     for q in data:
         try:
@@ -256,10 +235,10 @@ class QuizState:
         self.question = question
         self.message_id = message_id
         self.end_time = end_time  # UTC
-        self.answers: Dict[int, str] = {}  # user_id -> "A"/"B"/"C"/"D"
+        self.answers: Dict[int, str] = {}
 
-active_quizzes: Dict[int, QuizState] = {}   # message_id -> state
-finished_messages: Set[int] = set()         # kontrola anty-duplikat
+active_quizzes: Dict[int, QuizState] = {}
+finished_messages: Set[int] = set()
 quiz_lock = asyncio.Lock()
 
 def fmt_timestr(dt: datetime.datetime) -> str:
@@ -268,7 +247,6 @@ def fmt_timestr(dt: datetime.datetime) -> str:
 # -------------- Widok z przyciskami ----------
 
 class QuizPersistentView(ui.View):
-    """Widok „persistent” – te same custom_id, żeby po restarcie dalej łapać kliki."""
     def __init__(self, disabled: bool=False):
         super().__init__(timeout=None)
         self._disabled = disabled
@@ -296,7 +274,6 @@ class QuizPersistentView(ui.View):
         await handle_answer_click(interaction, "D")
 
 async def handle_answer_click(interaction: Interaction, letter: str):
-    """Obsługa kliknięcia przycisku odpowiedzi."""
     mid = interaction.message.id if interaction.message else None
     if not mid:
         return await interaction.response.send_message("Brak powiązanego pytania.", ephemeral=True)
@@ -326,7 +303,6 @@ def build_question_message(q: Dict[str, Any]) -> str:
     )
 
 async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
-    """Zamyka quiz, przyznaje punkty, ogłasza wynik."""
     if state.message_id in finished_messages:
         return
     finished_messages.add(state.message_id)
@@ -334,7 +310,6 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
     correct = state.question["answer"]
     winners: List[int] = [uid for uid, letter in state.answers.items() if letter == correct]
 
-    # update DB ranking
     ranking = await db_load_ranking()
     today = datetime.datetime.utcnow().date().isoformat()
     for uid in winners:
@@ -353,7 +328,6 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
         ranking[uid_s] = user_data
     await db_save_ranking(ranking)
 
-    # Ogłoszenie wyniku
     if winners:
         mentions = ", ".join(f"<@{uid}>" for uid in winners)
         msg = (
@@ -370,7 +344,6 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
 
     try:
         message = await channel.fetch_message(state.message_id)
-        # Zdezaktywuj przyciski
         try:
             await message.edit(view=QuizPersistentView(disabled=True))
         except Exception:
@@ -382,7 +355,6 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
 # -------------- Uruchamianie quizu ------------
 
 def get_quiz_role(guild: discord.Guild) -> Optional[discord.Role]:
-    """Zwraca rolę do pingowania: najpierw po ID, potem po nazwie."""
     role = None
     if QUIZ_ROLE_ID:
         try:
@@ -401,7 +373,7 @@ async def run_quiz(channel: discord.TextChannel):
         if not available:
             log.info("Wszystkie pytania zostały wykorzystane – czyszczę used_questions.")
             await db_clear_used_questions()
-            available = questions[:]  # po wyczyszczeniu bierzemy całą pulę
+            available = questions[:]
 
         question = random.choice(available)
         qid = int(question["id"])
@@ -409,7 +381,6 @@ async def run_quiz(channel: discord.TextChannel):
         content = build_question_message(question)
         view = QuizPersistentView()
 
-        # Ping roli @Quizowicz (jeśli istnieje)
         role = get_quiz_role(channel.guild)
         if role:
             msg = await channel.send(
@@ -420,17 +391,13 @@ async def run_quiz(channel: discord.TextChannel):
         else:
             msg = await channel.send(content, view=view)
 
-        # mapowanie kanał -> ostatni quiz
-        try:
-            last_quiz_id_per_channel[channel.id] = msg.id
-        except Exception:
-            pass
+        last_quiz_id_per_channel[channel.id] = msg.id
 
         end_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=QUIZ_DURATION_SECONDS)
         state = QuizState(question=question, message_id=msg.id, end_time=end_time)
         active_quizzes[msg.id] = state
 
-        log.info("Quiz wystartował (id=%s). Koniec: %s", qid, fmt_timestr(end_time))
+        log.info("Quiz wystartował (id=%s). Koniec: %s", qid, end_time.strftime("%H:%M:%S UTC"))
 
         async def _finish():
             try:
@@ -441,7 +408,7 @@ async def run_quiz(channel: discord.TextChannel):
                 active_quizzes.pop(msg.id, None)
         asyncio.create_task(_finish())
 
-# -------------- Komendy (prefix – tylko quiz/ranking) -----------------------
+# -------------- Komendy (prefix – tylko quiz/ranking + ręczny sync) ---------
 
 def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
     embed = discord.Embed(title=title, colour=0x2b7cff)
@@ -454,7 +421,6 @@ def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
 
 @bot.command()
 async def quiz(ctx: commands.Context):
-    """Ręczne uruchomienie quizu"""
     if not isinstance(ctx.channel, discord.TextChannel):
         return await ctx.reply("Tylko na kanałach tekstowych.")
     await run_quiz(ctx.channel)
@@ -462,29 +428,28 @@ async def quiz(ctx: commands.Context):
 @bot.command()
 async def ranking(ctx: commands.Context):
     data = await db_load_ranking()
-    pairs = sorted(((v.get("name") or str(uid), int(v.get("points",0))) for uid, v in data.items()), key=lambda x: x[1], reverse=True)
+    pairs = sorted(((v.get("name") or str(uid), int(v.get("points",0))) for uid, v in data.items()),
+                   key=lambda x: x[1], reverse=True)
     await ctx.send(embed=_top_embed("Ranking – All time", pairs))
 
 def _sum_period(d: Dict[str, int], days: int) -> int:
     cutoff = datetime.date.today() - datetime.timedelta(days=days)
-    total = 0
-    for k, v in (d or {}).items():
-        try:
-            if datetime.date.fromisoformat(k) >= cutoff:
-                total += int(v)
-        except Exception:
-            continue
-    return total
+    return sum(int(v) for k, v in (d or {}).items() if _safe_date(k) >= cutoff)
+
+def _safe_date(s: str) -> datetime.date:
+    try:
+        return datetime.date.fromisoformat(s)
+    except Exception:
+        return datetime.date(1970,1,1)
 
 @bot.command()
 async def rankingweekly(ctx: commands.Context):
     data = await db_load_ranking()
     pairs = []
     for v in data.values():
-        name = v.get("name") or "?"
         total = _sum_period(v.get("weekly") or {}, 7)
         if total:
-            pairs.append((name, total))
+            pairs.append((v.get("name") or "?", total))
     pairs.sort(key=lambda x: x[1], reverse=True)
     await ctx.send(embed=_top_embed("Ranking tygodniowy (7d)", pairs))
 
@@ -493,10 +458,9 @@ async def rankingmonthly(ctx: commands.Context):
     data = await db_load_ranking()
     pairs = []
     for v in data.values():
-        name = v.get("name") or "?"
         total = _sum_period(v.get("monthly") or {}, 30)
         if total:
-            pairs.append((name, total))
+            pairs.append((v.get("name") or "?", total))
     pairs.sort(key=lambda x: x[1], reverse=True)
     await ctx.send(embed=_top_embed("Ranking miesięczny (30d)", pairs))
 
@@ -504,11 +468,22 @@ async def rankingmonthly(ctx: commands.Context):
 async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None):
     member = member or ctx.author
     data = await db_load_ranking()
-    uid = str(member.id)
-    d = data.get(uid)
-    if not d:
-        return await ctx.reply(f"{member.display_name} ma 0 pkt.")
-    await ctx.reply(f"{d.get('name') or member.display_name} ma **{int(d.get('points',0))}** pkt.")
+    d = data.get(str(member.id))
+    pts = int(d.get("points",0)) if d else 0
+    await ctx.reply(f"{(d.get('name') if d else member.display_name)} ma **{pts}** pkt.")
+
+# RĘCZNY SYNC (tylko owner)
+@bot.command(name="sync")
+@commands.is_owner()
+async def sync_slash(ctx: commands.Context):
+    try:
+        await bot.tree.sync(guild=discord.Object(id=GUILD_ID))
+        names = [cmd.name for cmd in bot.tree.get_commands()]
+        await ctx.reply("✅ Zsynchronizowano slash-komendy.\nDostępne: " + ", ".join(names))
+        log.info("Manual sync done. Commands: %s", names)
+    except Exception as e:
+        await ctx.reply(f"⚠️ Sync error: {e}")
+        log.exception("Manual sync error: %r", e)
 
 # -------------- Slash commands (EPHEMERAL KOŁA) -----------------------------
 
@@ -518,7 +493,7 @@ async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None)
 async def slash_ping(interaction: discord.Interaction):
     await interaction.response.send_message("🏓 Działam!", ephemeral=True)
 
-# 50/50 jako /polnapol (bez wiodącej cyfry)
+# 50/50 jako /polnapol
 @app_commands.guilds(discord.Object(id=GUILD_ID))
 @bot.tree.command(name="polnapol", description="Pół na pół – widoczne tylko dla Ciebie (ephemeral).")
 async def slash_polnapol(interaction: discord.Interaction):
@@ -605,7 +580,7 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     )
     await interaction.response.send_message(f"📞 Telefon do przyjaciela → {msg}", ephemeral=True)
 
-# NEW: /mojekola – podgląd własnych cooldownów (ephemeral)
+# NEW: /mojekola
 @app_commands.guilds(discord.Object(id=GUILD_ID))
 @bot.tree.command(name="mojekola", description="Pokaż stan swoich kół ratunkowych (cooldowny).")
 async def slash_mojekola(interaction: discord.Interaction):
@@ -647,11 +622,9 @@ async def daily_quiz_task():
     global _last_reset_date
     now = datetime.datetime.utcnow()
     times = _parse_quiz_times(QUIZ_TIMES_ENV)
-    # reset na zmianę dnia
     if _last_reset_date != now.date():
         _fired_today.clear()
         _last_reset_date = now.date()
-    # alert
     for t in times:
         alert_dt = (datetime.datetime.combine(now.date(), t) - datetime.timedelta(minutes=ALERT_MINUTES_BEFORE)).time()
         if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
@@ -660,12 +633,11 @@ async def daily_quiz_task():
                 role = get_quiz_role(ch.guild)
                 if role and PING_ROLE_IN_ALERTS:
                     await ch.send(
-                        f"{role.mention} " + "🧠 Za {} minut pojawi się pytanie quizowe!".format(ALERT_MINUTES_BEFORE),
+                        f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
                         allowed_mentions=discord.AllowedMentions(roles=[role])
                     )
                 else:
-                    await ch.send("🧠 Za {} minut pojawi się pytanie quizowe!".format(ALERT_MINUTES_BEFORE))
-    # okno 2 minut
+                    await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
     for t in times:
         key = f"{t.hour:02d}:{t.minute:02d}"
         target = datetime.datetime.combine(now.date(), t)
@@ -679,8 +651,7 @@ async def daily_quiz_task():
 
 class PingHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
-        return  # wycisz standardowy log
-
+        return
     def do_GET(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
@@ -703,7 +674,7 @@ async def watchdog():
         latency = bot.latency
         if latency is None or latency > 180:
             log.error("Watchdog wykryl problem z pingiem (%s). Restart procesu.", latency)
-            os._exit(1)  # Render postawi nowy proces
+            os._exit(1)
     except Exception:
         os._exit(1)
 
@@ -723,12 +694,10 @@ async def get_quiz_channel() -> Optional[discord.TextChannel]:
                 _guild_cache = await bot.fetch_guild(GUILD_ID)
             except Exception:
                 return None
-    # po nazwie
     ch = discord.utils.get(_guild_cache.text_channels, name=QUIZ_CHANNEL_NAME)
     if ch:
         _channel_cache = ch
         return ch
-    # fallback po ID z ENV QUIZ_CHANNEL_ID
     ch_id = os.getenv("QUIZ_CHANNEL_ID")
     if ch_id:
         try:
@@ -745,16 +714,17 @@ async def get_quiz_channel() -> Optional[discord.TextChannel]:
 @bot.event
 async def on_ready():
     log.info("Zalogowano jako %s (%s)", bot.user, bot.user.id if bot.user else "?")
-    # rejestruj persistent view żeby po restarcie łapać kliki
     bot.add_view(QuizPersistentView())
     if not daily_quiz_task.is_running():
         daily_quiz_task.start()
     if not watchdog.is_running():
         watchdog.start()
-    # sync slashy (tylko na Twój serwer – szybki rollout)
     try:
         await bot.tree.sync(guild=discord.Object(id=GUILD_ID))
         log.info("Slash commands synced for guild %s", GUILD_ID)
+        # pokaż jakie komendy mamy po syncu
+        names = [cmd.name for cmd in bot.tree.get_commands()]
+        log.info("Registered app commands (global list): %s", names)
     except Exception as e:
         log.exception("Slash sync error: %r", e)
 
@@ -771,7 +741,6 @@ async def on_app_command_error(interaction: discord.Interaction, error: Exceptio
     log.exception("Slash command error: %r", error)
 
 def main():
-    # health server
     threading.Thread(target=run_health_server, daemon=True).start()
     bot.run(TOKEN)
 
