@@ -28,7 +28,6 @@ logging.basicConfig(
 log = logging.getLogger("quizbot")
 
 # -------------- ENV validation -------------
-
 def require_env(name: str) -> str:
     v = os.getenv(name)
     if not v:
@@ -201,7 +200,6 @@ async def lifeline_check_cooldown(user_id: int, lifeline_type: str) -> Optional[
     return None
 
 # -------------- Pytania ----------------------
-
 def load_questions() -> List[Dict[str, Any]]:
     if not os.path.exists(QUESTIONS_FILE):
         raise FileNotFoundError(f"Brak pliku z pytaniami: {QUESTIONS_FILE}")
@@ -228,13 +226,12 @@ def load_questions() -> List[Dict[str, Any]]:
     return normalized
 
 # -------------- Stan quizów ------------------
-
 class QuizState:
     __slots__ = ("question", "message_id", "end_time", "answers")
     def __init__(self, question: Dict[str, Any], message_id: int, end_time: datetime.datetime):
         self.question = question
         self.message_id = message_id
-        self.end_time = end_time  # UTC
+               self.end_time = end_time  # UTC
         self.answers: Dict[int, str] = {}
 
 active_quizzes: Dict[int, QuizState] = {}
@@ -245,7 +242,6 @@ def fmt_timestr(dt: datetime.datetime) -> str:
     return dt.strftime("%H:%M:%S UTC")
 
 # -------------- Widok z przyciskami ----------
-
 class QuizPersistentView(ui.View):
     def __init__(self, disabled: bool=False):
         super().__init__(timeout=None)
@@ -353,7 +349,6 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
         await channel.send(msg)
 
 # -------------- Uruchamianie quizu ------------
-
 def get_quiz_role(guild: discord.Guild) -> Optional[discord.Role]:
     role = None
     if QUIZ_ROLE_ID:
@@ -408,8 +403,7 @@ async def run_quiz(channel: discord.TextChannel):
                 active_quizzes.pop(msg.id, None)
         asyncio.create_task(_finish())
 
-# -------------- Komendy (prefix – tylko quiz/ranking + ręczny sync) ---------
-
+# -------------- Komendy (prefix – quiz/ranking + ręczny sync) --------------
 def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
     embed = discord.Embed(title=title, colour=0x2b7cff)
     if not pairs:
@@ -434,22 +428,24 @@ async def ranking(ctx: commands.Context):
 
 def _sum_period(d: Dict[str, int], days: int) -> int:
     cutoff = datetime.date.today() - datetime.timedelta(days=days)
-    return sum(int(v) for k, v in (d or {}).items() if _safe_date(k) >= cutoff)
-
-def _safe_date(s: str) -> datetime.date:
-    try:
-        return datetime.date.fromisoformat(s)
-    except Exception:
-        return datetime.date(1970,1,1)
+    total = 0
+    for k, v in (d or {}).items():
+        try:
+            if datetime.date.fromisoformat(k) >= cutoff:
+                total += int(v)
+        except Exception:
+            continue
+    return total
 
 @bot.command()
 async def rankingweekly(ctx: commands.Context):
     data = await db_load_ranking()
     pairs = []
     for v in data.values():
+        name = v.get("name") or "?"
         total = _sum_period(v.get("weekly") or {}, 7)
         if total:
-            pairs.append((v.get("name") or "?", total))
+            pairs.append((name, total))
     pairs.sort(key=lambda x: x[1], reverse=True)
     await ctx.send(embed=_top_embed("Ranking tygodniowy (7d)", pairs))
 
@@ -458,9 +454,10 @@ async def rankingmonthly(ctx: commands.Context):
     data = await db_load_ranking()
     pairs = []
     for v in data.values():
+        name = v.get("name") or "?"
         total = _sum_period(v.get("monthly") or {}, 30)
         if total:
-            pairs.append((v.get("name") or "?", total))
+            pairs.append((name, total))
     pairs.sort(key=lambda x: x[1], reverse=True)
     await ctx.send(embed=_top_embed("Ranking miesięczny (30d)", pairs))
 
@@ -477,7 +474,12 @@ async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None)
 @commands.is_owner()
 async def sync_slash(ctx: commands.Context):
     try:
-        await bot.tree.sync(guild=discord.Object(id=GUILD_ID))
+        # global
+        await bot.tree.sync()
+        # kopiuj globalne na gildię (instant widoczność) i synchronizuj gildię
+        guild_obj = discord.Object(id=GUILD_ID)
+        bot.tree.copy_global_to(guild=guild_obj)
+        await bot.tree.sync(guild=guild_obj)
         names = [cmd.name for cmd in bot.tree.get_commands()]
         await ctx.reply("✅ Zsynchronizowano slash-komendy.\nDostępne: " + ", ".join(names))
         log.info("Manual sync done. Commands: %s", names)
@@ -486,15 +488,10 @@ async def sync_slash(ctx: commands.Context):
         log.exception("Manual sync error: %r", e)
 
 # -------------- Slash commands (EPHEMERAL KOŁA) -----------------------------
-
-# TEST: /ping
-@app_commands.guilds(discord.Object(id=GUILD_ID))
 @bot.tree.command(name="ping", description="Sprawdź, czy slash-komendy działają (ephemeral).")
 async def slash_ping(interaction: discord.Interaction):
     await interaction.response.send_message("🏓 Działam!", ephemeral=True)
 
-# 50/50 jako /polnapol
-@app_commands.guilds(discord.Object(id=GUILD_ID))
 @bot.tree.command(name="polnapol", description="Pół na pół – widoczne tylko dla Ciebie (ephemeral).")
 async def slash_polnapol(interaction: discord.Interaction):
     ch = interaction.channel
@@ -521,7 +518,6 @@ async def slash_polnapol(interaction: discord.Interaction):
         ephemeral=True
     )
 
-@app_commands.guilds(discord.Object(id=GUILD_ID))
 @bot.tree.command(name="publika", description="Pytanie do publiczności – procentowy rozkład głosów (ephemeral).")
 async def slash_publika(interaction: discord.Interaction):
     ch = interaction.channel
@@ -554,9 +550,8 @@ async def slash_publika(interaction: discord.Interaction):
     )
     await interaction.response.send_message(msg, ephemeral=True)
 
-@app_commands.describe(friend="Wskaż gracza, którego odpowiedź chcesz podejrzeć")
-@app_commands.guilds(discord.Object(id=GUILD_ID))
 @bot.tree.command(name="telefon", description="Telefon do przyjaciela – pokaż odpowiedź wskazanego gracza (ephemeral).")
+@app_commands.describe(friend="Wskaż gracza, którego odpowiedź chcesz podejrzeć")
 async def slash_telefon(interaction: discord.Interaction, friend: discord.Member):
     ch = interaction.channel
     if not isinstance(ch, (discord.TextChannel, discord.Thread)):
@@ -580,8 +575,6 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     )
     await interaction.response.send_message(f"📞 Telefon do przyjaciela → {msg}", ephemeral=True)
 
-# NEW: /mojekola
-@app_commands.guilds(discord.Object(id=GUILD_ID))
 @bot.tree.command(name="mojekola", description="Pokaż stan swoich kół ratunkowych (cooldowny).")
 async def slash_mojekola(interaction: discord.Interaction):
     types = [("5050", "🌓 50/50"), ("publika", "📊 Publika"), ("telefon", "📞 Telefon")]
@@ -600,7 +593,6 @@ async def slash_mojekola(interaction: discord.Interaction):
     await interaction.response.send_message(msg, ephemeral=True)
 
 # -------------- Scheduler ---------------------
-
 def _parse_quiz_times(spec: str) -> List[datetime.time]:
     out = []
     for part in (spec or "").split(","):
@@ -648,7 +640,6 @@ async def daily_quiz_task():
                 _fired_today.add(key)
 
 # -------------- Health server + watchdog ------
-
 class PingHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         return
@@ -679,7 +670,6 @@ async def watchdog():
         os._exit(1)
 
 # -------------- Utility -----------------------
-
 _guild_cache: Optional[discord.Guild] = None
 _channel_cache: Optional[discord.TextChannel] = None
 
@@ -710,7 +700,6 @@ async def get_quiz_channel() -> Optional[discord.TextChannel]:
     return None
 
 # -------------- Events ------------------------
-
 @bot.event
 async def on_ready():
     log.info("Zalogowano jako %s (%s)", bot.user, bot.user.id if bot.user else "?")
@@ -720,11 +709,15 @@ async def on_ready():
     if not watchdog.is_running():
         watchdog.start()
     try:
-        await bot.tree.sync(guild=discord.Object(id=GUILD_ID))
-        log.info("Slash commands synced for guild %s", GUILD_ID)
-        # pokaż jakie komendy mamy po syncu
+        # 1) global sync
+        await bot.tree.sync()
+        # 2) instant dla Twojej gildii (kopiuj globalne do gildii i zsynchronizuj gildię)
+        guild_obj = discord.Object(id=GUILD_ID)
+        bot.tree.copy_global_to(guild=guild_obj)
+        await bot.tree.sync(guild=guild_obj)
+
         names = [cmd.name for cmd in bot.tree.get_commands()]
-        log.info("Registered app commands (global list): %s", names)
+        log.info("Slash commands synced. Global list: %s", names)
     except Exception as e:
         log.exception("Slash sync error: %r", e)
 
