@@ -58,7 +58,7 @@ QUIZ_ROLE_NAME = os.getenv("QUIZ_ROLE_NAME", "Quizowicz")
 PING_ROLE_IN_ALERTS = os.getenv("PING_ROLE_IN_ALERTS", "true").lower() == "true"
 
 # --- Lifelines / cooldown ---
-COOLDOWN_HOURS = 168  # 7 dni
+COOLDOWN_HOURS = 168  # 7 dni = 168h
 LIFELINE_TYPES = {"5050", "publika", "telefon"}
 
 # ostatni aktywny quiz per kanał
@@ -270,6 +270,41 @@ class QuizPersistentView(ui.View):
     @ui.button(label="D", custom_id="quiz_D", style=ButtonStyle.secondary)
     async def _d(self, interaction: Interaction, button: ui.Button):
         await handle_answer_click(interaction, "D")
+
+    # --- KOŁA RATUNKOWE (drugi rząd pod pytaniem) ---
+    @ui.button(label="50/50", custom_id="ll_5050", style=ButtonStyle.primary, row=1)
+    async def lifeline_5050(self, interaction: Interaction, button: ui.Button):
+        # używamy istniejącej logiki /polnapol
+        await slash_polnapol(interaction)
+
+    @ui.button(label="Publika", custom_id="ll_publika", style=ButtonStyle.primary, row=1)
+    async def lifeline_publika(self, interaction: Interaction, button: ui.Button):
+        # używamy istniejącej logiki /publika
+        await slash_publika(interaction)
+
+    @ui.button(label="Telefon", custom_id="ll_telefon", style=ButtonStyle.primary, row=1)
+    async def lifeline_telefon(self, interaction: Interaction, button: ui.Button):
+        # otwórz selektor użytkownika (ephemeral), a callback odpali slash_telefon
+        await interaction.response.send_message(
+            "Wybierz, do kogo dzwonisz:",
+            view=TelefonSelectView(),
+            ephemeral=True
+        )
+
+# --- Selektor użytkownika dla „Telefonu” ---
+class TelefonSelect(ui.UserSelect):
+    def __init__(self):
+        super().__init__(min_values=1, max_values=1, placeholder="Wybierz gracza")
+
+    async def callback(self, interaction: Interaction):
+        friend = self.values[0]  # discord.Member/User
+        # wywołujemy istniejącą logikę /telefon (brak cooldownu, jeśli cel nie odpowiedział)
+        await slash_telefon(interaction, friend)
+
+class TelefonSelectView(ui.View):
+    def __init__(self):
+        super().__init__(timeout=60)
+        self.add_item(TelefonSelect())
 
 async def handle_answer_click(interaction: Interaction, letter: str):
     mid = interaction.message.id if interaction.message else None
@@ -564,17 +599,17 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     if datetime.datetime.utcnow() > state.end_time:
         return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-    # sprawdź cooldown koła
+    # sprawdź cooldown koła (168h)
     cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
     if cd:
         return await interaction.response.send_message(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", ephemeral=True)
 
-    letter = state.answers.get(friend.id)
+    letter = state.answers.get(getattr(friend, "id", None))
 
     # jeśli wskazany gracz nie odpowiedział → nie zużywamy koła (brak cooldownu)
     if not letter:
         return await interaction.response.send_message(
-            f"📵 Abonent **{friend.display_name}** tymczasowo niedostępny – jeszcze nie odpowiedział(a). "
+            f"📵 Abonent **{getattr(friend, 'display_name', 'użytkownik')}** tymczasowo niedostępny – jeszcze nie odpowiedział(a). "
             f"Spróbuj zadzwonić później lub do kogoś innego. (Koło **nie** zostało zużyte.)",
             ephemeral=True
         )
@@ -594,16 +629,15 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     ]
     msg = random.choice(responses).format(answer=letter)
 
-    # >>> ZMIANA: pokazujemy, kto odebrał telefon (nick)
     await interaction.response.send_message(
-        f"📞 Telefon do **{friend.display_name}** → {msg}",
+        f"📞 Telefon do **{getattr(friend, 'display_name', 'użytkownik')}** → {msg}",
         ephemeral=True
     )
 
 @bot.tree.command(name="mojekola", description="Pokaż stan swoich kół ratunkowych (cooldowny).")
 async def slash_mojekola(interaction: discord.Interaction):
     types = [("5050", "🌓 50/50"), ("publika", "📊 Publika"), ("telefon", "📞 Telefon")]
-    lines = []
+    lines = [f"⏳ Cooldown kół: **{COOLDOWN_HOURS}h**"]
     for t_key, t_label in types:
         last = await db_lifeline_last_used(interaction.user.id, t_key)
         if not last:
@@ -679,7 +713,7 @@ class PingHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    # --- DODANE: HEAD dla monitorów uptime ---
+    # --- HEAD dla monitorów uptime ---
     def do_HEAD(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
@@ -689,7 +723,7 @@ class PingHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    # --- (opcjonalnie) DODANE: POST, jeśli monitor używa POST ---
+    # --- (opcjonalnie) POST, jeśli monitor używa POST ---
     def do_POST(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
