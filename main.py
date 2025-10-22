@@ -40,7 +40,7 @@ if os.getenv("BOT_DISABLED", "").lower() == "true":
     log.warning("BOT_DISABLED=true → wychodzę.")
     raise SystemExit(0)
 
-TOKEN = require_env("TOKEN")  # <- używaj ENV: TOKEN
+TOKEN = require_env("TOKEN")
 GUILD_ID = int(require_env("GUILD_ID"))
 
 SUPABASE_URL = require_env("SUPABASE_URL")
@@ -154,7 +154,6 @@ async def db_save_ranking(data: Dict[str, Dict[str, Any]]) -> None:
         log.error("DB save ranking error: %r", e)
 
 # --- Lifelines: DB helpers (cooldown) ---
-# używamy tabeli: lifelines_usage (user_id TEXT, type TEXT, used_at TIMESTAMP/STRING ISO)
 async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[datetime.datetime]:
     try:
         resp = await asyncio.to_thread(
@@ -243,6 +242,115 @@ quiz_lock = asyncio.Lock()
 def fmt_timestr(dt: datetime.datetime) -> str:
     return dt.strftime("%H:%M:%S UTC")
 
+# -------------- Helper: bezpieczne ephemeral --------------
+async def _safe_ephemeral(interaction: Interaction, content: str):
+    try:
+        if interaction.response.is_done():
+            await interaction.followup.send(content, ephemeral=True)
+        else:
+            await interaction.response.send_message(content, ephemeral=True)
+    except Exception:
+        # ostatnia próba – jeśli coś już poszło
+        try:
+            await interaction.followup.send(content, ephemeral=True)
+        except Exception:
+            pass
+
+# -------------- CORE: wspólna logika kół -------------------
+async def core_polnapol(interaction: Interaction):
+    ch = interaction.channel
+    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+        return await _safe_ephemeral(interaction, "Użyj na kanale tekstowym.")
+    state = get_state_for_channel(ch.id)
+    if not state:
+        return await _safe_ephemeral(interaction, "Brak aktywnego pytania na tym kanale.")
+    if datetime.datetime.utcnow() > state.end_time:
+        return await _safe_ephemeral(interaction, "Czas na to pytanie już minął.")
+
+    cd = await lifeline_check_cooldown(interaction.user.id, "5050")
+    if cd:
+        return await _safe_ephemeral(interaction, f"50/50 w cooldownie jeszcze {cd}.")
+
+    correct = state.question["answer"]
+    wrong = [x for x in ["A","B","C","D"] if x != correct]
+    kept = [correct, random.choice(wrong)]
+    random.shuffle(kept)
+
+    await db_lifeline_mark_use(interaction.user.id, "5050")
+    await _safe_ephemeral(interaction, f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**")
+
+async def core_publika(interaction: Interaction):
+    ch = interaction.channel
+    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+        return await _safe_ephemeral(interaction, "Użyj na kanale tekstowym.")
+    state = get_state_for_channel(ch.id)
+    if not state:
+        return await _safe_ephemeral(interaction, "Brak aktywnego pytania na tym kanale.")
+    if datetime.datetime.utcnow() > state.end_time:
+        return await _safe_ephemeral(interaction, "Czas na to pytanie już minął.")
+
+    cd = await lifeline_check_cooldown(interaction.user.id, "publika")
+    if cd:
+        return await _safe_ephemeral(interaction, f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.")
+
+    counts = {k: 0 for k in ["A", "B", "C", "D"]}
+    for letter in state.answers.values():
+        if letter in counts:
+            counts[letter] += 1
+    total = sum(counts.values()) or 1
+    perc = {k: round(v * 100 / total) for k, v in counts.items()}
+
+    await db_lifeline_mark_use(interaction.user.id, "publika")
+    msg = (
+        "📊 Głosy do tej pory:\n"
+        f"A: {counts['A']} ({perc['A']}%)\n"
+        f"B: {counts['B']} ({perc['B']}%)\n"
+        f"C: {counts['C']} ({perc['C']}%)\n"
+        f"D: {counts['D']} ({perc['D']}%)"
+    )
+    await _safe_ephemeral(interaction, msg)
+
+async def core_telefon(interaction: Interaction, friend: discord.abc.User):
+    ch = interaction.channel
+    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+        return await _safe_ephemeral(interaction, "Użyj na kanale tekstowym.")
+    state = get_state_for_channel(ch.id)
+    if not state:
+        return await _safe_ephemeral(interaction, "Brak aktywnego pytania na tym kanale.")
+    if datetime.datetime.utcnow() > state.end_time:
+        return await _safe_ephemeral(interaction, "Czas na to pytanie już minął.")
+
+    cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
+    if cd:
+        return await _safe_ephemeral(interaction, f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.")
+
+    fid = getattr(friend, "id", None)
+    letter = state.answers.get(fid)
+
+    if not letter:
+        return await _safe_ephemeral(
+            interaction,
+            f"📵 Abonent **{getattr(friend, 'display_name', getattr(friend, 'name', 'użytkownik'))}** tymczasowo niedostępny – jeszcze nie odpowiedział(a). "
+            f"Spróbuj zadzwonić później lub do kogoś innego. (Koło **nie** zostało zużyte.)",
+        )
+
+    await db_lifeline_mark_use(interaction.user.id, "telefon")
+
+    responses = [
+        "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
+        "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
+        "Hmm... strzelam, że to **{answer}**.",
+        "Myślę, że to może być **{answer}**, ale nie dam sobie ręki uciąć.",
+        "Nie jestem ekspertem, ale obstawiam **{answer}**.",
+        "Nie wiem na 100%, ale wydaje mi się, że chodzi o **{answer}**.",
+        "Kurczę... mam przeczucie, że to **{answer}**.",
+    ]
+    msg = random.choice(responses).format(answer=letter)
+    await _safe_ephemeral(
+        interaction,
+        f"📞 Telefon do **{getattr(friend, 'display_name', getattr(friend, 'name', 'użytkownik'))}** → {msg}"
+    )
+
 # -------------- Widok z przyciskami ----------
 class QuizPersistentView(ui.View):
     def __init__(self, disabled: bool=False):
@@ -271,25 +379,32 @@ class QuizPersistentView(ui.View):
     async def _d(self, interaction: Interaction, button: ui.Button):
         await handle_answer_click(interaction, "D")
 
+    # --- Etykieta nad kołami ratunkowymi (niewciśnialna) ---
+    @ui.button(label="Koła ratunkowe", custom_id="ll_label", style=ButtonStyle.secondary, disabled=True, row=1)
+    async def lifeline_label(self, interaction: Interaction, button: ui.Button):
+        # to tylko etykieta – nic nie robimy
+        await _safe_ephemeral(interaction, "To tylko etykieta 🙂")
+
     # --- KOŁA RATUNKOWE (drugi rząd pod pytaniem) ---
     @ui.button(label="50/50", custom_id="ll_5050", style=ButtonStyle.primary, row=1)
     async def lifeline_5050(self, interaction: Interaction, button: ui.Button):
-        # używamy istniejącej logiki /polnapol
-        await slash_polnapol(interaction)
+        await core_polnapol(interaction)
 
     @ui.button(label="Publika", custom_id="ll_publika", style=ButtonStyle.primary, row=1)
     async def lifeline_publika(self, interaction: Interaction, button: ui.Button):
-        # używamy istniejącej logiki /publika
-        await slash_publika(interaction)
+        await core_publika(interaction)
 
     @ui.button(label="Telefon", custom_id="ll_telefon", style=ButtonStyle.primary, row=1)
     async def lifeline_telefon(self, interaction: Interaction, button: ui.Button):
-        # otwórz selektor użytkownika (ephemeral), a callback odpali slash_telefon
-        await interaction.response.send_message(
+        await _safe_ephemeral(
+            interaction,
             "Wybierz, do kogo dzwonisz:",
-            view=TelefonSelectView(),
-            ephemeral=True
         )
+        # wyślij osobny widok z selectem (ephemeral już poszedł wyżej)
+        try:
+            await interaction.followup.send(view=TelefonSelectView(), ephemeral=True)
+        except Exception:
+            pass
 
 # --- Selektor użytkownika dla „Telefonu” ---
 class TelefonSelect(ui.UserSelect):
@@ -298,8 +413,7 @@ class TelefonSelect(ui.UserSelect):
 
     async def callback(self, interaction: Interaction):
         friend = self.values[0]  # discord.Member/User
-        # wywołujemy istniejącą logikę /telefon (brak cooldownu, jeśli cel nie odpowiedział)
-        await slash_telefon(interaction, friend)
+        await core_telefon(interaction, friend)
 
 class TelefonSelectView(ui.View):
     def __init__(self):
@@ -309,21 +423,18 @@ class TelefonSelectView(ui.View):
 async def handle_answer_click(interaction: Interaction, letter: str):
     mid = interaction.message.id if interaction.message else None
     if not mid:
-        return await interaction.response.send_message("Brak powiązanego pytania.", ephemeral=True)
+        return await _safe_ephemeral(interaction, "Brak powiązanego pytania.")
     state = active_quizzes.get(mid)
     now = datetime.datetime.utcnow()
     if not state:
-        return await interaction.response.send_message("Ten quiz już nie przyjmuje odpowiedzi.", ephemeral=True)
+        return await _safe_ephemeral(interaction, "Ten quiz już nie przyjmuje odpowiedzi.")
     if now > state.end_time:
-        return await interaction.response.send_message("Czas minął. Odpowiedzi po czasie nie są liczone.", ephemeral=True)
+        return await _safe_ephemeral(interaction, "Czas minął. Odpowiedzi po czasie nie są liczone.")
     uid = interaction.user.id
     if uid in state.answers:
-        return await interaction.response.send_message("Masz już zapisaną odpowiedź.", ephemeral=True)
+        return await _safe_ephemeral(interaction, "Masz już zapisaną odpowiedź.")
     state.answers[uid] = letter
-    try:
-        await interaction.response.send_message("Zapisano odpowiedź ✅", ephemeral=True)
-    except discord.errors.InteractionResponded:
-        pass
+    await _safe_ephemeral(interaction, "Zapisano odpowiedź ✅")
 
 def build_question_message(q: Dict[str, Any]) -> str:
     return (
@@ -511,9 +622,7 @@ async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None)
 @commands.is_owner()
 async def sync_slash(ctx: commands.Context):
     try:
-        # global
         await bot.tree.sync()
-        # instant dla Twojej gildii
         guild_obj = discord.Object(id=GUILD_ID)
         bot.tree.copy_global_to(guild=guild_obj)
         await bot.tree.sync(guild=guild_obj)
@@ -524,115 +633,23 @@ async def sync_slash(ctx: commands.Context):
         await ctx.reply(f"⚠️ Sync error: {e}")
         log.exception("Manual sync error: %r", e)
 
-# -------------- Slash commands (EPHEMERAL KOŁA) -----------------------------
+# -------------- Slash commands → wołają CORE -------------------
 @bot.tree.command(name="ping", description="Sprawdź, czy slash-komendy działają (ephemeral).")
 async def slash_ping(interaction: discord.Interaction):
-    await interaction.response.send_message("🏓 Działam!", ephemeral=True)
+    await _safe_ephemeral(interaction, "🏓 Działam!")
 
 @bot.tree.command(name="polnapol", description="Pół na pół – widoczne tylko dla Ciebie (ephemeral).")
 async def slash_polnapol(interaction: discord.Interaction):
-    ch = interaction.channel
-    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
-        return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
-    state = get_state_for_channel(ch.id)
-    if not state:
-        return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
-    if datetime.datetime.utcnow() > state.end_time:
-        return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
-
-    cd = await lifeline_check_cooldown(interaction.user.id, "5050")
-    if cd:
-        return await interaction.response.send_message(f"50/50 w cooldownie jeszcze {cd}.", ephemeral=True)
-
-    correct = state.question["answer"]
-    wrong = [x for x in ["A","B","C","D"] if x != correct]
-    kept = [correct, random.choice(wrong)]
-    random.shuffle(kept)
-
-    await db_lifeline_mark_use(interaction.user.id, "5050")
-    await interaction.response.send_message(
-        f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**",
-        ephemeral=True
-    )
+    await core_polnapol(interaction)
 
 @bot.tree.command(name="publika", description="Pytanie do publiczności – procentowy rozkład głosów (ephemeral).")
 async def slash_publika(interaction: discord.Interaction):
-    ch = interaction.channel
-    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
-        return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
-    state = get_state_for_channel(ch.id)
-    if not state:
-        return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
-    if datetime.datetime.utcnow() > state.end_time:
-        return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
-
-    cd = await lifeline_check_cooldown(interaction.user.id, "publika")
-    if cd:
-        return await interaction.response.send_message(f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.", ephemeral=True)
-
-    counts = {k: 0 for k in ["A", "B", "C", "D"]}
-    for letter in state.answers.values():
-        if letter in counts:
-            counts[letter] += 1
-    total = sum(counts.values()) or 1
-    perc = {k: round(v * 100 / total) for k, v in counts.items()}
-
-    await db_lifeline_mark_use(interaction.user.id, "publika")
-    msg = (
-        "📊 Głosy do tej pory:\n"
-        f"A: {counts['A']} ({perc['A']}%)\n"
-        f"B: {counts['B']} ({perc['B']}%)\n"
-        f"C: {counts['C']} ({perc['C']}%)\n"
-        f"D: {counts['D']} ({perc['D']}%)"
-    )
-    await interaction.response.send_message(msg, ephemeral=True)
+    await core_publika(interaction)
 
 @bot.tree.command(name="telefon", description="Telefon do przyjaciela – pokaż odpowiedź wskazanego gracza (ephemeral).")
 @app_commands.describe(friend="Wskaż gracza, którego odpowiedź chcesz podejrzeć")
 async def slash_telefon(interaction: discord.Interaction, friend: discord.Member):
-    ch = interaction.channel
-    if not isinstance(ch, (discord.TextChannel, discord.Thread)):
-        return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
-    state = get_state_for_channel(ch.id)
-    if not state:
-        return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
-    if datetime.datetime.utcnow() > state.end_time:
-        return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
-
-    # sprawdź cooldown koła (168h)
-    cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
-    if cd:
-        return await interaction.response.send_message(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", ephemeral=True)
-
-    letter = state.answers.get(getattr(friend, "id", None))
-
-    # jeśli wskazany gracz nie odpowiedział → nie zużywamy koła (brak cooldownu)
-    if not letter:
-        return await interaction.response.send_message(
-            f"📵 Abonent **{getattr(friend, 'display_name', 'użytkownik')}** tymczasowo niedostępny – jeszcze nie odpowiedział(a). "
-            f"Spróbuj zadzwonić później lub do kogoś innego. (Koło **nie** zostało zużyte.)",
-            ephemeral=True
-        )
-
-    # jest odpowiedź → teraz zużywamy koło i uruchamiamy cooldown
-    await db_lifeline_mark_use(interaction.user.id, "telefon")
-
-    # LOSOWY TEKST NARRACYJNY
-    responses = [
-        "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
-        "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
-        "Hmm... strzelam, że to **{answer}**.",
-        "Myślę, że to może być **{answer}**, ale nie dam sobie ręki uciąć.",
-        "Nie jestem ekspertem, ale obstawiam **{answer}**.",
-        "Nie wiem na 100%, ale wydaje mi się, że chodzi o **{answer}**.",
-        "Kurczę... mam przeczucie, że to **{answer}**.",
-    ]
-    msg = random.choice(responses).format(answer=letter)
-
-    await interaction.response.send_message(
-        f"📞 Telefon do **{getattr(friend, 'display_name', 'użytkownik')}** → {msg}",
-        ephemeral=True
-    )
+    await core_telefon(interaction, friend)
 
 @bot.tree.command(name="mojekola", description="Pokaż stan swoich kół ratunkowych (cooldowny).")
 async def slash_mojekola(interaction: discord.Interaction):
@@ -649,7 +666,7 @@ async def slash_mojekola(interaction: discord.Interaction):
         else:
             lines.append(f"{t_label}: **dostępne** ✅")
     msg = "🔎 **Twoje koła ratunkowe**\n" + "\n".join(lines)
-    await interaction.response.send_message(msg, ephemeral=True)
+    await _safe_ephemeral(interaction, msg)
 
 # -------------- Scheduler ---------------------
 def _parse_quiz_times(spec: str) -> List[datetime.time]:
@@ -713,7 +730,6 @@ class PingHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    # --- HEAD dla monitorów uptime ---
     def do_HEAD(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
@@ -723,7 +739,6 @@ class PingHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    # --- (opcjonalnie) POST, jeśli monitor używa POST ---
     def do_POST(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
@@ -753,10 +768,9 @@ async def watchdog():
     except Exception:
         os._exit(1)
 
-# -------------- Self-uptime ping (Render keep-alive) ------------
+# -------------- Self-uptime ping ------------
 @tasks.loop(minutes=5)
 async def uptime_ping():
-    """Ping co 5 minut, żeby Render nie usypiał instancji."""
     url = "https://naruto-quiz-bot.onrender.com/healthz"
     try:
         async with aiohttp.ClientSession() as session:
@@ -808,22 +822,18 @@ async def on_ready():
     if not watchdog.is_running():
         watchdog.start()
     if not uptime_ping.is_running():
-        uptime_ping.start()  # self-ping co 5 min
+        uptime_ping.start()
 
     try:
-        # 1) global sync
         await bot.tree.sync()
-        # 2) instant dla Twojej gildii (kopiuj globalne → gildia) i zsynchronizuj gildię
         guild_obj = discord.Object(id=GUILD_ID)
         bot.tree.copy_global_to(guild=guild_obj)
         await bot.tree.sync(guild=guild_obj)
-
         names = [cmd.name for cmd in bot.tree.get_commands()]
         log.info("Slash commands synced. Global list: %s", names)
     except Exception as e:
         log.exception("Slash sync error: %r", e)
 
-# Globalny handler błędów dla slashy
 @bot.tree.error
 async def on_app_command_error(interaction: discord.Interaction, error: Exception):
     try:
@@ -836,7 +846,6 @@ async def on_app_command_error(interaction: discord.Interaction, error: Exceptio
     log.exception("Slash command error: %r", error)
 
 def main():
-    # odpal lekki serwer healthcheck na porcie 8081 (Render go sprawdza)
     threading.Thread(target=run_health_server, daemon=True).start()
     bot.run(TOKEN)
 
