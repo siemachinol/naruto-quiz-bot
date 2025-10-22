@@ -564,29 +564,41 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     if datetime.datetime.utcnow() > state.end_time:
         return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
+    # sprawdź cooldown koła
     cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
     if cd:
         return await interaction.response.send_message(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", ephemeral=True)
 
     letter = state.answers.get(friend.id)
+
+    # jeśli wskazany gracz nie odpowiedział → nie zużywamy koła (brak cooldownu)
+    if not letter:
+        return await interaction.response.send_message(
+            f"📵 Abonent **{friend.display_name}** tymczasowo niedostępny – jeszcze nie odpowiedział(a). "
+            f"Spróbuj zadzwonić później lub do kogoś innego. (Koło **nie** zostało zużyte.)",
+            ephemeral=True
+        )
+
+    # jest odpowiedź → teraz zużywamy koło i uruchamiamy cooldown
     await db_lifeline_mark_use(interaction.user.id, "telefon")
 
-    if not letter:
-        msg = f"{friend.display_name} **jeszcze nie odpowiedział(a)**."
-    else:
-        # LOSOWY TEKST NARRACYJNY
-        responses = [
-            "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
-            "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
-            "Hmm... strzelam, że to **{answer}**.",
-            "Myślę, że to może być **{answer}**, ale nie dam sobie ręki uciąć.",
-            "Nie jestem ekspertem, ale obstawiam **{answer}**.",
-            "Nie wiem na 100%, ale wydaje mi się, że chodzi o **{answer}**.",
-            "Kurczę... mam przeczucie, że to **{answer}**.",
-        ]
-        msg = random.choice(responses).format(answer=letter)
+    # LOSOWY TEKST NARRACYJNY
+    responses = [
+        "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
+        "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
+        "Hmm... strzelam, że to **{answer}**.",
+        "Myślę, że to może być **{answer}**, ale nie dam sobie ręki uciąć.",
+        "Nie jestem ekspertem, ale obstawiam **{answer}**.",
+        "Nie wiem na 100%, ale wydaje mi się, że chodzi o **{answer}**.",
+        "Kurczę... mam przeczucie, że to **{answer}**.",
+    ]
+    msg = random.choice(responses).format(answer=letter)
 
-    await interaction.response.send_message(f"📞 Telefon do przyjaciela → {msg}", ephemeral=True)
+    # >>> ZMIANA: pokazujemy, kto odebrał telefon (nick)
+    await interaction.response.send_message(
+        f"📞 Telefon do **{friend.display_name}** → {msg}",
+        ephemeral=True
+    )
 
 @bot.tree.command(name="mojekola", description="Pokaż stan swoich kół ratunkowych (cooldowny).")
 async def slash_mojekola(interaction: discord.Interaction):
