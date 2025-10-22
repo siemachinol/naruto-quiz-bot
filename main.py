@@ -656,12 +656,37 @@ async def daily_quiz_task():
 class PingHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         return
+
     def do_GET(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
             self.send_header("Content-Type","text/plain; charset=utf-8")
             self.end_headers()
             self.wfile.write(b"ok")
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    # --- DODANE: HEAD dla monitorów uptime ---
+    def do_HEAD(self):
+        if self.path in ("/healthz", "/"):
+            self.send_response(200)
+            self.send_header("Content-Type","text/plain; charset=utf-8")
+            self.end_headers()
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    # --- (opcjonalnie) DODANE: POST, jeśli monitor używa POST ---
+    def do_POST(self):
+        if self.path in ("/healthz", "/"):
+            self.send_response(200)
+            self.send_header("Content-Type","text/plain; charset=utf-8")
+            self.end_headers()
+            try:
+                self.wfile.write(b"ok")
+            except Exception:
+                pass
         else:
             self.send_response(404)
             self.end_headers()
