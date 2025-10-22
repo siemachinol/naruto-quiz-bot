@@ -8,6 +8,7 @@ import datetime
 import threading
 from typing import Dict, Any, Optional, List, Set
 
+import aiohttp
 import discord
 from discord.ext import commands, tasks
 from discord import ButtonStyle, Interaction, ui, app_commands
@@ -39,7 +40,7 @@ if os.getenv("BOT_DISABLED", "").lower() == "true":
     log.warning("BOT_DISABLED=true → wychodzę.")
     raise SystemExit(0)
 
-TOKEN = require_env("TOKEN")
+TOKEN = require_env("TOKEN")  # <- używaj ENV: TOKEN
 GUILD_ID = int(require_env("GUILD_ID"))
 
 SUPABASE_URL = require_env("SUPABASE_URL")
@@ -153,6 +154,7 @@ async def db_save_ranking(data: Dict[str, Dict[str, Any]]) -> None:
         log.error("DB save ranking error: %r", e)
 
 # --- Lifelines: DB helpers (cooldown) ---
+# używamy tabeli: lifelines_usage (user_id TEXT, type TEXT, used_at TIMESTAMP/STRING ISO)
 async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[datetime.datetime]:
     try:
         resp = await asyncio.to_thread(
@@ -572,7 +574,7 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     if not letter:
         msg = f"{friend.display_name} **jeszcze nie odpowiedział(a)**."
     else:
-        # >>> LOSOWY TEKST NARRACYJNY <<<
+        # LOSOWY TEKST NARRACYJNY
         responses = [
             "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
             "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
@@ -680,6 +682,21 @@ async def watchdog():
     except Exception:
         os._exit(1)
 
+# -------------- Self-uptime ping (Render keep-alive) ------------
+@tasks.loop(minutes=5)
+async def uptime_ping():
+    """Ping co 5 minut, żeby Render nie usypiał instancji."""
+    url = "https://naruto-quiz-bot.onrender.com/healthz"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=10) as resp:
+                if resp.status == 200:
+                    log.info("Uptime ping OK (%s)", url)
+                else:
+                    log.warning("Uptime ping FAIL %s (%s)", url, resp.status)
+    except Exception as e:
+        log.warning("Uptime ping exception: %r", e)
+
 # -------------- Utility -----------------------
 _guild_cache: Optional[discord.Guild] = None
 _channel_cache: Optional[discord.TextChannel] = None
@@ -719,6 +736,9 @@ async def on_ready():
         daily_quiz_task.start()
     if not watchdog.is_running():
         watchdog.start()
+    if not uptime_ping.is_running():
+        uptime_ping.start()  # self-ping co 5 min
+
     try:
         # 1) global sync
         await bot.tree.sync()
@@ -745,6 +765,7 @@ async def on_app_command_error(interaction: discord.Interaction, error: Exceptio
     log.exception("Slash command error: %r", error)
 
 def main():
+    # odpal lekki serwer healthcheck na porcie 8081 (Render go sprawdza)
     threading.Thread(target=run_health_server, daemon=True).start()
     bot.run(TOKEN)
 
