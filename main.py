@@ -623,3 +623,97 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# =========================
+# LEGACY ALIASY + CICHY HANDLER BŁĘDÓW (DOKLEJ NA SAM KONIEC PLIKU)
+# =========================
+
+from discord.ext import commands as _legacy_commands
+import discord as _discord
+
+# 1) Cichutko ignoruj nieistniejące komendy prefixowe, żeby logi nie były czerwone
+@bot.event
+async def on_command_error(ctx: _legacy_commands.Context, error: Exception):
+    # Ktoś wpisał np. !cos – nie spamujemy logiem
+    if isinstance(error, _legacy_commands.CommandNotFound):
+        return
+    # inne błędy pokaż normalnie (żeby debug nie zniknął)
+    raise error
+
+
+# 2) !quiz – ręczne odpalenie pytania (dla administracji)
+@bot.command(name="quiz")
+@_legacy_commands.has_permissions(manage_guild=True)
+async def _legacy_quiz(ctx: _legacy_commands.Context):
+    """
+    Alias do starego !quiz. Nie zmieniam Twojej logiki:
+    - jeśli masz w kodzie funkcję postującą pytanie (np. post_quiz / send_quiz / ask_question),
+      to użyjemy jej; jeśli nie znajdziemy – damy czytelną informację.
+    """
+    # spróbuj odnaleźć istniejącą funkcję z Twojego pliku bez psucia czegokolwiek
+    target_fn = None
+    for cand in ("post_quiz", "send_quiz", "ask_question", "start_quiz", "send_quiz_question"):
+        fn = globals().get(cand)
+        if callable(fn):
+            target_fn = fn
+            break
+
+    if target_fn is None:
+        await ctx.reply(
+            "Nie znalazłem funkcji startującej pytanie w tej instancji bota.\n"
+            "Użyj proszę standardowej ścieżki (np. slashów) albo daj mi znać, "
+            "jak nazywa się Twoja funkcja od zadawania pytania – podepnę ją tu.",
+            mention_author=False,
+        )
+        return
+
+    try:
+        # najczęściej funkcja przyjmuje kanał docelowy; jeśli nie – spróbujemy bez argumentów
+        try:
+            await target_fn(ctx.channel)
+        except TypeError:
+            await target_fn()
+        try:
+            await ctx.message.add_reaction("✅")
+        except Exception:
+            pass
+    except Exception as e:
+        await ctx.reply(f"Nie udało się wystartować pytania: `{e}`", mention_author=False)
+
+
+# 3) !ranking – szybki podgląd TOP N z tabeli `ranking`
+@bot.command(name="ranking")
+async def _legacy_ranking(ctx: _legacy_commands.Context, top: int = 10):
+    """
+    Alias do starego !ranking. Czyta tabelę 'ranking' w Supabase i wypisuje TOP.
+    NIE zmieniam Twojej struktury – zakładam kolumny: user_id, name, points (jak wcześniej).
+    """
+    try:
+        # supabase klient MUSI już istnieć w Twoim pliku (tak jak do tej pory)
+        res = supabase.table("ranking").select("*").order("points", desc=True).limit(max(1, top)).execute()
+        rows = res.data or []
+        if not rows:
+            await ctx.reply("Ranking jest pusty.", mention_author=False)
+            return
+
+        lines = []
+        for i, r in enumerate(rows, start=1):
+            name = r.get("name") or "???"
+            pts = r.get("points") or 0
+            lines.append(f"{i}. **{name}** — {pts} pkt")
+
+        embed = _discord.Embed(
+            title="Ranking",
+            description="\n".join(lines),
+            color=_discord.Color.blurple()
+        )
+        await ctx.reply(embed=embed, mention_author=False)
+
+    except Exception as e:
+        # Jeśli ktoś nie ma tabeli ranking – niech dostanie czytelną wiadomość
+        await ctx.reply(
+            "Nie udało się pobrać rankingu z bazy.\n"
+            f"Powód: `{e}`\n"
+            "Sprawdź, czy istnieje tabela `ranking` (kolumny: user_id (UNIQUE), name, points, weekly, monthly).",
+            mention_author=False,
+        )
