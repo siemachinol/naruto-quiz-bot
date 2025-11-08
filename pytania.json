@@ -1,1 +1,3126 @@
-
+[
+  {
+    "question": "Jak nazywa się technika, której Itachi użył na Kakashim podczas ich pierwszego starcia?",
+    "options": {
+      "A": "Chidori",
+      "B": "Amaterasu",
+      "C": "Tsukuyomi",
+      "D": "Kamui"
+    },
+    "answer": "C",
+    "id": 1
+  },
+  {
+    "question": "Kto był przywódcą Pierwszego Oddziału Aliansu Shinobi podczas Wojny Ninja?",
+    "options": {
+      "A": "Darui",
+      "B": "Kitsuchi",
+      "C": "Gaara",
+      "D": "Kakashi"
+    },
+    "answer": "A",
+    "id": 2
+  },
+  {
+    "question": "Który z członków Akatsuki był nieoficjalnie szpiegiem dla Konohy?",
+    "options": {
+      "A": "Kisame",
+      "B": "Sasori",
+      "C": "Itachi",
+      "D": "Hidan"
+    },
+    "answer": "C",
+    "id": 3
+  },
+  {
+    "question": "Jak nazywa się technika, której użył Minato, aby zapieczętować Kyuubiego?",
+    "options": {
+      "A": "Hiraishin no Jutsu",
+      "B": "Shiki Fujin",
+      "C": "Monster Death Seal",
+      "D": "Fuinjutsu: Kyubi Fūin"
+    },
+    "answer": "B",
+    "id": 4
+  },
+  {
+    "question": "Który z Hokage stworzył technikę Edo Tensei?",
+    "options": {
+      "A": "Hiruzen Sarutobi",
+      "B": "Tobirama Senju",
+      "C": "Minato Namikaze",
+      "D": "Hashirama Senju"
+    },
+    "answer": "B",
+    "id": 5
+  },
+  {
+    "question": "Kto zabił Shisui Uchiha?",
+    "options": {
+      "A": "Danzo",
+      "B": "Itachi",
+      "C": "Kakashi",
+      "D": "Sam popełnił samobójstwo"
+    },
+    "answer": "D",
+    "id": 6
+  },
+  {
+    "question": "Jaka była unikalna umiejętność Kekkei Genkai Kimimaro?",
+    "options": {
+      "A": "Mokuton",
+      "B": "Jinton",
+      "C": "Shikotsumyaku",
+      "D": "Yoton"
+    },
+    "answer": "C",
+    "id": 7
+  },
+  {
+    "question": "Jak nazywała się organizacja, do której należał Yahiko?",
+    "options": {
+      "A": "Akatsuki",
+      "B": "ANBU",
+      "C": "Uzushio",
+      "D": "Kara"
+    },
+    "answer": "A",
+    "id": 8
+  },
+  {
+    "question": "Kto był piątym Mizukage?",
+    "options": {
+      "A": "Zabuza",
+      "B": "Yagura",
+      "C": "Mei Terumi",
+      "D": "Chojuro"
+    },
+    "answer": "C",
+    "id": 9
+  },
+  {
+    "question": "Podczas walki Naruto i Sasuke w Dolinie Końca (part 1), ile ogonów maksymalnie przejawił Naruto?",
+    "options": {
+      "A": "0",
+      "B": "1",
+      "C": "2",
+      "D": "3"
+    },
+    "answer": "B",
+    "id": 10
+  },
+  {
+    "question": "Jaką techniką Shikamaru ostatecznie unieruchomił Hidana w lesie?",
+    "options": {
+      "A": "Kagemanedem no Jutsu",
+      "B": "Kagemane Shuriken",
+      "C": "Kage Nui",
+      "D": "Kagemane no Jutsu, pułapka i detonacja"
+    },
+    "answer": "D",
+    "id": 11
+  },
+  {
+    "question": "Która z wymienionych postaci NIE była Jinchuuriki?",
+    "options": {
+      "A": "Yugito Nii",
+      "B": "Killer Bee",
+      "C": "Han",
+      "D": "Fugaku Uchiha"
+    },
+    "answer": "D",
+    "id": 12
+  },
+  {
+    "question": "Jakie było PRAWDZIWE imię Tobiego przed ujawnieniem swojej tożsamości?",
+    "options": {
+      "A": "Madara",
+      "B": "Obito",
+      "C": "Izuna",
+      "D": "Shisui"
+    },
+    "answer": "B",
+    "id": 13
+  },
+  {
+    "question": "Kto był mistrzem Hiruzena Sarutobi?",
+    "options": {
+      "A": "Tobirama Senju",
+      "B": "Hashirama Senju",
+      "C": "Kagami Uchiha",
+      "D": "Utakata"
+    },
+    "answer": "A",
+    "id": 14
+  },
+  {
+    "question": "Która z technik pozwala na manipulowanie cieniami?",
+    "options": {
+      "A": "Kagemane no Jutsu",
+      "B": "Tsukuyomi",
+      "C": "Raikiri",
+      "D": "Amaterasu"
+    },
+    "answer": "A",
+    "id": 15
+  },
+  {
+    "question": "Jak nazywa się potężna bariera obronna klanu Hyuga?",
+    "options": {
+      "A": "Kaiten",
+      "B": "Tenketsu",
+      "C": "Byakugan Shield",
+      "D": "Hakke Kūshō"
+    },
+    "answer": "A",
+    "id": 16
+  },
+  {
+    "question": "Jaką rangę miał Kakashi w czasie egzaminu na Chunina Naruto?",
+    "options": {
+      "A": "Jounin",
+      "B": "Tokubetsu Jounin",
+      "C": "Chuunin",
+      "D": "ANBU"
+    },
+    "answer": "A",
+    "id": 17
+  },
+  {
+    "question": "Który z członków Akatsuki był nieśmiertelny?",
+    "options": {
+      "A": "Deidara",
+      "B": "Hidan",
+      "C": "Sasori",
+      "D": "Zetsu"
+    },
+    "answer": "B",
+    "id": 18
+  },
+  {
+    "question": "Kto był pierwszym właścicielem Rinnegana po Rikudou Sennin?",
+    "options": {
+      "A": "Nagato",
+      "B": "Madara",
+      "C": "Obito",
+      "D": "Indra"
+    },
+    "answer": "B",
+    "id": 19
+  },
+  {
+    "question": "Jaką specjalizację miał klan Aburame?",
+    "options": {
+      "A": "Techniki genjutsu",
+      "B": "Kontrola owadów",
+      "C": "Manipulacja czasem",
+      "D": "Fuuinjutsu"
+    },
+    "answer": "B",
+    "id": 20
+  },
+  {
+    "question": "Jak zginął Asuma Sarutobi?",
+    "options": {
+      "A": "Został zabity przez Hidan",
+      "B": "Zginął w walce z Kakuzu",
+      "C": "Został zabity przez Itachiego",
+      "D": "Popełnił samobójstwo"
+    },
+    "answer": "A",
+    "id": 21
+  },
+  {
+    "question": "Które z poniższych jutsu NIE jest techniką przestrzenno-czasową?",
+    "options": {
+      "A": "Kamui",
+      "B": "Flying Raijin",
+      "C": "Amaterasu",
+      "D": "Summoning Technique"
+    },
+    "answer": "C",
+    "id": 22
+  },
+  {
+    "question": "Jak nazywała się organizacja założona przez Sasuke?",
+    "options": {
+      "A": "Akatsuki",
+      "B": "Root",
+      "C": "Kara",
+      "D": "Hebi"
+    },
+    "answer": "D",
+    "id": 23
+  },
+  {
+    "question": "Jakiego koloru były włosy Nagato przed aktywacją Rinnegana?",
+    "options": {
+      "A": "Czarne",
+      "B": "Czerwone",
+      "C": "Białe",
+      "D": "Fioletowe"
+    },
+    "answer": "B",
+    "id": 24
+  },
+  {
+    "question": "Jakie bijuu miała w sobie Yugito?",
+    "options": {
+      "A": "Nibi (Dwa Ogony)",
+      "B": "Sanbi (Trzy Ogony)",
+      "C": "Ichibi (Jeden Ogon)",
+      "D": "Gobi (Pięć Ogonów)"
+    },
+    "answer": "A",
+    "id": 25
+  },
+  {
+    "question": "Z jakiego kraju pochodził Killer Bee?",
+    "options": {
+      "A": "Kraj Ognia",
+      "B": "Kraj Chmur",
+      "C": "Kraj Błyskawic",
+      "D": "Kraj Wody"
+    },
+    "answer": "C",
+    "id": 26
+  },
+  {
+    "question": "Jaką unikalną zdolność miał Mangekyou Sharingan Shisuiego?",
+    "options": {
+      "A": "Amaterasu",
+      "B": "Tsukuyomi",
+      "C": "Kotoamatsukami",
+      "D": "Susanoo"
+    },
+    "answer": "C",
+    "id": 27
+  },
+  {
+    "question": "Który z ninja był mistrzem Kabuto Yakushiego?",
+    "options": {
+      "A": "Orochimaru",
+      "B": "Sasori",
+      "C": "Danzo",
+      "D": "Hiruzen"
+    },
+    "answer": "A",
+    "id": 28
+  },
+  {
+    "question": "Która z poniższych technik nie należy do Minato?",
+    "options": {
+      "A": "Flying Raijin",
+      "B": "Rasengan",
+      "C": "Death Reaper Seal",
+      "D": "Chidori"
+    },
+    "answer": "D",
+    "id": 29
+  },
+  {
+    "question": "Kto został Kage najwcześniej wiekiem?",
+    "options": {
+      "A": "Gaara",
+      "B": "Tsunade",
+      "C": "Minato",
+      "D": "Yagura"
+    },
+    "answer": "A",
+    "id": 30
+  },
+  {
+    "question": "Jakiej techniki Itachi użył, aby zmusić Kabuto do zakończenia Edo Tensei i tym samym uwolnienia wszystkich przyzwanych dusz?",
+    "options": {
+      "A": "Tsukuyomi",
+      "B": "Amaterasu",
+      "C": "Kotoamatsukami",
+      "D": "Izanami"
+    },
+    "answer": "D",
+    "id": 31
+  },
+  {
+    "question": "Kto był pierwotnym właścicielem miecza Samehada?",
+    "options": {
+      "A": "Mangetsu Hozuki",
+      "B": "Kisame Hoshigaki",
+      "C": "Fuguki Suikazan",
+      "D": "Suigetsu Hozuki"
+    },
+    "answer": "C",
+    "id": 32
+  },
+  {
+    "question": "Jak nazywa się technika Hashiramy pozwalająca stworzyć olbrzymiego drewnianego wojownika?",
+    "options": {
+      "A": "Mokuton: Mokuryuu",
+      "B": "Mokuton: Kajukai Kōrin",
+      "C": "Mokuton: Hotei no Jutsu",
+      "D": "Mokuton: Mokujin no Jutsu"
+    },
+    "answer": "D",
+    "id": 33
+  },
+  {
+    "question": "Która postać miała bezpośredni kontakt z Rikudou Senninem według historii w anime?",
+    "options": {
+      "A": "Naruto",
+      "B": "Sakura",
+      "C": "Itachi Uchiha",
+      "D": "Kakashi Hatake"
+    },
+    "answer": "A",
+    "id": 34
+  },
+  {
+    "question": "Który członek Akatsuki był odpowiedzialny za szpiegowanie Orochimaru?",
+    "options": {
+      "A": "Sasori",
+      "B": "Zetsu",
+      "C": "Kabuto",
+      "D": "Itachi"
+    },
+    "answer": "A",
+    "id": 35
+  },
+  {
+    "question": "Jakiego rodzaju chakrą posługiwał się Pakura z Sunagakure?",
+    "options": {
+      "A": "Shakuton (Heat Release)",
+      "B": "Yoton (Lava)",
+      "C": "Jiton (Magnet)",
+      "D": "Futton (Boil)"
+    },
+    "answer": "A",
+    "id": 36
+  },
+  {
+    "question": "Który z Kage potrafił używać Kekkei Tota?",
+    "options": {
+      "A": "Gaara",
+      "B": "Oonoki",
+      "C": "Tobirama",
+      "D": "Hiruzen"
+    },
+    "answer": "B",
+    "id": 37
+  },
+  {
+    "question": "Kogo ożywił Kabuto, żeby wzmocnić armię Edo Tensei, mimo że wcześniej Orochimaru nie udało się tego dokonać?",
+    "options": {
+      "A": "Hashirama Senju",
+      "B": "Dan Katō",
+      "C": "Hiruzen Sarutobi",
+      "D": "Madara Uchiha"
+    },
+    "answer": "D",
+    "id": 38
+  },
+  {
+    "question": "Jakiego rodzaju jutsu użył Sasuke, by uwięzić Biju po zdobyciu Rinnegan?",
+    "options": {
+      "A": "Amenotejikara",
+      "B": "Chibaku Tensei",
+      "C": "Kotoamatsukami",
+      "D": "Limbo"
+    },
+    "answer": "B",
+    "id": 39
+  },
+  {
+    "question": "Które z dzieci Hagoromo odziedziczyło jego fizyczną siłę i ciało?",
+    "options": {
+      "A": "Indra",
+      "B": "Asura",
+      "C": "Hamura",
+      "D": "Kaguya"
+    },
+    "answer": "B",
+    "id": 40
+  },
+  {
+    "question": "Jaką technikę uznaje się za pierwowzór Rasengana?",
+    "options": {
+      "A": "Bijuu Dama",
+      "B": "Chidori",
+      "C": "Odama Rasengan",
+      "D": "Flying Thunder God"
+    },
+    "answer": "A",
+    "id": 41
+  },
+  {
+    "question": "Jaką cechę dziedziczyli członkowie klanu Kaguya?",
+    "options": {
+      "A": "Shikotsumyaku",
+      "B": "Byakugan",
+      "C": "Jinton",
+      "D": "Shakuton"
+    },
+    "answer": "A",
+    "id": 42
+  },
+  {
+    "question": "Co było kluczowe do aktywowania Rinnegan przez Madarę?",
+    "options": {
+      "A": "Komórki Hashiramy",
+      "B": "Mangekyou Sharingan",
+      "C": "Chakra Kuramy",
+      "D": "DNA Senju"
+    },
+    "answer": "A",
+    "id": 43
+  },
+  {
+    "question": "Jak nazywał się specjalny klan z Kirigakure zdolny do manipulacji wodą?",
+    "options": {
+      "A": "Hozuki",
+      "B": "Yuki",
+      "C": "Fuma",
+      "D": "Kamizuru"
+    },
+    "answer": "A",
+    "id": 44
+  },
+  {
+    "question": "Jak nazywał się nauczyciel ANBU, który trenował Yamato?",
+    "options": {
+      "A": "Danzo",
+      "B": "Kakashi",
+      "C": "Hiruzen",
+      "D": "Orochimaru"
+    },
+    "answer": "A",
+    "id": 45
+  },
+  {
+    "question": "Który z członków Siedmiu Mieczników Mgły był bratem Suigetsu?",
+    "options": {
+      "A": "Zabuza Momochi",
+      "B": "Fuguki Suikazan",
+      "C": "Kisame Hoshigaki",
+      "D": "Mangetsu Hozuki"
+    },
+    "answer": "D",
+    "id": 46
+  },
+  {
+    "question": "Kto był naczelnym doradcą Tsunade?",
+    "options": {
+      "A": "Shizune",
+      "B": "Kakashi",
+      "C": "Jiraiya",
+      "D": "Danzo"
+    },
+    "answer": "A",
+    "id": 47
+  },
+  {
+    "question": "Kto był drugim liderem organizacji Akatsuki po Yahiko?",
+    "options": {
+      "A": "Pain (Nagato)",
+      "B": "Konan",
+      "C": "Obito",
+      "D": "Zetsu"
+    },
+    "answer": "A",
+    "id": 48
+  },
+  {
+    "question": "Jak nazywa się organizacja, do której należał Koji Kashin (Boruto)?",
+    "options": {
+      "A": "Kara",
+      "B": "Akatsuki",
+      "C": "ROOT",
+      "D": "Byakuya Gang"
+    },
+    "answer": "A",
+    "id": 49
+  },
+  {
+    "question": "Kto przejął kontrolę nad Dziewięcioogoniastym Lisem podczas ataku na Wioskę Liścia?",
+    "options": {
+      "A": "Obito Uchiha",
+      "B": "Madara Uchiha",
+      "C": "Danzo Shimura",
+      "D": "Orochimaru"
+    },
+    "answer": "A",
+    "id": 50
+  },
+  {
+    "question": "Który z użytkowników Rinnegana nie miał go od urodzenia, lecz uzyskał go sztucznie?",
+    "options": {
+      "A": "Hagoromo",
+      "B": "Momoshiki",
+      "C": "Nagato",
+      "D": "Urashiki"
+    },
+    "answer": "C",
+    "id": 51
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Bicie potworów",
+      "D": "Questy"
+    },
+    "answer": "C",
+    "id": 52
+  },
+  {
+    "question": "Która z technik pozwalała Tobiemu (Obito) przechodzić przez ataki fizyczne?",
+    "options": {
+      "A": "Kamui",
+      "B": "Izanagi",
+      "C": "Uzumaki Sealing Art",
+      "D": "Susanoo"
+    },
+    "answer": "A",
+    "id": 53
+  },
+  {
+    "question": "Dlaczego Naruto nie mógł używać trybu mędrca (Sage Mode) podczas walki z Nagato (Pain) przez cały czas?",
+    "options": {
+      "A": "Nie był jeszcze wystarczająco wyszkolony",
+      "B": "Potrzebował bezruchu do zbierania naturalnej energii",
+      "C": "Był zbyt zmęczony po walce z Kakuzu",
+      "D": "Nagato zakłócał przepływ chakry w okolicy"
+    },
+    "answer": "B",
+    "id": 54
+  },
+  {
+    "question": "Jaką rolę odegrała pieczęć Byakugō na czole Tsunade podczas jej walki z Madarą?",
+    "options": {
+      "A": "Wzmocniła jej genjutsu",
+      "B": "Pozwoliła jej aktywować technikę Yin Release",
+      "C": "Zapewniła ciągłą regenerację bez składania pieczęci",
+      "D": "Zamieniła jej czakrę w chakrę mędrca"
+    },
+    "answer": "C",
+    "id": 55
+  },
+  {
+    "question": "Dlaczego Yamato był tak cenny dla Kabuto i Madary podczas wojny?",
+    "options": {
+      "A": "Posiadał dojutsu Senju",
+      "B": "Zawierał komórki Hashiramy i mógł wzmocnić Białe Zetsu",
+      "C": "Mógł aktywować kamień Uchiha",
+      "D": "Znał lokalizację wszystkich bijū"
+    },
+    "answer": "B",
+    "id": 56
+  },
+  {
+    "question": "Która z postaci była odpowiedzialna za powstrzymanie Edo Tensei podczas Czwartej Wielkiej Wojny Shinobi?",
+    "options": {
+      "A": "Itachi Uchiha",
+      "B": "Sasuke Uchiha",
+      "C": "Naruto Uzumaki",
+      "D": "Tsunade"
+    },
+    "answer": "A",
+    "id": 57
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B",
+    "id": 58
+  },
+  {
+    "question": "Dlaczego Sharingan Kakashiego znika po zakończeniu Czwartej Wielkiej Wojny Shinobi?",
+    "options": {
+      "A": "Stracił go w walce z Kaguya",
+      "B": "Został zwrócony Obito jako dusza",
+      "C": "Był tymczasowo nadany przez duszę Obito",
+      "D": "Został usunięty przez Sasuke"
+    },
+    "answer": "C",
+    "id": 59
+  },
+  {
+    "question": "Jakie nagrody mogą otrzymać ANBU na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C",
+    "id": 60
+  },
+  {
+    "question": "Który z Kage był pierwszą osobą w historii znaną z posiadania Kekkei Tōta?",
+    "options": {
+      "A": "Mū z Iwagakure",
+      "B": "Onoki z Iwagakure",
+      "C": "Hashirama Senju",
+      "D": "Tobirama Senju"
+    },
+    "answer": "A",
+    "id": 61
+  },
+  {
+    "question": "Jaką funkcję pełniła pieczęć 'Zabójcza Pieczęć Jastrzębia' umieszczona przez Danzo na członkach organizacji ROOT ANBU?",
+    "options": {
+      "A": "Umożliwiała teleportację do bazy",
+      "B": "Chroniła umysł przed genjutsu",
+      "C": "Zabijała użytkownika przy próbie ujawnienia tajemnic",
+      "D": "Zwiększała odporność na techniki sensoryczne"
+    },
+    "answer": "C",
+    "id": 62
+  },
+  {
+    "question": "Dlaczego Rin Nohara zginęła z rąk Kakashiego?",
+    "options": {
+      "A": "Była szpiegiem Kirigakure",
+      "B": "Została porwana przez Obito i zmanipulowana",
+      "C": "Sama rzuciła się na Chidori, by nie zniszczyć Konohy jako Jinchūriki",
+      "D": "Była pod wpływem techniki genjutsu i zaatakowała Kakashiego"
+    },
+    "answer": "C",
+    "id": 63
+  },
+  {
+    "question": "Kto był pierwszym Jinchūriki Dziesięcioogoniastego (Jūbi)?",
+    "options": {
+      "A": "Madara Uchiha",
+      "B": "Obito Uchiha",
+      "C": "Hagoromo Ōtsutsuki",
+      "D": "Kaguya Ōtsutsuki"
+    },
+    "answer": "C",
+    "id": 64
+  },
+  {
+    "question": "Który z Hokage zginął w walce, używając techniki samopoświęcenia, aby zapieczętować dusze przeciwników?",
+    "options": {
+      "A": "Minato Namikaze",
+      "B": "Hashirama Senju",
+      "C": "Hiruzen Sarutobi",
+      "D": "Tobirama Senju"
+    },
+    "answer": "C",
+    "id": 65
+  },
+  {
+    "question": "Który z beta testów będzie służył do sprawdzenia walki i balansu PvP na naszym serwerze?",
+    "options": {
+      "A": "Test #1",
+      "B": "Test #2",
+      "C": "Test #3",
+      "D": "Test #4"
+    },
+    "answer": "B",
+    "id": 66
+  },
+  {
+    "question": "Jakim sposobem Itachi przeniósł do Naruto technikę Kotoamatsukami z oka Shisuiego?",
+    "options": {
+      "A": "Poprzez kontakt fizyczny z czakrą",
+      "B": "Używając kruka ukrytego w ciele Naruto",
+      "C": "Poprzez senne genjutsu",
+      "D": "W czasie wspólnego treningu z Jiraiyą"
+    },
+    "answer": "B",
+    "id": 67
+  },
+  {
+    "question": "Dlaczego Killer Bee był w stanie zaprzyjaźnić się z Hachibim (Gyūki), w przeciwieństwie do innych Jinchūriki?",
+    "options": {
+      "A": "Miał specjalną pieczęć, która tłumiła emocje bestii",
+      "B": "Nigdy nie stracił kontroli nad sobą",
+      "C": "Traktował Hachibiego jak partnera, nie broń",
+      "D": "Był trenowany przez Raikage do rozmowy z bijū"
+    },
+    "answer": "C",
+    "id": 68
+  },
+  {
+    "question": "Który z poniższych faktów o Nagato jest zgodny z mangą i databookami?",
+    "options": {
+      "A": "Był potomkiem klanu Uzumaki",
+      "B": "Miał brata bliźniaka, który zginął w wojnie",
+      "C": "Używał technik klanu Hyuga",
+      "D": "Był uczniem Minato Namikaze"
+    },
+    "answer": "A",
+    "id": 69
+  },
+  {
+    "question": "Dlaczego Kabuto nie był w stanie przywrócić Jiraiyi do życia techniką Edo Tensei?",
+    "options": {
+      "A": "Ciało było niedostępne i zbyt głęboko zatopione",
+      "B": "Nie miał próbki DNA",
+      "C": "Został zapieczętowany przez Shinigamiego",
+      "D": "Był chroniony przez pieczęć Minato"
+    },
+    "answer": "A",
+    "id": 70
+  },
+  {
+    "question": "Jak Itachi Uchiha zablokował kontrolę Edo Tensei Kabuto nad swoim ciałem?",
+    "options": {
+      "A": "Izanami",
+      "B": "Tsukuyomi",
+      "C": "Kotoamatsukami Shisuiego",
+      "D": "Amaterasu na pieczęci kontroli"
+    },
+    "answer": "C",
+    "id": 71
+  },
+  {
+    "question": "Co było bezpośrednią przyczyną aktywacji Mangekyō Sharingana przez Shisui Uchiha?",
+    "options": {
+      "A": "Zobaczył śmierć swojego ojca",
+      "B": "Został zdradzony przez Danzo",
+      "C": "Shisui był świadkiem śmierci przyjaciela podczas misji, co obudziło Mangekyō Sharingana, ponieważ czuł się za to odpowiedzialny.",
+      "D": "Nie jest znana – nie została pokazana ani ujawniona w kanonie"
+    },
+    "answer": "C",
+    "id": 72
+  },
+  {
+    "question": "Dlaczego Obito Uchiha przeżył zmiażdżenie połowy ciała podczas misji w Kamui?",
+    "options": {
+      "A": "Użył techniki Kamui by uciec",
+      "B": "Został uratowany przez Zetsu i Hashiramowe komórki",
+      "C": "Kakashi zastosował leczenie natychmiastowe",
+      "D": "Miał aktywną technikę Izanagi"
+    },
+    "answer": "B",
+    "id": 73
+  },
+  {
+    "question": "Dlaczego Hiruzen Sarutobi wybrał Minato Namikaze na Czwartego Hokage zamiast swojego ucznia Orochimaru?",
+    "options": {
+      "A": "Minato był silniejszy niż Orochimaru",
+      "B": "Orochimaru był podejrzewany o nieetyczne eksperymenty",
+      "C": "Orochimaru odmówił objęcia stanowiska",
+      "D": "Rada Starszych nie wyraziła zgody"
+    },
+    "answer": "B",
+    "id": 74
+  },
+  {
+    "question": "Który z klanów poza Uchiha był zdolny do manipulacji ogniem jako elementem natury, zgodnie z opisami w databookach?",
+    "options": {
+      "A": "Sarutobi",
+      "B": "Inuzuka",
+      "C": "Akimichi",
+      "D": "Yamanaka"
+    },
+    "answer": "A",
+    "id": 75
+  },
+  {
+    "question": "W jakim celu Danzo Shimura przechowywał DNA Hashiramy w swoim ramieniu?",
+    "options": {
+      "A": "By wzmocnić swoją wytrzymałość",
+      "B": "By używać Wood Release",
+      "C": "By utrzymać aktywność wielu Sharinganów",
+      "D": "By ukrywać klątwę Orochimaru"
+    },
+    "answer": "C",
+    "id": 76
+  },
+  {
+    "question": "Jaką konkretną technikę medyczną stosowała Tsunade, by utrzymać młody wygląd przez dziesięciolecia?",
+    "options": {
+      "A": "Genjutsu upiększające",
+      "B": "Stałe odświeżanie komórek pieczęcią mitotyczną",
+      "C": "Zapieczętowanie części energii w pieczęci Byakugō",
+      "D": "Przesunięcie percepcji czasu w układzie nerwowym"
+    },
+    "answer": "C",
+    "id": 77
+  },
+  {
+    "question": "Który z historycznych Hokage stworzył system edukacji akademii ninja w Konohagakure?",
+    "options": {
+      "A": "Hashirama Senju",
+      "B": "Tobirama Senju",
+      "C": "Hiruzen Sarutobi",
+      "D": "Minato Namikaze"
+    },
+    "answer": "B",
+    "id": 78
+  },
+  {
+    "question": "Jakie było prawdziwe imię właściciela ciała, które Kabuto wykorzystał do wskrzeszenia Madary Uchiha jako Edo Tensei, zanim poprawił rytuał?",
+    "options": {
+      "A": "Yamato",
+      "B": "Shisui",
+      "C": "Unknown – ciało zostało całkowicie zmodyfikowane",
+      "D": "Hashirama’s clone"
+    },
+    "answer": "C",
+    "id": 79
+  },
+  {
+    "question": "Który z poniższych faktów na temat klanu Uzumaki jest fałszywy?",
+    "options": {
+      "A": "Posiadali zdolność do tworzenia pieczęci blokujących Kekkei Genkai",
+      "B": "Ich naturalna żywotność umożliwiała przechowywanie bijū",
+      "C": "Zostali zaatakowani przez wszystkie wielkie wioski w obawie przed ich fūinjutsu",
+      "D": "Mito Uzumaki była siostrą Hashiramy Senju"
+    },
+    "answer": "D",
+    "id": 80
+  },
+  {
+    "question": "Co jest potrzebne do aktywacji Edo Tensei?",
+    "options": {
+      "A": "DNA zmarłego i ofiara",
+      "B": "Pieczęć żywiołu i maska",
+      "C": "Rinnegan i chakra ofiary",
+      "D": "Kamui i ciało"
+    },
+    "answer": "A",
+    "id": 81
+  },
+  {
+    "question": "Który z poniższych shinobi nigdy nie był oficjalnym członkiem ANBU, ani też nie został pokazany w jakiejkolwiek retrospekcji jako członek tej jednostki?",
+    "options": {
+      "A": "Yamato",
+      "B": "Itachi Uchiha",
+      "C": "Might Gay",
+      "D": "Kakashi Hatake"
+    },
+    "answer": "C",
+    "id": 82
+  },
+  {
+    "question": "Który z poniższych Jinchūriki jako jedyny został oficjalnie uznany przez swoją wioskę za bohatera, zanim doszło do Czwartej Wielkiej Wojny Shinobi?",
+    "options": {
+      "A": "Yagura",
+      "B": "Roshi",
+      "C": "Killer Bee",
+      "D": "Han"
+    },
+    "answer": "C",
+    "id": 83
+  },
+  {
+    "question": "Który z poniższych shinobi nie używał techniki Kuchiyose no Jutsu (techniki przyzwania) w żadnej formie w anime ani mandze?",
+    "options": {
+      "A": "Iruka Umino",
+      "B": "Anko Mitarashi",
+      "C": "Jiraiya",
+      "D": "Temari"
+    },
+    "answer": "A",
+    "id": 84
+  },
+  {
+    "question": "Podczas ataku Orochimaru na Konohę (egzamin chūnina), Bariera Czwórki Dźwięku miała za zadanie odciąć Hiruzenowi możliwość wsparcia. Jak nazywała się konkretna technika bariery, której użyli?",
+    "options": {
+      "A": "Shishienjin",
+      "B": "Kekkai Tengai Hōjin",
+      "C": "Shikokumujin",
+      "D": "Gofū Kekkai"
+    },
+    "answer": "A",
+    "id": 85
+  },
+  {
+    "question": "W serii pojawia się unikalna pieczęć użyta przez klan Uzumaki do zabezpieczenia wejścia do świątyni maski śmierci, gdzie przechowywano maski Shinigamiego. Jak nazywała się ta specjalna technika pieczętująca?",
+    "options": {
+      "A": "Fūin Kekkai: Uzushio no Kōkai",
+      "B": "Uzumaki Kongō Fūin",
+      "C": "Shiki Kekkai: Fūin no Kōshin",
+      "D": "Gogyō Kaiin"
+    },
+    "answer": "C",
+    "id": 86
+  },
+  {
+    "question": "W archiwach Konohy znajdowały się zwoje zakazanych technik (kinjutsu), w tym jeden, z którego Naruto nauczył się Tajnej Techniki Cienia (Kage Bunshin). Jaką technikę, opisaną w tym samym zwoju, uważa się za najbardziej niebezpieczną i zakazaną przez Hashiramę Senju osobiście?",
+    "options": {
+      "A": "Tajū Kage Bunshin no Jutsu",
+      "B": "Edo Tensei",
+      "C": "Hiraishin no Jutsu",
+      "D": "Shiki Fūjin"
+    },
+    "answer": "B",
+    "id": 87
+  },
+  {
+    "question": "W oryginalnym kanonie, zanim system drużyn shinobi (np. trójki geninów z jōninem) został oficjalnie przyjęty w Konohagakure, istniał eksperymentalny zespół, który jako pierwszy sprawdzono w tej formule. Kto był jego liderem?",
+    "options": {
+      "A": "Kagami Uchiha",
+      "B": "Tobirama Senju",
+      "C": "Hiruzen Sarutobi",
+      "D": "Torifu Akimichi"
+    },
+    "answer": "B",
+    "id": 88
+  },
+  {
+    "question": "W mandze oraz oficjalnych materiałach wspomniano o specjalnym stylu walki, z którego korzystał Sakumo Hatake (ojciec Kakashiego), znanym jako „Biały Kieł Konohy”. Jak nazywała się broń, z której słynął Sakumo i która nadawała mu ten przydomek?",
+    "options": {
+      "A": "Shiroi Tōken - Biały Miecz",
+      "B": "Hakuhō - Biały Lotos",
+      "C": "Ōkami no Yaiba - Wilczy Kieł",
+      "D": "Jintō - Miecz Lojalności"
+    },
+    "answer": "A",
+    "id": 89
+  },
+  {
+    "question": "Podczas Pierwszej Wielkiej Wojny Shinobi, klan Uzumaki został niemal całkowicie zniszczony. Wśród krajów, które brały udział w zniszczeniu Uzushiogakure, który kraj jako pierwszy zainicjował atak, obawiając się pieczętujących technik klanu Uzumaki?",
+    "options": {
+      "A": "Kraj Ziemi - Iwagakure",
+      "B": "Kraj Wody - Kirigakure",
+      "C": "Kraj Chmury - Kumogakure",
+      "D": "Kraj Pioruna - Hoshigakure"
+    },
+    "answer": "B",
+    "id": 90
+  },
+  {
+    "question": "Która statystyka zwiększa odporność na efekty spowolnienia i ogłuszenia na naszym serwerze?",
+    "options": {
+      "A": "Genjutsu",
+      "B": "Resist",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B",
+    "id": 91
+  },
+  {
+    "question": "Co NIE jest głównym źródłem doświadczenia na naszym serwerze?",
+    "options": {
+      "A": "PvP",
+      "B": "Taski",
+      "C": "Zabijanie graczy",
+      "D": "Questy"
+    },
+    "answer": "C",
+    "id": 92
+  },
+  {
+    "question": "Jakie są konsekwencje śmierci na naszym serwerze?",
+    "options": {
+      "A": "Utrata doświadczenia",
+      "B": "Permadeath",
+      "C": "Brak strat w expie, ale inne konsekwencje",
+      "D": "Reset postaci"
+    },
+    "answer": "C",
+    "id": 93
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę ataków wręcz i uniki na naszym serwerze?",
+    "options": {
+      "A": "Taijutsu",
+      "B": "Strength",
+      "C": "Bukijutsu",
+      "D": "Ninjutsu"
+    },
+    "answer": "A",
+    "id": 94
+  },
+  {
+    "question": "Jaką rolę pełni system reputacji na naszym serwerze?",
+    "options": {
+      "A": "Wpływa na liczbę questów dziennie",
+      "B": "Zwiększa szansę na unik",
+      "C": "Wpływa na dostęp do technik i reakcje NPC",
+      "D": "Zwiększa ilość zdobywanego expa"
+    },
+    "answer": "C",
+    "id": 95
+  },
+  {
+    "question": "W mandze i databookach opisano, że technika Izanami klanu Uchiha została stworzona w odpowiedzi na nadużywanie Izanagi. Jak nazywała się Uchiha, która jako pierwsza skutecznie użyła Izanami, by zakończyć konflikt w klanie?",
+    "options": {
+      "A": "Naori Uchiha",
+      "B": "Yuriko Uchiha",
+      "C": "Shisui Uchiha",
+      "D": "Mikoto Uchiha"
+    },
+    "answer": "A",
+    "id": 96
+  },
+  {
+    "question": "Jak można zregenerować zdrowie poza walką na naszym serwerze?",
+    "options": {
+      "A": "Używając spelli leczniczych",
+      "B": "Spamując chakrą",
+      "C": "Używając bandaży i ognisk",
+      "D": "Poprzez odpoczynek w dojo"
+    },
+    "answer": "C",
+    "id": 97
+  },
+  {
+    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach na naszym serwerze?",
+    "options": {
+      "A": "Fuinjutsu",
+      "B": "Genjutsu",
+      "C": "Ninjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "B",
+    "id": 98
+  },
+  {
+    "question": "Który z poniższych systemów NIE jest częścią progresji postaci na naszym serwerze?",
+    "options": {
+      "A": "Ability Points",
+      "B": "Reputacja",
+      "C": "Cooldown Points",
+      "D": "Statystyki jak Ninjutsu i Genjutsu"
+    },
+    "answer": "C",
+    "id": 99
+  },
+  {
+    "question": "Za jakie czynności ANBU mogą otrzymać nagrody na naszym serwerze?",
+    "options": {
+      "A": "Za niszczenie pułapek",
+      "B": "Za leczenie graczy",
+      "C": "Za eliminowanie morderców (PK)",
+      "D": "Za największy poziom"
+    },
+    "answer": "C",
+    "id": 100
+  },
+  {
+    "question": "Który klan na naszym serwerze ma pasywną zdolność 'Sharingan – Przenikliwe Oczy'?",
+    "options": {
+      "A": "Hyuga",
+      "B": "Uchiha",
+      "C": "Yamanaka",
+      "D": "Aburame"
+    },
+    "answer": "B",
+    "id": 101
+  },
+  {
+    "question": "Jaki debuff balansujący posiada klan Uzumaki na naszym serwerze?",
+    "options": {
+      "A": "Opóźniona Kontrola Natury",
+      "B": "Marnotrawstwo Chakry",
+      "C": "Pasożytnicza Izolacja",
+      "D": "Delikatna Struktura Ciała"
+    },
+    "answer": "B",
+    "id": 102
+  },
+  {
+    "question": "Który klan na naszym serwerze regeneruje się automatycznie, jeśli wróg miałby zadać śmiertelny cios?",
+    "options": {
+      "A": "Senju",
+      "B": "Uchiha",
+      "C": "Uzumaki",
+      "D": "Inuzuka"
+    },
+    "answer": "C",
+    "id": 103
+  },
+  {
+    "question": "Jaki bonus pasywny uzyskuje klan Hyuga dzięki aktywnemu Byakuganowi na naszym serwerze?",
+    "options": {
+      "A": "+15% do prędkości",
+      "B": "+10% do szansy na unik",
+      "C": "+5% obrażeń i 25% szansy na blok regeneracji chakry",
+      "D": "+1 kratka zasięgu Genjutsu"
+    },
+    "answer": "C",
+    "id": 104
+  },
+  {
+    "question": "Który klan otrzymuje +2 Ability Point co poziom na naszym serwerze?",
+    "options": {
+      "A": "Uzumaki",
+      "B": "Yamanaka",
+      "C": "No Clan",
+      "D": "Senju"
+    },
+    "answer": "C",
+    "id": 105
+  },
+  {
+    "question": "Jaki debuff posiadają członkowie klanu Akimichi na naszym serwerze?",
+    "options": {
+      "A": "Psychic Recoil",
+      "B": "Brak Siły Bez Planu",
+      "C": "Przeklęty Metabolizm",
+      "D": "Dzika Natura"
+    },
+    "answer": "C",
+    "id": 106
+  },
+  {
+    "question": "Który klan ma styl walki Jūken skalujący się z Intelligence + Taijutsu na naszym serwerze?",
+    "options": {
+      "A": "Uchiha",
+      "B": "Hyuga",
+      "C": "Senju",
+      "D": "Inuzuka"
+    },
+    "answer": "B",
+    "id": 107
+  },
+  {
+    "question": "Jaka pasywna zdolność klanu Yamanaka pozwala widzieć statystyki innych graczy na naszym serwerze?",
+    "options": {
+      "A": "Mental Sync",
+      "B": "Cień Kontroli",
+      "C": "Mental Link",
+      "D": "Adaptacja"
+    },
+    "answer": "C",
+    "id": 108
+  },
+  {
+    "question": "Który klan na naszym serwerze traci bonusy pasywne, jeśli ich kompan zostanie pokonany?",
+    "options": {
+      "A": "Inuzuka",
+      "B": "Akimichi",
+      "C": "Uchiha",
+      "D": "Aburame"
+    },
+    "answer": "A",
+    "id": 109
+  },
+  {
+    "question": "Jaki efekt powoduje debuff 'Psychic Recoil' u klanu Yamanaka na naszym serwerze?",
+    "options": {
+      "A": "-10% prędkości",
+      "B": "-20% regeneracji chakry przez 5 sek. po nieudanym Genjutsu",
+      "C": "+15% koszt chakry",
+      "D": "-10% do HP"
+    },
+    "answer": "B",
+    "id": 110
+  },
+  {
+    "question": "Jaki efekt uboczny posiada debuff 'Brak Siły Bez Planu' w klanie Nara na naszym serwerze?",
+    "options": {
+      "A": "Techniki kosztują więcej chakry",
+      "B": "Zwiększona podatność na kontrolę",
+      "C": "Ataki fizyczne zadają -20% mniej obrażeń",
+      "D": "Brak dostępu do technik Genjutsu"
+    },
+    "answer": "C",
+    "id": 111
+  },
+  {
+    "question": "Który klan zaczyna z dwiema naturami chakry (ziemia i woda) na naszym serwerze?",
+    "options": {
+      "A": "Senju",
+      "B": "Uzumaki",
+      "C": "Yamanaka",
+      "D": "Nara"
+    },
+    "answer": "A",
+    "id": 112
+  },
+  {
+    "question": "Który klan ma najniższy przyrost chakry na poziom na naszym serwerze?",
+    "options": {
+      "A": "Akimichi",
+      "B": "Inuzuka",
+      "C": "Hyuga",
+      "D": "Uchiha"
+    },
+    "answer": "A",
+    "id": 113
+  },
+  {
+    "question": "Jaka jest rola psa towarzysza w mechanice klanu Inuzuka na naszym serwerze?",
+    "options": {
+      "A": "Zwiększa obrażenia Genjutsu",
+      "B": "Może przyjmować debuffy właściciela",
+      "C": "Ostrzega przed pułapkami i zwiększa statystyki gracza",
+      "D": "Zwiększa regenerację HP gracza"
+    },
+    "answer": "C",
+    "id": 114
+  },
+  {
+    "question": "Jakie korzyści daje zdolność 'Mental Sync' u klanu Yamanaka na naszym serwerze?",
+    "options": {
+      "A": "Zwiększa obrażenia Genjutsu o 15%",
+      "B": "Obniża cooldowny technik twoich i najbliższego sojusznika",
+      "C": "Zwiększa zasięg Ninjutsu",
+      "D": "Redukuje zużycie chakry o 20%"
+    },
+    "answer": "B",
+    "id": 115
+  },
+  {
+    "question": "Jak działa efekt 'Ciało Roju' u klanu Aburame na naszym serwerze?",
+    "options": {
+      "A": "Zmniejsza obrażenia od broni dystansowych",
+      "B": "Chroni przed iluzjami na 10 sekund",
+      "C": "Zwiększa odporność na techniki chakryczne, gdy HP > 70%",
+      "D": "Przyspiesza ataki autoataków"
+    },
+    "answer": "C",
+    "id": 116
+  },
+  {
+    "question": "Który klan ma styl walki, w którym melee ataki skalują się z Intelligence i Taijutsu na naszym serwerze?",
+    "options": {
+      "A": "Yamanaka",
+      "B": "Hyuga",
+      "C": "Nara",
+      "D": "Aburame"
+    },
+    "answer": "B",
+    "id": 117
+  },
+  {
+    "question": "Co daje dodatkowe nagrody w postaci punktów reputacji na naszym serwerze?",
+    "options": {
+      "A": "Taski",
+      "B": "Misje dzienne",
+      "C": "Wygrane walki PvP",
+      "D": "Polowanie na bossów"
+    },
+    "answer": "A",
+    "id": 118
+  },
+  {
+    "question": "Jaka statystyka u klanu Uchiha oceniana jest jako 'bardzo słaba' na naszym serwerze?",
+    "options": {
+      "A": "Bukijutsu",
+      "B": "Strength",
+      "C": "Fuinjutsu",
+      "D": "Taijutsu"
+    },
+    "answer": "C",
+    "id": 119
+  },
+  {
+    "question": "Który klan traci wszystkie swoje pasywne zdolności po śmierci kompana na naszym serwerze?",
+    "options": {
+      "A": "Yamanaka",
+      "B": "Inuzuka",
+      "C": "Senju",
+      "D": "Uzumaki"
+    },
+    "answer": "B",
+    "id": 120
+  },
+  {
+    "question": "Kim był Raiko na początku swojej wędrówki?",
+    "options": {
+      "A": "Geninem z Konohy",
+      "B": "Wandererem bez przynależności",
+      "C": "Samurajem z Kraju Żelaza",
+      "D": "Zbiegłym shinobi z Kirigakure"
+    },
+    "answer": "B",
+    "id": 121
+  },
+  {
+    "question": "Czym był Konohageddon w opowieści?",
+    "options": {
+      "A": "Techniką niszczącą Konohę",
+      "B": "Katastrofą naturalną",
+      "C": "Tor przeszkód i symbol wyzwania",
+      "D": "Atakiem zorganizowanym przez Akatsuki"
+    },
+    "answer": "C",
+    "id": 122
+  },
+  {
+    "question": "Które imię było na szczycie tablicy wyników Konohageddonu?",
+    "options": {
+      "A": "Raiko",
+      "B": "Takeshi",
+      "C": "Suselkowy",
+      "D": "Siema_Chinol"
+    },
+    "answer": "D",
+    "id": 123
+  },
+  {
+    "question": "Jak Raiko trenował na początku swojej drogi?",
+    "options": {
+      "A": "Z nauczycielem Taijutsu",
+      "B": "Samodzielnie, uderzając w drewniane pale",
+      "C": "W drużynie geninów",
+      "D": "W symulacji VR"
+    },
+    "answer": "B",
+    "id": 124
+  },
+  {
+    "question": "Kim był Takeshi Arakida?",
+    "options": {
+      "A": "Strażnikiem bramy Konohy",
+      "B": "Przywódcą wioski",
+      "C": "Jouninem prowadzącym Resistance Training",
+      "D": "Trenerem broni dystansowej"
+    },
+    "answer": "C",
+    "id": 125
+  },
+  {
+    "question": "Na czym polegał trening Takeshiego?",
+    "options": {
+      "A": "Na walce wręcz z Jouninem",
+      "B": "Na unikaniu ognistych kul i reagowaniu na znaki chakry",
+      "C": "Na walkach drużynowych na placu",
+      "D": "Na rozbrajaniu pułapek"
+    },
+    "answer": "B",
+    "id": 126
+  },
+  {
+    "question": "Jaką bronią ćwiczyła jedna z geninek na placu treningowym?",
+    "options": {
+      "A": "Kuszą",
+      "B": "Wachlarzem",
+      "C": "Łukiem",
+      "D": "Kataną"
+    },
+    "answer": "B",
+    "id": 127
+  },
+  {
+    "question": "Jak Suselkowy określił osoby, które jako pierwsze zapiszą się na tablicy?",
+    "options": {
+      "A": "Pierwsi, którzy polegną",
+      "B": "Zuchwali nowicjusze",
+      "C": "Ci, którzy zostaną legendą",
+      "D": "Wybrańcy Hokage"
+    },
+    "answer": "C",
+    "id": 128
+  },
+  {
+    "question": "Dlaczego Raiko nie miał żadnej broni?",
+    "options": {
+      "A": "Zgubił ją w drodze do Konohy",
+      "B": "Nie potrafił jej używać",
+      "C": "Nie miał dostępu ani przynależności",
+      "D": "Zrezygnował z niej świadomie"
+    },
+    "answer": "C",
+    "id": 129
+  },
+  {
+    "question": "Czego nauczył się Raiko podczas Resistance Training?",
+    "options": {
+      "A": "Kiedy i jak atakować z ukrycia",
+      "B": "Że przetrwanie wymaga instynktu i wyczucia chakry",
+      "C": "Że najlepszą obroną jest atak",
+      "D": "Jak używać technik żywiołu ognia"
+    },
+    "answer": "B",
+    "id": 130
+  },
+  {
+    "question": "Które jutsu klanu Aburame wykorzystuje kikaichū do stworzenia klona?",
+    "options": {
+      "A": "Mushi Yose no Jutsu",
+      "B": "Mushi Bunshin no Jutsu",
+      "C": "Hijutsu: Mushidama",
+      "D": "Mushi Kabe no Jutsu"
+    },
+    "answer": "B",
+    "id": 131
+  },
+  {
+    "question": "Jaką technikę Hyūga stosują do 128 precyzyjnych uderzeń?",
+    "options": {
+      "A": "Hakke Rokujuyon Shou",
+      "B": "Hakkeshou Kaiten",
+      "C": "Hakke Hyakunijuuhachi Shou",
+      "D": "Shugohakke Rokujuyon Shou"
+    },
+    "answer": "C",
+    "id": 132
+  },
+  {
+    "question": "Czym różni się Chō Baika no Jutsu od Baika no Jutsu?",
+    "options": {
+      "A": "Jest szybsze",
+      "B": "Pozwala powiększyć się częściowo",
+      "C": "Działa tylko z drużyną",
+      "D": "Zwiększa rozmiar całego ciała do gigantycznych rozmiarów"
+    },
+    "answer": "D",
+    "id": 133
+  },
+  {
+    "question": "Które jutsu klanu Inuzuka wymaga transformacji w dwugłowego wilka?",
+    "options": {
+      "A": "Gatsuuga",
+      "B": "Jinjū Konbi Henge: Sōtō Rōjō",
+      "C": "Garouga",
+      "D": "Dynamic Marking"
+    },
+    "answer": "C",
+    "id": 134
+  },
+  {
+    "question": "Jakie zastosowanie ma jutsu Fuuin Kai z repertuaru Uzumakich?",
+    "options": {
+      "A": "Zamykanie duszy",
+      "B": "Zrywanie pieczęci",
+      "C": "Teleportacja",
+      "D": "Tworzenie barier"
+    },
+    "answer": "B",
+    "id": 135
+  },
+  {
+    "question": "Do czego służy technika Kagemane no Jutsu?",
+    "options": {
+      "A": "Do ofensywy",
+      "B": "Do leczenia",
+      "C": "Do przejęcia cienia wroga i kontrolowania jego ruchów",
+      "D": "Do teleportacji"
+    },
+    "answer": "C",
+    "id": 136
+  },
+  {
+    "question": "Jakie jutsu Uchiha tworzy potężną kulę ognia?",
+    "options": {
+      "A": "Katon: Housenka no Jutsu",
+      "B": "Katon: Ryuka no Jutsu",
+      "C": "Katon: Goukakyuu no Jutsu",
+      "D": "Katon: Gouryuuka no Jutsu"
+    },
+    "answer": "C",
+    "id": 137
+  },
+  {
+    "question": "Które jutsu Yamanaka pozwala na przejęcie umysłu przeciwnika?",
+    "options": {
+      "A": "Shindenshin no Jutsu",
+      "B": "Shinranshin no Jutsu",
+      "C": "Shintenshin no Jutsu",
+      "D": "Zenshin Shintanshin no Jutsu"
+    },
+    "answer": "C",
+    "id": 138
+  },
+  {
+    "question": "Która technika Senju tworzy olbrzymiego drewnianego smoka?",
+    "options": {
+      "A": "Mokuton: Mokuryuu no Jutsu",
+      "B": "Mokuton: Mokujin no Jutsu",
+      "C": "Mokuton: Daijurin no Jutsu",
+      "D": "Mokuton: Shin Susenju"
+    },
+    "answer": "A",
+    "id": 139
+  },
+  {
+    "question": "Jaką funkcję pełni Mind Flower Technique Yamanaka?",
+    "options": {
+      "A": "Wiązanie przeciwnika",
+      "B": "Tworzenie bariery",
+      "C": "Odbieranie chakry",
+      "D": "Zakłócanie koncentracji wroga"
+    },
+    "answer": "D",
+    "id": 140
+  },
+  {
+    "question": "Która technika Suiton pozwala na stworzenie klonów wodnych?",
+    "options": {
+      "A": "Suikoudan no Jutsu",
+      "B": "Mizu Bunshin no Jutsu",
+      "C": "Suirou no Jutsu",
+      "D": "Goshokuzame"
+    },
+    "answer": "B",
+    "id": 141
+  },
+  {
+    "question": "Jaka technika wodna polega na zamknięciu przeciwnika w sferze wody, wymagając kontaktu użytkownika?",
+    "options": {
+      "A": "Suikoudan no Jutsu",
+      "B": "Suiryuudan no Jutsu",
+      "C": "Suirou no Jutsu",
+      "D": "Dai Bakusui Shouha"
+    },
+    "answer": "C",
+    "id": 142
+  },
+  {
+    "question": "Która technika Suiton znana jest z tworzenia ogromnego jeziora lub oceanu?",
+    "options": {
+      "A": "Daikoudan no Jutsu",
+      "B": "Dai Bakusui Shouha",
+      "C": "Daibakufu no Jutsu",
+      "D": "Senjikizame"
+    },
+    "answer": "B",
+    "id": 143
+  },
+  {
+    "question": "Jakie jest główne zastosowanie techniki Suiton: Suiben (Water Whip)?",
+    "options": {
+      "A": "Osłona",
+      "B": "Unieruchomienie i kontrola",
+      "C": "Presja frontalna",
+      "D": "Wytwarzanie mgły"
+    },
+    "answer": "B",
+    "id": 144
+  },
+  {
+    "question": "Która z technik Suiton jest fillerem i tworzy pięć rekinów wodnych?",
+    "options": {
+      "A": "Senjikizame",
+      "B": "Suiryudan Rendan",
+      "C": "Goshokuzame",
+      "D": "Suikoudan no Jutsu"
+    },
+    "answer": "C",
+    "id": 145
+  },
+  {
+    "question": "Która technika Katon polega na utworzeniu linii ognia biegnącej po ziemi?",
+    "options": {
+      "A": "Katon: Endan",
+      "B": "Katon: Hibashiri",
+      "C": "Katon: Kaen Senpū",
+      "D": "Katon: Zukokku"
+    },
+    "answer": "B",
+    "id": 146
+  },
+  {
+    "question": "Jaka technika Katon tworzy chmurę popiołu, która eksploduje po zaiskrzeniu?",
+    "options": {
+      "A": "Katon: Gourenka",
+      "B": "Katon: Gouketsu no Jutsu",
+      "C": "Katon: Haisekishou",
+      "D": "Katon: Bakufuu Ranbu"
+    },
+    "answer": "C",
+    "id": 147
+  },
+  {
+    "question": "Która technika Katon powstaje z kombinacji techniki ognia i oleju ropuchy?",
+    "options": {
+      "A": "Katon: Karyuu Endan",
+      "B": "Katon: Gamayu Endan",
+      "C": "Katon: Ryuurendan",
+      "D": "Katon: Moeru Ude"
+    },
+    "answer": "B",
+    "id": 148
+  },
+  {
+    "question": "Jaka technika ognia używana przez Kakuzu tworzy masową falę ognia?",
+    "options": {
+      "A": "Katon: Gourenka",
+      "B": "Katon: Zukokku",
+      "C": "Katon: Gouketsu no Jutsu",
+      "D": "Katon: Housenka Rendan"
+    },
+    "answer": "B",
+    "id": 149
+  },
+  {
+    "question": "Która technika ognista zaliczana jest do fillerów i tworzy ognistą pięść do taijutsu?",
+    "options": {
+      "A": "Katon: Moeru Ude",
+      "B": "Katon: Endan",
+      "C": "Katon: Haisekishou",
+      "D": "Katon: Kaen Senpū"
+    },
+    "answer": "A",
+    "id": 150
+  },
+  {
+    "question": "Która technika Fuuton tworzy niewidzialne ostrze z wiatru?",
+    "options": {
+      "A": "Kazekiri no Jutsu",
+      "B": "Kaze no Yaiba",
+      "C": "Kamaitachi no Jutsu",
+      "D": "Kazetsume"
+    },
+    "answer": "B",
+    "id": 151
+  },
+  {
+    "question": "Jakie jest główne zastosowanie techniki Fuuton: Daitoppa?",
+    "options": {
+      "A": "Tworzenie ostrzy wiatru",
+      "B": "Obrona i dystansowanie przeciwnika",
+      "C": "Atak frontalny dużą kulą wiatru",
+      "D": "Wzmocnienie stylu Taijutsu"
+    },
+    "answer": "B",
+    "id": 152
+  },
+  {
+    "question": "Która technika Fuuton została opracowana przez Naruto i działa na poziomie komórkowym?",
+    "options": {
+      "A": "Fuuton: Rasengan",
+      "B": "Fuuton: Rasenshuriken",
+      "C": "Fuuton: Shinkuu Taigyoku",
+      "D": "Fuuton: Juuha Reppushou"
+    },
+    "answer": "B",
+    "id": 153
+  },
+  {
+    "question": "Fuuton: Kamaitachi no Jutsu to technika używana z pomocą?",
+    "options": {
+      "A": "Pięści",
+      "B": "Smoka z chakry",
+      "C": "Wachlarza",
+      "D": "Kuli powietrza"
+    },
+    "answer": "C",
+    "id": 154
+  },
+  {
+    "question": "Która technika Fuuton strzela kulami powietrza z ust?",
+    "options": {
+      "A": "Shinkuu Renpa",
+      "B": "Shinkuu Gyoku",
+      "C": "Kazekiri no Jutsu",
+      "D": "Fuujin no Jutsu"
+    },
+    "answer": "B",
+    "id": 155
+  },
+  {
+    "question": "Która technika Doton tworzy błotnistą rzekę pod nogami przeciwnika?",
+    "options": {
+      "A": "Doton: Doroku Gaeshi",
+      "B": "Doton: Doryū Taiga",
+      "C": "Doton: Doryūheki",
+      "D": "Doton: Doryūdan"
+    },
+    "answer": "B",
+    "id": 156
+  },
+  {
+    "question": "Jakie jest zastosowanie techniki Doton: Iwagakure no Jutsu?",
+    "options": {
+      "A": "Tworzy skalne kolce z ziemi",
+      "B": "Ukrywa użytkownika w ziemi lub skałach",
+      "C": "Zamyka przeciwnika w kopule",
+      "D": "Zwiększa ciężar ciała"
+    },
+    "answer": "B",
+    "id": 157
+  },
+  {
+    "question": "Która technika Doton tworzy kostur z ziemi do walki wręcz?",
+    "options": {
+      "A": "Doton: Doryō Dango",
+      "B": "Doton: Gansetsukon",
+      "C": "Doton: Gōremu no Jutsu",
+      "D": "Doton: Domu"
+    },
+    "answer": "B",
+    "id": 158
+  },
+  {
+    "question": "Co robi technika Doton: Domu używana przez Kakuzu?",
+    "options": {
+      "A": "Zamyka przeciwników w kopule",
+      "B": "Zwiększa ciężar ofiary",
+      "C": "Utwardza ciało użytkownika jak stal",
+      "D": "Tworzy ścianę z ziemi"
+    },
+    "answer": "C",
+    "id": 159
+  },
+  {
+    "question": "Doton: Doryūheki to technika służąca do:",
+    "options": {
+      "A": "Ataku frontalnego błotem",
+      "B": "Wzmocnienia fizycznego",
+      "C": "Tworzenia ściany ziemi do obrony",
+      "D": "Ukrycia się pod ziemią"
+    },
+    "answer": "C",
+    "id": 160
+  },
+  {
+    "question": "Która technika Doton podnosi ogromny blok ziemi, którym można rzucać?",
+    "options": {
+      "A": "Doton: Doryūdan",
+      "B": "Doton: Doryō Dango",
+      "C": "Doton: Gōremu no Jutsu",
+      "D": "Doton: Uitenpen"
+    },
+    "answer": "B",
+    "id": 161
+  },
+  {
+    "question": "Czym charakteryzuje się Doton: Doton Kekkai: Dorō Dōmu?",
+    "options": {
+      "A": "Zmienia poziom terenu",
+      "B": "Wysysa chakrę z uwięzionych przeciwników",
+      "C": "Tworzy kolce z ziemi",
+      "D": "Zwiększa ciężar przeciwnika"
+    },
+    "answer": "B",
+    "id": 162
+  },
+  {
+    "question": "Która technika pozwala użytkownikowi poruszać się pod ziemią jak kret?",
+    "options": {
+      "A": "Doton: Moguragakure no Jutsu",
+      "B": "Doton: Iwagakure no Jutsu",
+      "C": "Doton: Ganchūsō",
+      "D": "Doton: Tsuchi Kairō"
+    },
+    "answer": "A",
+    "id": 163
+  },
+  {
+    "question": "Doton: Gōremu no Jutsu tworzy:",
+    "options": {
+      "A": "Kamienną kopułę",
+      "B": "Ziemnego golema do walki i obrony",
+      "C": "Skalne kolce z ziemi",
+      "D": "Ogromną formację górską"
+    },
+    "answer": "B",
+    "id": 164
+  },
+  {
+    "question": "Która technika Doton zwiększa ciężar celu, unieruchamiając go?",
+    "options": {
+      "A": "Doton: Kajūgan no Jutsu",
+      "B": "Doton: Chidōkaku",
+      "C": "Doton: Domu",
+      "D": "Doton: Doryūheki"
+    },
+    "answer": "A",
+    "id": 165
+  },
+  {
+    "question": "Która technika Raiton tworzy błysk oślepiający przeciwnika?",
+    "options": {
+      "A": "Raiton: Denkō Noroshi",
+      "B": "Raiton: Jibashi",
+      "C": "Raiton: Gian",
+      "D": "Raiton: Kaminari Shibari"
+    },
+    "answer": "A",
+    "id": 166
+  },
+  {
+    "question": "Jakie jest główne zastosowanie techniki Raiton: Jibashi?",
+    "options": {
+      "A": "Przyciągnięcie pioruna",
+      "B": "Tworzenie sieci błyskawic",
+      "C": "Krótkodystansowy atak paraliżujący",
+      "D": "Rotujący smok z błyskawic"
+    },
+    "answer": "C",
+    "id": 167
+  },
+  {
+    "question": "Która technika Raiton jest znana jako 'One Thousand Birds'?",
+    "options": {
+      "A": "Raiton: Raijū Tsuiga",
+      "B": "Raiton: Chidori",
+      "C": "Raiton: Kuropansa",
+      "D": "Raiton: Gian"
+    },
+    "answer": "B",
+    "id": 168
+  },
+  {
+    "question": "Raiton: Gian to technika, która:",
+    "options": {
+      "A": "Tworzy bestię z błyskawic",
+      "B": "Więzi przeciwnika w sieci",
+      "C": "Strzela potężnym promieniem elektrycznym",
+      "D": "Zwiększa ciężar przeciwnika"
+    },
+    "answer": "C",
+    "id": 169
+  },
+  {
+    "question": "Jak działa Raiton: Raiten no Yoroi?",
+    "options": {
+      "A": "Tworzy pancerz z ziemi",
+      "B": "Pokrywa ciało użytkownika błyskawicami",
+      "C": "Generuje wir błyskawic wokół przeciwnika",
+      "D": "Wywołuje paraliż w grupie wrogów"
+    },
+    "answer": "B",
+    "id": 170
+  },
+  {
+    "question": "Która technika tworzy czarną panterę z błyskawic?",
+    "options": {
+      "A": "Raiton: Chidori",
+      "B": "Raiton: Kuropansa",
+      "C": "Raiton: Kangekiha",
+      "D": "Raiton: Hebi no Ikazuchi"
+    },
+    "answer": "B",
+    "id": 171
+  },
+  {
+    "question": "Raiton: Kangekiha najlepiej nadaje się do:",
+    "options": {
+      "A": "Oślepiania przeciwnika",
+      "B": "Precyzyjnego przebicia jednego celu",
+      "C": "Obszarowego porażenia błyskawicą",
+      "D": "Więzienia oponenta"
+    },
+    "answer": "C",
+    "id": 172
+  },
+  {
+    "question": "Co przyciąga piorun do wybranego miejsca?",
+    "options": {
+      "A": "Raiton: Gian",
+      "B": "Raiton: Denkō Noroshi",
+      "C": "Raiton: Hiraishin (wariacja)",
+      "D": "Raiton: Hell Stab"
+    },
+    "answer": "C",
+    "id": 173
+  },
+  {
+    "question": "Która technika Raiton tworzy błyskawicznego smoka wirującego jak tornado?",
+    "options": {
+      "A": "Raiton: Rairyū no Tatsumaki",
+      "B": "Raiton: Kuropansa",
+      "C": "Raiton: Raijū Tsuiga",
+      "D": "Raiton: Kaminari Shibari"
+    },
+    "answer": "A",
+    "id": 174
+  },
+  {
+    "question": "Raiton: Hell Stab (Liger Bomb) jest znany jako technika:",
+    "options": {
+      "A": "Ucieczki",
+      "B": "Obronna",
+      "C": "Eliminująca jednym ciosem",
+      "D": "Paraliżująca w grupie"
+    },
+    "answer": "C",
+    "id": 175
+  },
+  {
+    "question": "Jaką cenę ponosi użytkownik techniki Shiki Fūjin (Dead Demon Consuming Seal)?",
+    "options": {
+      "A": "Traci kontrolę nad ciałem",
+      "B": "Oddaje swoją duszę w zamian za pieczęć",
+      "C": "Zapada w śpiączkę",
+      "D": "Traci dostęp do chakry"
+    },
+    "answer": "B",
+    "id": 176
+  },
+  {
+    "question": "Które zakazane jutsu pozwala użytkownikowi walczyć z ogromną siłą kosztem życia?",
+    "options": {
+      "A": "Fushi Tensei",
+      "B": "Hachimon",
+      "C": "Edo Tensei",
+      "D": "Sōzō Saisei"
+    },
+    "answer": "B",
+    "id": 177
+  },
+  {
+    "question": "Na czym polega działanie techniki Edo Tensei?",
+    "options": {
+      "A": "Przywołuje potwory z innego wymiaru",
+      "B": "Tworzy kopie cienia użytkownika",
+      "C": "Wskrzesza zmarłych w nieśmiertelnych ciałach",
+      "D": "Zamyka przeciwników w kopule ziemi"
+    },
+    "answer": "C",
+    "id": 178
+  },
+  {
+    "question": "Która technika pozwala Orochimaru przenieść duszę do nowego ciała?",
+    "options": {
+      "A": "Fushi Tensei",
+      "B": "Souma no Kou",
+      "C": "Jigyaku no Jutsu",
+      "D": "Kuchiyose: Edo Tensei Shiki"
+    },
+    "answer": "A",
+    "id": 179
+  },
+  {
+    "question": "Jakie jest główne zastosowanie techniki Jigyaku no Jutsu?",
+    "options": {
+      "A": "Ucieczka z więzi błyskawic",
+      "B": "Zwiększenie odporności na pieczęcie",
+      "C": "Cofnięcie wspomnień celu",
+      "D": "Zmiana położenia duszy"
+    },
+    "answer": "C",
+    "id": 180
+  },
+  {
+    "question": "Jakie warunki są niezbędne do zebrania Senjutsu Chakry?",
+    "options": {
+      "A": "Użycie pieczęci klanu Uzumaki",
+      "B": "Całkowity bezruch i harmonia z naturą",
+      "C": "Osiągnięcie ósmej bramy",
+      "D": "Władanie Sharinganem"
+    },
+    "answer": "B",
+    "id": 181
+  },
+  {
+    "question": "Która postać używała Senpo: Kawazu Naki?",
+    "options": {
+      "A": "Naruto i Killer Bee",
+      "B": "Sasuke i Orochimaru",
+      "C": "Jiraiya z ropuchami Ma i Pa",
+      "D": "Hashirama i Madara"
+    },
+    "answer": "C",
+    "id": 182
+  },
+  {
+    "question": "Czym wyróżnia się Six Paths Sage Mode?",
+    "options": {
+      "A": "Pozwala na wskrzeszanie zmarłych",
+      "B": "Łączy Senjutsu z mocą Rikudō Sennina",
+      "C": "Wymaga ciała klanu Uchiha",
+      "D": "Umożliwia kopiowanie jutsu"
+    },
+    "answer": "B",
+    "id": 183
+  },
+  {
+    "question": "Jaką zdolność daje Senjutsu Chakra Detection?",
+    "options": {
+      "A": "Przenikanie przez ściany",
+      "B": "Zwiększenie prędkości biegu",
+      "C": "Wykrywanie obecności bez użycia wzroku",
+      "D": "Tworzenie klonów z natury"
+    },
+    "answer": "C",
+    "id": 184
+  },
+  {
+    "question": "Które z poniższych jest fillerową techniką Senjutsu?",
+    "options": {
+      "A": "Sennin Mōdo",
+      "B": "Senjutsu: Enhanced Reflexes",
+      "C": "Senpo: Kawazu Naki",
+      "D": "Senpo: Ryūsengan"
+    },
+    "answer": "B",
+    "id": 185
+  },
+  {
+    "question": "Jakie jest główne zastosowanie techniki Reverse Summoning (Gyaku Kuchiyose)?",
+    "options": {
+      "A": "Przywoływanie zwierząt do walki",
+      "B": "Teleportacja użytkownika do ustalonej lokacji",
+      "C": "Zniszczenie przedmiotów wroga",
+      "D": "Przywoływanie broni z wymiaru"
+    },
+    "answer": "B",
+    "id": 186
+  },
+  {
+    "question": "Która technika pozwala na teleportację do wcześniej oznaczonego miejsca?",
+    "options": {
+      "A": "Jikūkan Idō",
+      "B": "Kamui",
+      "C": "Hiraishin no Jutsu",
+      "D": "Yomotsu Hirasaka"
+    },
+    "answer": "C",
+    "id": 187
+  },
+  {
+    "question": "Czym wyróżnia się technika Amenotejikara Sasuke?",
+    "options": {
+      "A": "Tworzy portal do wymiaru Kamui",
+      "B": "Zamienia pozycję użytkownika z innym obiektem",
+      "C": "Teleportuje przedmioty do innego wymiaru",
+      "D": "Umożliwia latanie i sensing"
+    },
+    "answer": "B",
+    "id": 188
+  },
+  {
+    "question": "Jaka jest rola techniki Tengai Hōjin w czasie walki?",
+    "options": {
+      "A": "Zwiększa siłę fizyczną użytkownika",
+      "B": "Pozwala manipulować pogodą",
+      "C": "Wykrywa teleportacje wrogów",
+      "D": "Umożliwia natychmiastowy transport drużyny"
+    },
+    "answer": "C",
+    "id": 189
+  },
+  {
+    "question": "Które jutsu pozwala na manipulację wymiarami poprzez przestrzenne zakrzywienie?",
+    "options": {
+      "A": "Flying Rain Jutsu",
+      "B": "Kamui",
+      "C": "Raikō Kenka",
+      "D": "Kuchiyose no Jutsu"
+    },
+    "answer": "B",
+    "id": 190
+  },
+  {
+    "question": "Jakie jutsu pozwala otworzyć portal do alternatywnego wymiaru?",
+    "options": {
+      "A": "Yomotsu Hirasaka",
+      "B": "Hiraishin no Jutsu",
+      "C": "Jikūkan Idō",
+      "D": "Amenotejikara"
+    },
+    "answer": "A",
+    "id": 191
+  },
+  {
+    "question": "Która technika pozwala przyzywać broń z wymiaru poprzez pieczęcie?",
+    "options": {
+      "A": "Raikō Kenka",
+      "B": "Reverse Summoning",
+      "C": "Kamui",
+      "D": "Kuchiyose no Jutsu"
+    },
+    "answer": "A",
+    "id": 192
+  },
+  {
+    "question": "Flying Rain Jutsu z anime służy głównie do?",
+    "options": {
+      "A": "Atakowania falą błyskawic",
+      "B": "Teleportacji przeciwników",
+      "C": "Monitorowania obecności chakry",
+      "D": "Przywoływania broni w deszczu"
+    },
+    "answer": "C",
+    "id": 193
+  },
+  {
+    "question": "Które z poniższych NIE jest czasoprzestrzennym jutsu?",
+    "options": {
+      "A": "Jikūkan Idō",
+      "B": "Amenotejikara",
+      "C": "Chidori",
+      "D": "Kamui"
+    },
+    "answer": "C",
+    "id": 194
+  },
+  {
+    "question": "Jakie są główne zastosowania Kuchiyose no Jutsu?",
+    "options": {
+      "A": "Uniki i ofensywa",
+      "B": "Zabójstwo duszy",
+      "C": "Przywoływanie zwierząt lub obiektów",
+      "D": "Detekcja teleportacji"
+    },
+    "answer": "C",
+    "id": 195
+  },
+  {
+    "question": "Jaka broń spowalnia przeciwników, rozrzucając kolce na ziemi?",
+    "options": {
+      "A": "Makibishi",
+      "B": "Kunai",
+      "C": "Senbony",
+      "D": "Claws"
+    },
+    "answer": "A",
+    "id": 196
+  },
+  {
+    "question": "Która broń na naszym serwerze wykonuje trzykrotny atak obszarowy, ale unieruchamia użytkownika?",
+    "options": {
+      "A": "Katana",
+      "B": "Nunchako",
+      "C": "Jō",
+      "D": "Claws"
+    },
+    "answer": "B",
+    "id": 197
+  },
+  {
+    "question": "Jaką bronią na naszym serwerze można przyciągnąć przeciwnika z dystansu?",
+    "options": {
+      "A": "Tantō",
+      "B": "Senbony",
+      "C": "Kusarigama",
+      "D": "Jitte"
+    },
+    "answer": "C",
+    "id": 198
+  },
+  {
+    "question": "Która broń na naszym serwerze oferuje opcję ataku pojedynczym lub podwójnym ostrzem, wpływając na koszt energii?",
+    "options": {
+      "A": "Chakra Blade",
+      "B": "Kama",
+      "C": "Kunai",
+      "D": "Jidanda"
+    },
+    "answer": "B",
+    "id": 199
+  },
+  {
+    "question": "Która broń na naszym serwerze zadaje wysokie obrażenia i spowalnia, ale ma cooldown 4 sekundy?",
+    "options": {
+      "A": "Jō",
+      "B": "Katana",
+      "C": "Kanabō",
+      "D": "Chakra Blade"
+    },
+    "answer": "C",
+    "id": 200
+  },
+  {
+    "question": "Która broń na naszym serwerze ma zasięg 4 pola i pozostaje na miejscu po rzuceniu?",
+    "options": {
+      "A": "Senbony",
+      "B": "Fūma Shuriken",
+      "C": "Jidanda",
+      "D": "Katana"
+    },
+    "answer": "B",
+    "id": 201
+  },
+  {
+    "question": "Która broń na naszym serwerze defensywna pozwala zablokować część obrażeń?",
+    "options": {
+      "A": "Jitte",
+      "B": "Jō",
+      "C": "Kunai",
+      "D": "Claws"
+    },
+    "answer": "A",
+    "id": 202
+  },
+  {
+    "question": "Która broń na naszym serwerze posiada funkcję ładowania chakrą?",
+    "options": {
+      "A": "Chakra Blade",
+      "B": "Tessen",
+      "C": "Makibishi",
+      "D": "Nunchako"
+    },
+    "answer": "A",
+    "id": 203
+  },
+  {
+    "question": "Która broń na naszym serwerze pozwala na atak w linii prostej na 3 pola?",
+    "options": {
+      "A": "Jidanda",
+      "B": "Katana",
+      "C": "Tantō",
+      "D": "Claws"
+    },
+    "answer": "B",
+    "id": 204
+  },
+  {
+    "question": "Jaka broń na naszym serwerze jest ciężka, rzucana, i atakuje obszar 3x3?",
+    "options": {
+      "A": "Kusarigama",
+      "B": "Fūma Shuriken",
+      "C": "Jidanda",
+      "D": "Senbony"
+    },
+    "answer": "C",
+    "id": 205
+  },
+  {
+    "question": "Jak nazywał się nowy obiekt przy Training Grounds, do którego wszedł Raiko?",
+    "options": {
+      "A": "Shinobi Hall",
+      "B": "Shinobi Gym",
+      "C": "Dojo Kage",
+      "D": "Grounds Annex"
+    },
+    "answer": "B",
+    "id": 206
+  },
+  {
+    "question": "Jak działa Gym Protect System, gdy ktoś próbuje wynieść talerz (obciążenie)?",
+    "options": {
+      "A": "Włącza alarm dźwiękowy",
+      "B": "Nakłada karę czasową",
+      "C": "Teleportuje talerz z powrotem",
+      "D": "Powiadamia jounina dyżurnego"
+    },
+    "answer": "C",
+    "id": 207
+  },
+  {
+    "question": "Jaką lekcję o pochodzeniu siły dostał Raiko od jounina przy ławce?",
+    "options": {
+      "A": "Siła przychodzi z klanu",
+      "B": "Siła to kwestia wrodzonego talentu",
+      "C": "Siła to efekt rzadkich technik",
+      "D": "Siła wynika z codziennych decyzji"
+    },
+    "answer": "D",
+    "id": 208
+  },
+  {
+    "question": "Dlaczego plansza szachowa tak utkwiła Raiko w głowie?",
+    "options": {
+      "A": "Bo przypominała mu dzieciństwo",
+      "B": "Przez spokój i ciszę kontrastujące z innymi treningami",
+      "C": "Z powodu huku widowni",
+      "D": "Bo wygrał swoją pierwszą partię"
+    },
+    "answer": "B",
+    "id": 209
+  },
+  {
+    "question": "Jakiego narzędzia używał Gai, by uczyć przetrwania w lesie?",
+    "options": {
+      "A": "Piły",
+      "B": "Siekiery",
+      "C": "Noża myśliwskiego",
+      "D": "Piły łańcuchowej"
+    },
+    "answer": "B",
+    "id": 210
+  },
+  {
+    "question": "Co według Gai’a daje rozbicie namiotu i ognisko?",
+    "options": {
+      "A": "Wyłącznie HP",
+      "B": "Wyłącznie chakrę",
+      "C": "HP, chakrę i staminę",
+      "D": "Tylko staminę"
+    },
+    "answer": "C",
+    "id": 211
+  },
+  {
+    "question": "Jaki sens miał pierwszy samodzielnie ugotowany posiłek Raiko?",
+    "options": {
+      "A": "Był najdroższy",
+      "B": "Został przygotowany perfekcyjnie",
+      "C": "Smakował jak coś więcej, bo był zrobiony własnoręcznie",
+      "D": "Był efektem nauki kuchni w restauracji"
+    },
+    "answer": "C",
+    "id": 212
+  },
+  {
+    "question": "Kto zaprezentował Raiko serię technik Taijutsu?",
+    "options": {
+      "A": "Maito Gai",
+      "B": "Kakashi",
+      "C": "Rock Lee",
+      "D": "Neji"
+    },
+    "answer": "C",
+    "id": 213
+  },
+  {
+    "question": "Która technika Lee wywołała falę uderzeniową z ziemi?",
+    "options": {
+      "A": "Goken Impact",
+      "B": "Konoha Senpuu",
+      "C": "Ryūjin Geri",
+      "D": "Shōfū"
+    },
+    "answer": "A",
+    "id": 214
+  },
+  {
+    "question": "Jaki był motyw przewodni przekazu Gai’a dla Raiko?",
+    "options": {
+      "A": "Technika > serce",
+      "B": "Prawdziwa siła tkwi w sercu, które niesie cios",
+      "C": "Geniusz wygrywa z determinacją",
+      "D": "Iluzja jest ważniejsza od prędkości"
+    },
+    "answer": "B",
+    "id": 215
+  },
+  {
+    "question": "Kto uratował Raiko przed fałszywymi Aburame?",
+    "options": {
+      "A": "Kakashi",
+      "B": "Shino",
+      "C": "Maito Gai",
+      "D": "Suselkowy"
+    },
+    "answer": "C",
+    "id": 216
+  },
+  {
+    "question": "Kim okazał się Suselkowy w Kronikach Wędrowca?",
+    "options": {
+      "A": "Kupcem z zewnątrz",
+      "B": "Jouninem z Konohy bez klanu",
+      "C": "Członkiem klanu Aburame",
+      "D": "Przybyszem z innej wioski"
+    },
+    "answer": "C",
+    "id": 217
+  },
+  {
+    "question": "Jak nazywa się technika Suselkowego użyta w kopcu do uspokajania roju?",
+    "options": {
+      "A": "Mushiyose no Uta",
+      "B": "Konbaisu no Shinka (Convince Swarm)",
+      "C": "Kikaichū Shuuketsu",
+      "D": "Mushikami no Fuuin"
+    },
+    "answer": "B",
+    "id": 218
+  },
+  {
+    "question": "Co było kluczowe do pokonania „królowej” w kopcu w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Czysta siła Raiko",
+      "B": "Iluzja Genjutsu",
+      "C": "Przejęcie lojalności owadów od królowej",
+      "D": "Użycie barier fuinjutsu przez Raiko"
+    },
+    "answer": "C",
+    "id": 219
+  },
+  {
+    "question": "Co znaleziono przy korzeniach starego drzewa w dzielnicy Aburame w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Maskę",
+      "B": "Kokon",
+      "C": "Zwój",
+      "D": "Pęknięty ul"
+    },
+    "answer": "B",
+    "id": 220
+  },
+  {
+    "question": "Jakiej techniki użył Suselkowy, by stworzyć sobowtóry z owadów w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Kage Bunshin",
+      "B": "Mushikage no Jutsu",
+      "C": "Mushi Bunshin no Jutsu",
+      "D": "Genmu no Mushi"
+    },
+    "answer": "C",
+    "id": 221
+  },
+  {
+    "question": "Jak zakończono starcie z larwą-hybrydą w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Przez spalenie",
+      "B": "Przez pieczęć roju — Mushikami no Fuuin",
+      "C": "Przez wodną barierę",
+      "D": "Przez odwrót przeciwnika"
+    },
+    "answer": "B",
+    "id": 222
+  },
+  {
+    "question": "Jaki niezwykły obiekt do tworzenia mikstur znaleziono w podziemiach w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Summoning Altar",
+      "B": "Alchemical Table",
+      "C": "Forge of Runes",
+      "D": "Sealing Bench"
+    },
+    "answer": "B",
+    "id": 223
+  },
+  {
+    "question": "Jak nazwano przeciwnika spotkanego w tunelach kopalni w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Queen Husk",
+      "B": "Hollow Queen",
+      "C": "Void Empress",
+      "D": "Silken Regent"
+    },
+    "answer": "B",
+    "id": 224
+  },
+  {
+    "question": "Co ujawniły notatki w komnacie królowej o dawnym projekcie w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Projekt iluzji bez chakra",
+      "B": "Hodowlę smoków",
+      "C": "Hybrydę ludzi i owadów – idealnego wojownika",
+      "D": "Eksperyment teleportacyjny"
+    },
+    "answer": "C",
+    "id": 225
+  },
+  {
+    "question": "Jak zareagowała Hollow Queen po przewadze taktycznej bohaterów w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Została zapieczętowana",
+      "B": "Zginęła od razu",
+      "C": "Rozpadła się w chmurę i wycofała",
+      "D": "Poddała się"
+    },
+    "answer": "C",
+    "id": 226
+  },
+  {
+    "question": "Jaką defensywną technikę zaprezentował Suselkowy podczas ataku postaci w płaszczu w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Bug Cloak",
+      "B": "Iron Skin",
+      "C": "Silk Shield",
+      "D": "Hive Guard"
+    },
+    "answer": "A",
+    "id": 227
+  },
+  {
+    "question": "Co stworzył Raiko przy Alchemical Table, by przełamać atak przeciwniczki w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Miksturę iluzji",
+      "B": "Proszek",
+      "C": "Eliksir niewidzialności",
+      "D": "Wybuchowy kunai"
+    },
+    "answer": "B",
+    "id": 228
+  },
+  {
+    "question": "Jak nazywał się młody NPC, który poprosił o naukę rozmowy z robakami w jednym z rozdziałów Kronik Wędrowca?",
+    "options": {
+      "A": "Ren",
+      "B": "Kyo",
+      "C": "Iori",
+      "D": "Shiba"
+    },
+    "answer": "B",
+    "id": 229
+  },
+  {
+    "id": 230,
+    "question": "Jak liczona jest reputacja wioski?",
+    "options": {
+      "A": "Średnia z reputacji członków",
+      "B": "Najwyższa reputacja z członków",
+      "C": "Suma reputacji członków",
+      "D": "Stała wartość 100"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 231,
+    "question": "Gdzie sprawdzisz ulubioną broń postaci?",
+    "options": {
+      "A": "W ekwipunku",
+      "B": "Na stronie profilu postaci",
+      "C": "W oknie misji",
+      "D": "W panelu wioski"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 232,
+    "question": "Na jakiej podstawie system wskazuje Favorite Weapon?",
+    "options": {
+      "A": "Deklaracji gracza",
+      "B": "Najwyższego poziomu broni",
+      "C": "Rzeczywistych użyć broni",
+      "D": "Losowo co tydzień"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 233,
+    "question": "Co robi deszcz z efektami ognia?",
+    "options": {
+      "A": "Wzmacnia",
+      "B": "Nie wpływa",
+      "C": "Stopniowo gasi",
+      "D": "Natychmiast gasi"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 234,
+    "question": "Jak długo utrzymuje się status \"Mokry” po wyjściu spod deszczu?",
+    "options": {
+      "A": "~5 sekund",
+      "B": "~30 sekund",
+      "C": "Do reloga",
+      "D": "Do użycia ręcznika"
+    },
+    "answer": "A"
+  },
+  {
+    "id": 235,
+    "question": "Czy chodzenie po wodzie nakłada status \"Mokry\"?",
+    "options": {
+      "A": "Nie",
+      "B": "Tak",
+      "C": "X",
+      "D": "X"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 236,
+    "question": "Pasyw Uchiha Reflexes daje…",
+    "options": {
+      "A": "Auto-heal",
+      "B": "Szansę na automatyczny unik",
+      "C": "Podwójny skok",
+      "D": "Szansę na obrażenia krytyczne"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 237,
+    "question": "Na czym skupia się trening u Genmy Shiranui?",
+    "options": {
+      "A": "Genjutsu",
+      "B": "Kondycji fizycznej i podstawach walki",
+      "C": "Summonach",
+      "D": "Gotowaniu"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 238,
+    "question": "Koszt chakry Kawarimi no Jutsu:",
+    "options": {
+      "A": "20",
+      "B": "30",
+      "C": "40",
+      "D": "50"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 239,
+    "question": "Cooldown Kawarimi no Jutsu wynosi:",
+    "options": {
+      "A": "15 s",
+      "B": "30 s",
+      "C": "45 s",
+      "D": "60 s"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 240,
+    "question": "Jak długo po użyciu Kawarimi, jutsu te neutralizuje pierwszy cios?",
+    "options": {
+      "A": "5 s",
+      "B": "8 s",
+      "C": "10 s",
+      "D": "12 s"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 241,
+    "question": "Jak daleko przenosi gracza Kawarimi?",
+    "options": {
+      "A": "1 kratkę",
+      "B": "2 kratki",
+      "C": "3 kratki",
+      "D": "Losowo"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 242,
+    "question": "Dodatkowy efekt po Kawarimi:",
+    "options": {
+      "A": "Niewidzialność",
+      "B": "Podwojenie obrażeń",
+      "C": "Stun przeciwnika",
+      "D": "Leczenie 50 HP"
+    },
+    "answer": "A"
+  },
+  {
+    "id": 243,
+    "question": "Koszt chakry Henge no Jutsu:",
+    "options": {
+      "A": "10",
+      "B": "20",
+      "C": "30",
+      "D": "40"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 244,
+    "question": "Cooldown Henge no Jutsu:",
+    "options": {
+      "A": "30 s",
+      "B": "45 s",
+      "C": "60 s",
+      "D": "90 s"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 245,
+    "question": "Czas trwania Henge:",
+    "options": {
+      "A": "15 s",
+      "B": "20 s",
+      "C": "30 s",
+      "D": "45 s"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 246,
+    "question": "Transformacja w PRZEDMIOT powoduje:",
+    "options": {
+      "A": "Wolniejszy bieg",
+      "B": "Niewidoczny nick",
+      "C": "Auto-heal",
+      "D": "Odporność na obrażenia"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 247,
+    "question": "Czego nie możemy, jeżeli wykorzystując Henge no jutsu zamienimy się w przedmiot?",
+    "options": {
+      "A": "Pisać na czacie",
+      "B": "Otwierać mape",
+      "C": "Patrzeć w ekwipunek",
+      "D": "Zmieniać klan"
+    },
+    "answer": "A"
+  },
+  {
+    "id": 248,
+    "question": "Co natychmiastowo przerywa Henge?",
+    "options": {
+      "A": "Zmiana broni",
+      "B": "Każdy atak",
+      "C": "Skok",
+      "D": "Zamknięcie UI"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 249,
+    "question": "Ile pytań zawiera test u Iruki?",
+    "options": {
+      "A": "5",
+      "B": "8",
+      "C": "10",
+      "D": "12"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 250,
+    "question": "Forma egzaminu u Iruki to:",
+    "options": {
+      "A": "Czat tekstowy",
+      "B": "Interaktywny overlay na ekranie",
+      "C": "NPC dialog",
+      "D": "\"Papierowy\" test jednokrotnego wyboru"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 251,
+    "question": "Jaki jest cel wdrożenia testu u Iruki:",
+    "options": {
+      "A": "Utrudnić start",
+      "B": "Dodać RNG drop",
+      "C": "Sprawdzić wiedzę i urozmaicić naukę",
+      "D": "Zastąpić tutorial"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 252,
+    "question": "Gdzie dzieje się akcja pierwszego tutorial?",
+    "options": {
+      "A": "Akademia",
+      "B": "Szpital Konohy",
+      "C": "Dojo Uchiha",
+      "D": "Forest Arena"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 253,
+    "question": "Co daje nam ukończenie pierwszego tutorialu w szpitalu?",
+    "options": {
+      "A": "Tylko pieniądze",
+      "B": "Wyłącznie reputację",
+      "C": "Wynagrodzenie, reputację i kilka przedmiotów",
+      "D": "Tylko exp"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 254,
+    "question": "Po szpitalu akcja przenosi się do:",
+    "options": {
+      "A": "ANBU HQ",
+      "B": "Akademii Konohy",
+      "C": "Sand Village",
+      "D": "Wioski Ukrytej w Chmurach"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 255,
+    "question": "Ile misji tutorialowych dodano w szpitalu (Rozdz. 5)?",
+    "options": {
+      "A": "12",
+      "B": "15",
+      "C": "18",
+      "D": "20"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 256,
+    "question": "Kto JEDYNY może natychmiastowo leczyć wykorzystując jutsu i przedmioty medyczne?",
+    "options": {
+      "A": "Każdy z Soldier Pills",
+      "B": "Każdy z apteczką",
+      "C": "Każdy medyk",
+      "D": "Każdy po Henge"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 257,
+    "question": "Plaster leczy:",
+    "options": {
+      "A": "10 HP przez 5 tików",
+      "B": "20 HP natychmiast",
+      "C": "5 HP przez 10 tików",
+      "D": "30 HP natychmiast"
+    },
+    "answer": "A"
+  },
+  {
+    "id": 258,
+    "question": "Bandaż leczy:",
+    "options": {
+      "A": "20 HP przez 5 tików",
+      "B": "10 HP przez 5 tików",
+      "C": "50 HP natychmiast",
+      "D": "Skaluje się z poziomem"
+    },
+    "answer": "A"
+  },
+  {
+    "id": 259,
+    "question": "Warunek działania plastrów/bandaży:",
+    "options": {
+      "A": "Bieg",
+      "B": "Brak ruchu i ataku",
+      "C": "Chat off",
+      "D": "Woda"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 260,
+    "question": "Jak często można uzywać Soldier Pills?",
+    "options": {
+      "A": "Raz na 60 s",
+      "B": "Raz na 5 min",
+      "C": "Bez limitu",
+      "D": "Raz na 10 min"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 261,
+    "question": "Jaki efekt daje uzycie Soldier Pills?",
+    "options": {
+      "A": "+5% speed na 60 s",
+      "B": "2 chakry i 2 energii co 2 s przez 100 s",
+      "C": "Natychmiast 100 chakry",
+      "D": "Leczenie 50 HP"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 262,
+    "question": "Jaki czas odnowienia ma Hero Water?",
+    "options": {
+      "A": "1 min",
+      "B": "5 min",
+      "C": "10 min",
+      "D": "Brak"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 263,
+    "question": "Jaki jest buff szybkości ruchy po użyciu Hero Water?",
+    "options": {
+      "A": "+5%",
+      "B": "+10%",
+      "C": "+15%",
+      "D": "+20%"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 264,
+    "question": "Jakie statystyki podbija Hero Water?",
+    "options": {
+      "A": "Ninjutsu i Taijutsu",
+      "B": "Ninjutsu, Taijutsu, Strength, Resistance",
+      "C": "Tylko Strength",
+      "D": "Chakra i HP"
+    },
+    "answer": "B"
+  },
+  {
+    "id": 265,
+    "question": "Jaki jest efekt uboczny po użyciu Hero Water?",
+    "options": {
+      "A": "-10% HP i -20% speed na 5 s",
+      "B": "-5% HP i -10% speed",
+      "C": "Brak",
+      "D": "Paraliż 2 s"
+    },
+    "answer": "A"
+  },
+  {
+    "question": "Co odblokowuje uzyskanie rangi Genin?",
+    "options": {
+      "A": "Dostęp tylko do nowych skinów",
+      "B": "Możliwość walki PvP jedynie na Arenie",
+      "C": "taski, jutsu, drużyny, wyjście za bramy",
+      "D": "Dostęp wyłącznie do Story Mode"
+    },
+    "answer": "C",
+    "id": 266
+  },
+  {
+    "question": "Które jutsu NIE jest wymagane do podejścia do egzaminu na Genina?",
+    "options": {
+      "A": "Henge no Jutsu",
+      "B": "Orioke no Jutsu",
+      "C": "Bunshin no Jutsu",
+      "D": "Kawarimi no Jutsu"
+    },
+    "answer": "B",
+    "id": 267
+  },
+  {
+    "question": "Ile kosztuje Bunshin no Jutsu?",
+    "options": {
+      "A": "80 Chakry",
+      "B": "50 Chakry",
+      "C": "120 Chakry",
+      "D": "Nie kosztuje chakry"
+    },
+    "answer": "A",
+    "id": 268
+  },
+  {
+    "question": "Od czego zależy liczba klonów w Bunshin no Jutsu?",
+    "options": {
+      "A": "Od poziomu gracza",
+      "B": "Od statystyki Resistance",
+      "C": "Od statystyki Fuinjutsu",
+      "D": "Od Inteligencji (INT)"
+    },
+    "answer": "C",
+    "id": 269
+  },
+  {
+    "question": "Ile INT potrzeba, aby postawić pułapkę?",
+    "options": {
+      "A": "5 INT",
+      "B": "8 INT",
+      "C": "10 INT",
+      "D": "12 INT"
+    },
+    "answer": "C",
+    "id": 270
+  },
+  {
+    "question": "Przy jakiej wartości INT rozbrajanie pułapek jest całkowicie bezpieczne (0% ryzyka obrażeń)?",
+    "options": {
+      "A": "10 INT",
+      "B": "12 INT",
+      "C": "18 INT",
+      "D": "20 INT"
+    },
+    "answer": "D",
+    "id": 271
+  },
+  {
+    "question": "Co NIE jest elementem systemu Wiosek?",
+    "options": {
+      "A": "Czat wioski",
+      "B": "Głosowania i zarządzanie rangami",
+      "C": "Automatyczna teleportacja członków do siebie",
+      "D": "Reputacja sumowana z reputacji graczy"
+    },
+    "answer": "C",
+    "id": 272
+  },
+  {
+    "question": "Jaką wartość HP ma klon z Bunshin no Jutsu?",
+    "options": {
+      "A": "1 HP",
+      "B": "Tyle co gracz, ale nie atakuje",
+      "C": "10% HP gracza",
+      "D": "Zależy od Resistance"
+    },
+    "answer": "A",
+    "id": 273
+  },
+  {
+    "id": 274,
+    "question": "Jak nazywa się dokładnie miecz Itachiego, który mógł permanentnie zapieczętować przeciwnika w stanie iluzji?",
+    "options": {
+      "A": "Samehada",
+      "B": "Kusanagi",
+      "C": "Totsuka no Tsurugi",
+      "D": "Yata no Tachi"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 275,
+    "question": "Jak nazywa się legendarna tarcza, którą posiadało Susanoo Itachiego, czyniąc go prawie nie do zranienia?",
+    "options": {
+      "A": "Eight Trigrams Shield",
+      "B": "Adamantine Shield",
+      "C": "Yata Mirror (Yata no Kagami)",
+      "D": "Divine Reflecting Plate"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 276,
+    "question": "Dlaczego Killer Bee jako jeden z nielicznych Jinchūriki miał dobre relacje z bijuu?",
+    "options": {
+      "A": "Urodził się z bijuu",
+      "B": "Był szkolony psychicznie jako dziecko",
+      "C": "Akceptował Gyūki i traktował go jako partnera",
+      "D": "Gyūki był słaby i nie mógł dominować"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 277,
+    "question": "Jak nazywał się prawdziwy stwórca Zetsu?",
+    "options": {
+      "A": "Madara",
+      "B": "Hashirama",
+      "C": "Kaguya Ōtsutsuki",
+      "D": "Hagoromo"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 278,
+    "question": "Jakie było pierwotne zadanie organizacji Akatsuki za czasów Yahiko?",
+    "options": {
+      "A": "Zniszczenie Konoha",
+      "B": "Wskrzeszenie Jūbi",
+      "C": "Pokój przez współpracę shinobi",
+      "D": "Sprzedaż informacji"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 279,
+    "question": "Co było powodem samobójstwa Shisuiego?",
+    "options": {
+      "A": "Strach",
+      "B": "Słabość",
+      "C": "Chciał powstrzymać Danzo przed kradzieżą oka",
+      "D": "Misja ANBU"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 280,
+    "question": "Jaką funkcję pełniło ramię Danzo pokryte Sharinganami?",
+    "options": {
+      "A": "Leczenie",
+      "B": "Susanoo",
+      "C": "Wielokrotne użycie Izanagi",
+      "D": "Wzmocnienie Taijutsu"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 281,
+    "question": "Dlaczego Naruto nie mógł przestać gonić Sasuke, mimo lat cierpienia i upokorzeń?",
+    "options": {
+      "A": "Bo obiecał Sakurze",
+      "B": "Bo był uparty",
+      "C": "Bo zobaczył w Sasuke samego siebie, tylko bez nikogo, kto by o niego walczył",
+      "D": "Bo Hokage tak kazał"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 282,
+    "question": "Co sprawiło, że Nagato zmienił decyzję po rozmowie z Naruto?",
+    "options": {
+      "A": "Moc Tailed Beast Mode",
+      "B": "Krzyk Hinaty",
+      "C": "Słowa Jiraiyi żyjące w Naruto",
+      "D": "Ból klęski"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 283,
+    "question": "Dlaczego Kakashi zawsze spóźniał się na zbiórki?",
+    "options": {
+      "A": "Leniwy",
+      "B": "Przyzwyczajenie",
+      "C": "Odwiedzał grób Obito",
+      "D": "Chciał denerwować Naruto"
+    },
+    "answer": "C"
+  },
+  {
+    "id": 284,
+    "question": "Co dla Itachiego oznaczało 'wybrać ciemność'?",
+    "options": {
+      "A": "Porzucić emocje",
+      "B": "Stać się złoczyńcą",
+      "C": "Wziąć na siebie nienawiść świata, żeby inni mogli żyć w pokoju",
+      "D": "Zostać samotnikiem"
+    },
+    "answer": "C"
+  }
+]
