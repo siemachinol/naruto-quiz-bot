@@ -334,6 +334,63 @@ class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
                 pass
 # --- END REPORT FEATURE ---
 
+# --- LIFELINES FEATURE: modal do „Telefonu” ---
+class PhoneFriendModal(ui.Modal, title="Telefon do przyjaciela"):
+    friend_input = ui.TextInput(
+        label="Kogo podglądamy?",
+        placeholder="Wklej @wzmiankę lub ID użytkownika",
+        max_length=100,
+    )
+
+    def __init__(self, source_message_id: int):
+        super().__init__(timeout=180)
+        self.source_message_id = source_message_id
+
+    async def on_submit(self, interaction: Interaction):
+        import re
+        ch = interaction.channel
+        if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+            return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+
+        state = active_quizzes.get(self.source_message_id)
+        if not state:
+            return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+        if datetime.datetime.utcnow() > state.end_time:
+            return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+
+        text = (self.friend_input.value or "").strip()
+        m = re.search(r"(\d{17,20})", text)  # ID z <@...> lub sama liczba
+        if not m:
+            return await interaction.response.send_message("Podaj poprawną wzmiankę lub ID.", ephemeral=True)
+        uid = int(m.group(1))
+        guild = interaction.guild
+        friend = guild.get_member(uid) if guild else None
+
+        cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
+        if cd:
+            return await interaction.response.send_message(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", ephemeral=True)
+
+        letter = state.answers.get(uid)
+        if not letter:
+            return await interaction.response.send_message(
+                f"📵 Abonent **{friend.display_name if friend else uid}** jeszcze nie odpowiedział(a). (Koło **nie** zostało zużyte.)",
+                ephemeral=True
+            )
+
+        await db_lifeline_mark_use(interaction.user.id, "telefon")
+        import random
+        responses = [
+            "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie **{answer}**.",
+            "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
+            "Hmm... strzelam, że **{answer}**.",
+            "Myślę, że to może być **{answer}**.",
+        ]
+        await interaction.response.send_message(
+            f"📞 Telefon do **{friend.display_name if friend else uid}** → {random.choice(responses).format(answer=letter)}",
+            ephemeral=True
+        )
+# --- END LIFELINES FEATURE ---
+
 # -------------- Widok z przyciskami ----------
 class QuizPersistentView(ui.View):
     def __init__(self, disabled: bool=False):
@@ -346,24 +403,88 @@ class QuizPersistentView(ui.View):
                 except Exception:
                     pass
 
-    @ui.button(label="A", custom_id="quiz_A", style=ButtonStyle.secondary)
+    @ui.button(label="A", custom_id="quiz_A", style=ButtonStyle.secondary, row=0)
     async def _a(self, interaction: Interaction, button: ui.Button):
         await handle_answer_click(interaction, "A")
 
-    @ui.button(label="B", custom_id="quiz_B", style=ButtonStyle.secondary)
+    @ui.button(label="B", custom_id="quiz_B", style=ButtonStyle.secondary, row=0)
     async def _b(self, interaction: Interaction, button: ui.Button):
         await handle_answer_click(interaction, "B")
 
-    @ui.button(label="C", custom_id="quiz_C", style=ButtonStyle.secondary)
+    @ui.button(label="C", custom_id="quiz_C", style=ButtonStyle.secondary, row=0)
     async def _c(self, interaction: Interaction, button: ui.Button):
         await handle_answer_click(interaction, "C")
 
-    @ui.button(label="D", custom_id="quiz_D", style=ButtonStyle.secondary)
+    @ui.button(label="D", custom_id="quiz_D", style=ButtonStyle.secondary, row=0)
     async def _d(self, interaction: Interaction, button: ui.Button):
         await handle_answer_click(interaction, "D")
 
-    # --- REPORT FEATURE: przycisk otwierający modal ---
-    @ui.button(label="🚩 Zgłoś pytanie", custom_id="quiz_report", style=ButtonStyle.danger, row=1)
+    # ── KOŁA RATUNKOWE – PRZYCISKI (ROW=1) ──────────────────────────────────
+    @ui.button(label="50/50", custom_id="quiz_5050", style=ButtonStyle.primary, row=1)
+    async def _btn_5050(self, interaction: Interaction, button: ui.Button):
+        ch = interaction.channel
+        if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+            return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+        state = get_state_for_channel(ch.id)
+        if not state:
+            return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+        if datetime.datetime.utcnow() > state.end_time:
+            return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+
+        cd = await lifeline_check_cooldown(interaction.user.id, "5050")
+        if cd:
+            return await interaction.response.send_message(f"50/50 w cooldownie jeszcze {cd}.", ephemeral=True)
+
+        correct = state.question["answer"]
+        wrong = [x for x in ["A","B","C","D"] if x != correct]
+        kept = [correct, random.choice(wrong)]
+        random.shuffle(kept)
+        await db_lifeline_mark_use(interaction.user.id, "5050")
+        await interaction.response.send_message(
+            f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**",
+            ephemeral=True
+        )
+
+    @ui.button(label="Publika", custom_id="quiz_audience", style=ButtonStyle.primary, row=1)
+    async def _btn_audience(self, interaction: Interaction, button: ui.Button):
+        ch = interaction.channel
+        if not isinstance(ch, (discord.TextChannel, discord.Thread)):
+            return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+        state = get_state_for_channel(ch.id)
+        if not state:
+            return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+        if datetime.datetime.utcnow() > state.end_time:
+            return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+
+        cd = await lifeline_check_cooldown(interaction.user.id, "publika")
+        if cd:
+            return await interaction.response.send_message(f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.", ephemeral=True)
+
+        counts = {k: 0 for k in ["A", "B", "C", "D"]}
+        for letter in state.answers.values():
+            if letter in counts:
+                counts[letter] += 1
+        total = sum(counts.values()) or 1
+        perc = {k: round(v * 100 / total) for k, v in counts.items()}
+        await db_lifeline_mark_use(interaction.user.id, "publika")
+        msg = (
+            "📊 Głosy do tej pory:\n"
+            f"A: {counts['A']} ({perc['A']}%)\n"
+            f"B: {counts['B']} ({perc['B']}%)\n"
+            f"C: {counts['C']} ({perc['C']}%)\n"
+            f"D: {counts['D']} ({perc['D']}%)"
+        )
+        await interaction.response.send_message(msg, ephemeral=True)
+
+    @ui.button(label="Telefon", custom_id="quiz_phone", style=ButtonStyle.primary, row=1)
+    async def _btn_phone(self, interaction: Interaction, button: ui.Button):
+        msg = interaction.message
+        if not msg:
+            return await interaction.response.send_message("Brak powiązanej wiadomości.", ephemeral=True)
+        await interaction.response.send_modal(PhoneFriendModal(source_message_id=msg.id))
+
+    # --- REPORT FEATURE: przycisk otwierający modal (ROW=2) ---
+    @ui.button(label="🚩 Zgłoś pytanie", custom_id="quiz_report", style=ButtonStyle.danger, row=2)
     async def _report(self, interaction: Interaction, button: ui.Button):
         msg = interaction.message
         if not msg:
