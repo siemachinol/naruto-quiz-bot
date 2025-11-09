@@ -334,7 +334,7 @@ class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
                 pass
 # --- END REPORT FEATURE ---
 
-# --- LIFELINES FEATURE: modal do „Telefonu” ---
+# --- LIFELINES FEATURE: modal do „Telefonu” (pozostawiony, nieużywany) ---
 class PhoneFriendModal(ui.Modal, title="Telefon do przyjaciela"):
     friend_input = ui.TextInput(
         label="Kogo podglądamy?",
@@ -389,6 +389,63 @@ class PhoneFriendModal(ui.Modal, title="Telefon do przyjaciela"):
             f"📞 Telefon do **{friend.display_name if friend else uid}** → {random.choice(responses).format(answer=letter)}",
             ephemeral=True
         )
+# --- END LIFELINES FEATURE ---
+
+# --- LIFELINES FEATURE: UserSelect do „Telefonu” ---
+class PhoneFriendSelectView(ui.View):
+    def __init__(self, source_message_id: int):
+        super().__init__(timeout=90)
+        self.source_message_id = source_message_id
+        self.select = ui.UserSelect(placeholder="Wybierz gracza", min_values=1, max_values=1)
+        self.select.callback = self._on_select
+        self.add_item(self.select)
+
+    async def _on_select(self, interaction: Interaction):
+        ch = interaction.channel
+        guild = interaction.guild
+        if not isinstance(ch, (discord.TextChannel, discord.Thread)) or not guild:
+            return await interaction.response.send_message("Użyj na kanale tekstowym serwera.", ephemeral=True)
+
+        state = active_quizzes.get(self.source_message_id)
+        if not state:
+            return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+        if datetime.datetime.utcnow() > state.end_time:
+            return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+
+        try:
+            uid = int(self.select.values[0])
+        except Exception:
+            return await interaction.response.send_message("Nie udało się odczytać wyboru.", ephemeral=True)
+        friend = guild.get_member(uid)
+
+        cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
+        if cd:
+            return await interaction.response.send_message(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", ephemeral=True)
+
+        letter = state.answers.get(uid)
+        if not letter:
+            return await interaction.response.send_message(
+                f"📵 Abonent **{friend.display_name if friend else uid}** jeszcze nie odpowiedział(a). "
+                f"(Koło **nie** zostało zużyte.)",
+                ephemeral=True
+            )
+
+        await db_lifeline_mark_use(interaction.user.id, "telefon")
+
+        responses = [
+            "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie **{answer}**.",
+            "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
+            "Hmm... strzelam, że **{answer}**.",
+            "Myślę, że to może być **{answer}**.",
+        ]
+        import random
+        msg = random.choice(responses).format(answer=letter)
+
+        await interaction.response.send_message(
+            f"📞 Telefon do **{friend.display_name if friend else uid}** → {msg}",
+            ephemeral=True
+        )
+        self.stop()
 # --- END LIFELINES FEATURE ---
 
 # -------------- Widok z przyciskami ----------
@@ -492,7 +549,12 @@ class QuizPersistentView(ui.View):
         msg = interaction.message
         if not msg:
             return await interaction.response.send_message("Brak powiązanej wiadomości.", ephemeral=True)
-        await interaction.response.send_modal(PhoneFriendModal(source_message_id=msg.id))
+        # zamiast modala – lista użytkowników do wyboru
+        await interaction.response.send_message(
+            "Wybierz gracza, do którego dzwonisz:",
+            view=PhoneFriendSelectView(source_message_id=msg.id),
+            ephemeral=True
+        )
 
     # --- REPORT FEATURE: przycisk otwierający modal (ROW=2) ---
     @ui.button(label="🚩 Zgłoś pytanie", custom_id="quiz_report", style=ButtonStyle.danger, row=2)
@@ -822,7 +884,7 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
         "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
         "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
         "Hmm... strzelam, że to **{answer}**.",
-        "Myślę, że to może być **{answer}**, ale nie dam sobie ręki uciąć.",
+        "Myślę, że to może być **{answer}**.",
         "Nie jestem ekspertem, ale obstawiam **{answer}**.",
         "Nie wiem na 100%, ale wydaje mi się, że chodzi o **{answer}**.",
         "Kurczę... mam przeczucie, że to **{answer}**.",
