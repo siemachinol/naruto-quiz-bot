@@ -419,6 +419,17 @@ class QuizPersistentView(ui.View):
     async def _d(self, interaction: Interaction, button: ui.Button):
         await handle_answer_click(interaction, "D")
 
+    # ── Etykieta dla kół ratunkowych (ROW=1) ─────────────────────────────────
+    @ui.button(
+        label="Koła ratunkowe",
+        custom_id="quiz_helpers_label",
+        style=ButtonStyle.secondary,
+        disabled=True,
+        row=1
+    )
+    async def _lbl_helpers(self, interaction: Interaction, button: ui.Button):
+        pass  # to tylko etykieta (disabled)
+
     # ── KOŁA RATUNKOWE – PRZYCISKI (ROW=1) ──────────────────────────────────
     @ui.button(label="50/50", custom_id="quiz_5050", style=ButtonStyle.primary, row=1)
     async def _btn_5050(self, interaction: Interaction, button: ui.Button):
