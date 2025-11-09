@@ -13,6 +13,7 @@ import discord
 from discord.ext import commands, tasks
 from discord import ButtonStyle, Interaction, ui, app_commands
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from discord.errors import HTTPException  # <— DODANE: do obsługi 429
 
 # --- optional for local dev ---
 try:
@@ -265,6 +266,29 @@ quiz_lock = asyncio.Lock()
 def fmt_timestr(dt: datetime.datetime) -> str:
     return dt.strftime("%H:%M:%S UTC")
 
+# ---------- DODANE: bezpieczne ephemerale z retry 429 ----------
+async def safe_ephemeral(interaction: Interaction, content: str = "", view: Optional[discord.ui.View] = None):
+    # 1) Defer (jeśli jeszcze nie było odpowiedzi)
+    if not interaction.response.is_done():
+        try:
+            await interaction.response.defer(ephemeral=True, thinking=False)
+        except Exception:
+            pass
+    # 2) Followup + jednorazowy retry na 429 (Cloudflare 1015)
+    for attempt in (1, 2):
+        try:
+            return await interaction.followup.send(content, view=view, ephemeral=True)
+        except HTTPException as e:
+            if getattr(e, "status", None) == 429 and attempt == 1:
+                await asyncio.sleep(1.5)
+                continue
+            log.warning("safe_ephemeral: send failed (status=%s): %r", getattr(e, "status", "?"), e)
+            return None
+        except Exception as e:
+            log.warning("safe_ephemeral: unexpected send error: %r", e)
+            return None
+# ---------------------------------------------------------------
+
 # --- REPORT FEATURE: modal ---
 class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
     reason = ui.TextInput(
@@ -407,7 +431,7 @@ class PhoneFriendSelectView(ui.View):
         if datetime.datetime.utcnow() > state.end_time:
             return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-        # --- KLUCZOWA POPRAWKA: bierzemy ID z payloadu interakcji ---
+        # Bierzemy ID z payloadu interakcji
         raw_values = (interaction.data or {}).get("values") or []  # type: ignore[attr-defined]
         try:
             uid = int(raw_values[0])
@@ -551,11 +575,13 @@ class QuizPersistentView(ui.View):
     async def _btn_phone(self, interaction: Interaction, button: ui.Button):
         msg = interaction.message
         if not msg:
-            return await interaction.response.send_message("Brak powiązanej wiadomości.", ephemeral=True)
-        await interaction.response.send_message(
+            # ZAMIANA NA safe_ephemeral
+            return await safe_ephemeral(interaction, "Brak powiązanej wiadomości.")
+        # ZAMIANA NA safe_ephemeral
+        await safe_ephemeral(
+            interaction,
             "Wybierz gracza, do którego dzwonisz:",
             view=PhoneFriendSelectView(source_message_id=msg.id),
-            ephemeral=True
         )
 
     # --- REPORT FEATURE: przycisk otwierający modal (ROW=2) ---
@@ -571,23 +597,21 @@ class QuizPersistentView(ui.View):
     # --- END REPORT FEATURE ---
 
 async def handle_answer_click(interaction: Interaction, letter: str):
+    # ZAMIANA WSZYSTKICH send_message → safe_ephemeral
     mid = interaction.message.id if interaction.message else None
     if not mid:
-        return await interaction.response.send_message("Brak powiązanego pytania.", ephemeral=True)
+        return await safe_ephemeral(interaction, "Brak powiązanego pytania.")
     state = active_quizzes.get(mid)
     now = datetime.datetime.utcnow()
     if not state:
-        return await interaction.response.send_message("Ten quiz już nie przyjmuje odpowiedzi.", ephemeral=True)
+        return await safe_ephemeral(interaction, "Ten quiz już nie przyjmuje odpowiedzi.")
     if now > state.end_time:
-        return await interaction.response.send_message("Czas minął. Odpowiedzi po czasie nie są liczone.", ephemeral=True)
+        return await safe_ephemeral(interaction, "Czas minął. Odpowiedzi po czasie nie są liczone.")
     uid = interaction.user.id
     if uid in state.answers:
-        return await interaction.response.send_message("Masz już zapisaną odpowiedź.", ephemeral=True)
+        return await safe_ephemeral(interaction, "Masz już zapisaną odpowiedź.")
     state.answers[uid] = letter
-    try:
-        await interaction.response.send_message("Zapisano odpowiedź ✅", ephemeral=True)
-    except discord.errors.InteractionResponded:
-        pass
+    await safe_ephemeral(interaction, "Zapisano odpowiedź ✅")
 
 def build_question_message(q: Dict[str, Any]) -> str:
     return (
