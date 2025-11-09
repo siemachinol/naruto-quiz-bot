@@ -266,32 +266,26 @@ quiz_lock = asyncio.Lock()
 def fmt_timestr(dt: datetime.datetime) -> str:
     return dt.strftime("%H:%M:%S UTC")
 
-# ---------- POPRAWIONE: bezpieczne ephemerale z retry 429 ----------
+# ---------- PROSTSZE I PEWNIEJSZE EPHEMERAL ----------
 async def safe_ephemeral(interaction: Interaction, content: str = "", view: Optional[discord.ui.View] = None):
-    # 1) Defer (jeśli jeszcze nie było odpowiedzi)
-    if not interaction.response.is_done():
-        try:
-            await interaction.response.defer(ephemeral=True, thinking=False)
-        except Exception:
-            pass
-    # 2) Followup + jednorazowy retry na 429 (Cloudflare 1015)
-    #    Nie przekazujemy 'view', jeśli jest None (unikamy TypeError).
     for attempt in (1, 2):
         try:
-            kwargs = {"content": content, "ephemeral": True}
-            if view is not None:
-                kwargs["view"] = view
-            return await interaction.followup.send(**kwargs)
+            if not interaction.response.is_done():
+                # Pierwsza próba: bezpośrednia odpowiedź (ephemeral)
+                return await interaction.response.send_message(content, ephemeral=True, view=view)
+            # Jeśli już odpowiedziano – followup (też ephemeral)
+            return await interaction.followup.send(content, ephemeral=True, view=view)
         except HTTPException as e:
+            # Sporadyczne 429 → krótki backoff i druga próba
             if getattr(e, "status", None) == 429 and attempt == 1:
                 await asyncio.sleep(1.5)
                 continue
-            log.warning("safe_ephemeral: send failed (status=%s): %r", getattr(e, "status", "?"), e)
+            log.warning("safe_ephemeral failed (status=%s): %r", getattr(e, "status", "?"), e)
             return None
         except Exception as e:
-            log.warning("safe_ephemeral: unexpected send error: %r", e)
+            log.warning("safe_ephemeral unexpected error: %r", e)
             return None
-# -------------------------------------------------------------------
+# ----------------------------------------------------
 
 # --- REPORT FEATURE: modal ---
 class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
@@ -579,7 +573,6 @@ class QuizPersistentView(ui.View):
     async def _btn_phone(self, interaction: Interaction, button: ui.Button):
         msg = interaction.message
         if not msg:
-            # używamy safe_ephemeral (bez view=None)
             return await safe_ephemeral(interaction, "Brak powiązanej wiadomości.")
         await safe_ephemeral(
             interaction,
@@ -600,7 +593,6 @@ class QuizPersistentView(ui.View):
     # --- END REPORT FEATURE ---
 
 async def handle_answer_click(interaction: Interaction, letter: str):
-    # używamy safe_ephemeral (bez view=None)
     mid = interaction.message.id if interaction.message else None
     if not mid:
         return await safe_ephemeral(interaction, "Brak powiązanego pytania.")
@@ -613,7 +605,19 @@ async def handle_answer_click(interaction: Interaction, letter: str):
     uid = interaction.user.id
     if uid in state.answers:
         return await safe_ephemeral(interaction, "Masz już zapisaną odpowiedź.")
+
     state.answers[uid] = letter
+
+    # --- LOG do Render Logs ---
+    log.info(
+        "Answer saved: guild=%s channel=%s user=%s letter=%s msg=%s",
+        getattr(interaction.guild, "id", "?"),
+        getattr(interaction.channel, "id", "?"),
+        interaction.user.id,
+        letter,
+        mid,
+    )
+
     await safe_ephemeral(interaction, "Zapisano odpowiedź ✅")
 
 def build_question_message(q: Dict[str, Any]) -> str:
