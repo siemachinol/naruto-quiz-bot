@@ -13,7 +13,7 @@ import discord
 from discord.ext import commands, tasks
 from discord import ButtonStyle, Interaction, ui, app_commands
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from discord.errors import HTTPException  # <— DODANE: do obsługi 429
+from discord.errors import HTTPException  # <— do obsługi 429
 
 # --- optional for local dev ---
 try:
@@ -266,7 +266,7 @@ quiz_lock = asyncio.Lock()
 def fmt_timestr(dt: datetime.datetime) -> str:
     return dt.strftime("%H:%M:%S UTC")
 
-# ---------- DODANE: bezpieczne ephemerale z retry 429 ----------
+# ---------- POPRAWIONE: bezpieczne ephemerale z retry 429 ----------
 async def safe_ephemeral(interaction: Interaction, content: str = "", view: Optional[discord.ui.View] = None):
     # 1) Defer (jeśli jeszcze nie było odpowiedzi)
     if not interaction.response.is_done():
@@ -275,9 +275,13 @@ async def safe_ephemeral(interaction: Interaction, content: str = "", view: Opti
         except Exception:
             pass
     # 2) Followup + jednorazowy retry na 429 (Cloudflare 1015)
+    #    Nie przekazujemy 'view', jeśli jest None (unikamy TypeError).
     for attempt in (1, 2):
         try:
-            return await interaction.followup.send(content, view=view, ephemeral=True)
+            kwargs = {"content": content, "ephemeral": True}
+            if view is not None:
+                kwargs["view"] = view
+            return await interaction.followup.send(**kwargs)
         except HTTPException as e:
             if getattr(e, "status", None) == 429 and attempt == 1:
                 await asyncio.sleep(1.5)
@@ -287,7 +291,7 @@ async def safe_ephemeral(interaction: Interaction, content: str = "", view: Opti
         except Exception as e:
             log.warning("safe_ephemeral: unexpected send error: %r", e)
             return None
-# ---------------------------------------------------------------
+# -------------------------------------------------------------------
 
 # --- REPORT FEATURE: modal ---
 class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
@@ -575,9 +579,8 @@ class QuizPersistentView(ui.View):
     async def _btn_phone(self, interaction: Interaction, button: ui.Button):
         msg = interaction.message
         if not msg:
-            # ZAMIANA NA safe_ephemeral
+            # używamy safe_ephemeral (bez view=None)
             return await safe_ephemeral(interaction, "Brak powiązanej wiadomości.")
-        # ZAMIANA NA safe_ephemeral
         await safe_ephemeral(
             interaction,
             "Wybierz gracza, do którego dzwonisz:",
@@ -597,7 +600,7 @@ class QuizPersistentView(ui.View):
     # --- END REPORT FEATURE ---
 
 async def handle_answer_click(interaction: Interaction, letter: str):
-    # ZAMIANA WSZYSTKICH send_message → safe_ephemeral
+    # używamy safe_ephemeral (bez view=None)
     mid = interaction.message.id if interaction.message else None
     if not mid:
         return await safe_ephemeral(interaction, "Brak powiązanego pytania.")
