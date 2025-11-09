@@ -265,7 +265,7 @@ quiz_lock = asyncio.Lock()
 def fmt_timestr(dt: datetime.datetime) -> str:
     return dt.strftime("%H:%M:%S UTC")
 
-# --- REPORT FEATURE: modal (okienko) ---
+# --- REPORT FEATURE: modal ---
 class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
     reason = ui.TextInput(
         label="Co jest nie tak?",
@@ -407,14 +407,12 @@ class PhoneFriendSelectView(ui.View):
         if datetime.datetime.utcnow() > state.end_time:
             return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-        # --- POPRAWKA: UserSelect zwraca Member/User, więc bierzemy .id ---
-        selected = self.select.values[0]
-        uid = getattr(selected, "id", None)
-        if uid is None:
-            try:
-                uid = int(selected)  # awaryjnie, gdyby biblioteka zwróciła snowflake jako str
-            except Exception:
-                return await interaction.response.send_message("Nie udało się odczytać wyboru.", ephemeral=True)
+        # --- KLUCZOWA POPRAWKA: bierzemy ID z payloadu interakcji ---
+        raw_values = (interaction.data or {}).get("values") or []  # type: ignore[attr-defined]
+        try:
+            uid = int(raw_values[0])
+        except Exception:
+            return await interaction.response.send_message("Nie udało się odczytać wyboru.", ephemeral=True)
 
         friend = guild.get_member(uid)
         if friend is None:
@@ -706,7 +704,7 @@ async def run_quiz(channel: discord.TextChannel):
                 active_quizzes.pop(msg.id, None)
         asyncio.create_task(_finish())
 
-# -------------- Komendy (prefix – quiz/ranking + ręczny sync) --------------
+# -------------- Komendy (prefix) --------------
 def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
     embed = discord.Embed(title=title, colour=0x2b7cff)
     if not pairs:
@@ -788,7 +786,7 @@ async def sync_slash(ctx: commands.Context):
         await ctx.reply(f"⚠️ Sync error: {e}")
         log.exception("Manual sync error: %r", e)
 
-# -------------- Slash commands (EPHEMERAL KOŁA) -----------------------------
+# -------------- Slash commands (ephemeral) --------------
 @bot.tree.command(name="ping", description="Sprawdź, czy slash-komendy działają (ephemeral).")
 async def slash_ping(interaction: discord.Interaction):
     await interaction.response.send_message("🏓 Działam!", ephemeral=True)
