@@ -1320,7 +1320,7 @@
     "id": 120
   },
   {
-    "question": "Kim był Raiko na początku swojej wędrówki?",
+    "question": "Kim był Raiko na początku swojej wędrówki?(Kroniki Wędrowca)",
     "options": {
       "A": "Geninem z Konohy",
       "B": "Wandererem bez przynależności",
@@ -1331,7 +1331,7 @@
     "id": 121
   },
   {
-    "question": "Czym był Konohageddon w opowieści?",
+    "question": "Czym był Konohageddon w opowieści?(Kroniki Wędrowca)",
     "options": {
       "A": "Techniką niszczącą Konohę",
       "B": "Katastrofą naturalną",
@@ -1342,7 +1342,7 @@
     "id": 122
   },
   {
-    "question": "Które imię było na szczycie tablicy wyników Konohageddonu?",
+    "question": "Które imię było na szczycie tablicy wyników Konohageddonu?(Kroniki Wędrowca)",
     "options": {
       "A": "Raiko",
       "B": "Takeshi",
@@ -1353,7 +1353,7 @@
     "id": 123
   },
   {
-    "question": "Jak Raiko trenował na początku swojej drogi?",
+    "question": "Jak Raiko trenował na początku swojej drogi?(Kroniki Wędrowca)",
     "options": {
       "A": "Z nauczycielem Taijutsu",
       "B": "Samodzielnie, uderzając w drewniane pale",
@@ -1397,7 +1397,7 @@
     "id": 127
   },
   {
-    "question": "Jak Suselkowy określił osoby, które jako pierwsze zapiszą się na tablicy?",
+    "question": "Jak Suselkowy określił osoby, które jako pierwsze zapiszą się na tablicy?(Kroniki Wędrowca)",
     "options": {
       "A": "Pierwsi, którzy polegną",
       "B": "Zuchwali nowicjusze",
@@ -1408,7 +1408,7 @@
     "id": 128
   },
   {
-    "question": "Dlaczego Raiko nie miał żadnej broni?",
+    "question": "Dlaczego Raiko nie miał żadnej broni?(Kroniki Wędrowca)",
     "options": {
       "A": "Zgubił ją w drodze do Konohy",
       "B": "Nie potrafił jej używać",
@@ -1419,7 +1419,7 @@
     "id": 129
   },
   {
-    "question": "Czego nauczył się Raiko podczas Resistance Training?",
+    "question": "Czego nauczył się Raiko podczas Resistance Training?(Kroniki Wędrowca)",
     "options": {
       "A": "Kiedy i jak atakować z ukrycia",
       "B": "Że przetrwanie wymaga instynktu i wyczucia chakry",
@@ -2255,7 +2255,7 @@
     "id": 205
   },
   {
-    "question": "Jak nazywał się nowy obiekt przy Training Grounds, do którego wszedł Raiko?",
+    "question": "Jak nazywał się nowy obiekt przy Training Grounds, do którego wszedł Raiko?(Kroniki Wędrowca)",
     "options": {
       "A": "Shinobi Hall",
       "B": "Shinobi Gym",
@@ -2277,7 +2277,7 @@
     "id": 207
   },
   {
-    "question": "Jaką lekcję o pochodzeniu siły dostał Raiko od jounina przy ławce?",
+    "question": "Jaką lekcję o pochodzeniu siły dostał Raiko od jounina przy ławce?(Kroniki Wędrowca)",
     "options": {
       "A": "Siła przychodzi z klanu",
       "B": "Siła to kwestia wrodzonego talentu",
@@ -2288,7 +2288,7 @@
     "id": 208
   },
   {
-    "question": "Dlaczego plansza szachowa tak utkwiła Raiko w głowie?",
+    "question": "Dlaczego plansza szachowa tak utkwiła Raiko w głowie?(Kroniki Wędrowca)",
     "options": {
       "A": "Bo przypominała mu dzieciństwo",
       "B": "Przez spokój i ciszę kontrastujące z innymi treningami",
@@ -2321,7 +2321,7 @@
     "id": 211
   },
   {
-    "question": "Jaki sens miał pierwszy samodzielnie ugotowany posiłek Raiko?",
+    "question": "Jaki sens miał pierwszy samodzielnie ugotowany posiłek Raiko?(Kroniki Wędrowca)",
     "options": {
       "A": "Był najdroższy",
       "B": "Został przygotowany perfekcyjnie",
@@ -2332,7 +2332,7 @@
     "id": 212
   },
   {
-    "question": "Kto zaprezentował Raiko serię technik Taijutsu?",
+    "question": "Kto zaprezentował Raiko serię technik Taijutsu?(Kroniki Wędrowca)",
     "options": {
       "A": "Maito Gai",
       "B": "Kakashi",
@@ -2354,7 +2354,7 @@
     "id": 214
   },
   {
-    "question": "Jaki był motyw przewodni przekazu Gai’a dla Raiko?",
+    "question": "Jaki był motyw przewodni przekazu Gai’a dla Raiko?(Kroniki Wędrowca)",
     "options": {
       "A": "Technika > serce",
       "B": "Prawdziwa siła tkwi w sercu, które niesie cios",
@@ -2365,7 +2365,7 @@
     "id": 215
   },
   {
-    "question": "Kto uratował Raiko przed fałszywymi Aburame?",
+    "question": "Kto uratował Raiko przed fałszywymi Aburame?(Kroniki Wędrowca)",
     "options": {
       "A": "Kakashi",
       "B": "Shino",
