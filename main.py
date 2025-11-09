@@ -271,12 +271,14 @@ async def safe_ephemeral(interaction: Interaction, content: str = "", view: Opti
     for attempt in (1, 2):
         try:
             if not interaction.response.is_done():
-                # Pierwsza próba: bezpośrednia odpowiedź (ephemeral)
+                if view is None:
+                    return await interaction.response.send_message(content, ephemeral=True)
                 return await interaction.response.send_message(content, ephemeral=True, view=view)
-            # Jeśli już odpowiedziano – followup (też ephemeral)
+            # już odpowiedziano – followup
+            if view is None:
+                return await interaction.followup.send(content, ephemeral=True)
             return await interaction.followup.send(content, ephemeral=True, view=view)
         except HTTPException as e:
-            # Sporadyczne 429 → krótki backoff i druga próba
             if getattr(e, "status", None) == 429 and attempt == 1:
                 await asyncio.sleep(1.5)
                 continue
@@ -517,41 +519,68 @@ class QuizPersistentView(ui.View):
     async def _btn_5050(self, interaction: Interaction, button: ui.Button):
         ch = interaction.channel
         if not isinstance(ch, (discord.TextChannel, discord.Thread)):
-            return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+            return await interaction.followup.send("Użyj na kanale tekstowym.", ephemeral=True)
+
         state = get_state_for_channel(ch.id)
         if not state:
-            return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+            return await interaction.followup.send("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+
         if datetime.datetime.utcnow() > state.end_time:
-            return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+            return await interaction.followup.send("Czas na to pytanie już minął.", ephemeral=True)
 
         cd = await lifeline_check_cooldown(interaction.user.id, "5050")
         if cd:
-            return await interaction.response.send_message(f"50/50 w cooldownie jeszcze {cd}.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message(f"50/50 w cooldownie jeszcze {cd}.", ephemeral=True)
+            return await interaction.followup.send(f"50/50 w cooldownie jeszcze {cd}.", ephemeral=True)
 
         correct = state.question["answer"]
         wrong = [x for x in ["A","B","C","D"] if x != correct]
         kept = [correct, random.choice(wrong)]
         random.shuffle(kept)
         await db_lifeline_mark_use(interaction.user.id, "5050")
-        await interaction.response.send_message(
-            f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**",
-            ephemeral=True
-        )
+
+        if not interaction.response.is_done():
+            await interaction.response.send_message(
+                f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**",
+                ephemeral=True
+            )
+        else:
+            await interaction.followup.send(
+                f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**",
+                ephemeral=True
+            )
 
     @ui.button(label="Publika", custom_id="quiz_audience", style=ButtonStyle.primary, row=1)
     async def _btn_audience(self, interaction: Interaction, button: ui.Button):
         ch = interaction.channel
         if not isinstance(ch, (discord.TextChannel, discord.Thread)):
-            return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+            return await interaction.followup.send("Użyj na kanale tekstowym.", ephemeral=True)
+
         state = get_state_for_channel(ch.id)
         if not state:
-            return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+            return await interaction.followup.send("Brak aktywnego pytania na tym kanale.", ephemeral=True)
+
         if datetime.datetime.utcnow() > state.end_time:
-            return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
+            return await interaction.followup.send("Czas na to pytanie już minął.", ephemeral=True)
 
         cd = await lifeline_check_cooldown(interaction.user.id, "publika")
         if cd:
-            return await interaction.response.send_message(f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.", ephemeral=True)
+            if not interaction.response.is_done():
+                return await interaction.response.send_message(f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.", ephemeral=True)
+            return await interaction.followup.send(f"„Pytanie do publiczności” w cooldownie jeszcze {cd}.", ephemeral=True)
 
         counts = {k: 0 for k in ["A", "B", "C", "D"]}
         for letter in state.answers.values():
@@ -560,6 +589,7 @@ class QuizPersistentView(ui.View):
         total = sum(counts.values()) or 1
         perc = {k: round(v * 100 / total) for k, v in counts.items()}
         await db_lifeline_mark_use(interaction.user.id, "publika")
+
         msg = (
             "📊 Głosy do tej pory:\n"
             f"A: {counts['A']} ({perc['A']}%)\n"
@@ -567,7 +597,11 @@ class QuizPersistentView(ui.View):
             f"C: {counts['C']} ({perc['C']}%)\n"
             f"D: {counts['D']} ({perc['D']}%)"
         )
-        await interaction.response.send_message(msg, ephemeral=True)
+
+        if not interaction.response.is_done():
+            await interaction.response.send_message(msg, ephemeral=True)
+        else:
+            await interaction.followup.send(msg, ephemeral=True)
 
     @ui.button(label="Telefon", custom_id="quiz_phone", style=ButtonStyle.primary, row=1)
     async def _btn_phone(self, interaction: Interaction, button: ui.Button):
