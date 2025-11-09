@@ -462,7 +462,7 @@ class PhoneFriendSelectView(ui.View):
         responses = [
             "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie **{answer}**.",
             "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
-            "Hmm... strzelam, że **{answer}**.",
+            "Hmm... strzelam, że to **{answer}**.",
             "Myślę, że to może być **{answer}**.",
         ]
         import random
@@ -770,6 +770,7 @@ async def run_quiz(channel: discord.TextChannel):
         asyncio.create_task(_finish())
 
 # -------------- Komendy (prefix) --------------
+
 def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
     embed = discord.Embed(title=title, colour=0x2b7cff)
     if not pairs:
@@ -778,12 +779,6 @@ def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
     for i, (name, pts) in enumerate(pairs[:10], start=1):
         embed.add_field(name=f"{i}. {name}", value=f"{pts} pkt", inline=False)
     return embed
-
-@bot.command()
-async def quiz(ctx: commands.Context):
-    if not isinstance(ctx.channel, discord.TextChannel):
-        return await ctx.reply("Tylko na kanałach tekstowych.")
-    await run_quiz(ctx.channel)
 
 @bot.command()
 async def ranking(ctx: commands.Context):
@@ -1117,6 +1112,84 @@ async def get_quiz_channel() -> Optional[discord.TextChannel]:
             pass
     return None
 
+# ===================== DODANE: uprawnienia do !quiz =====================
+
+# Admin (użytkownik) bez limitu, Wspierający (rola) – globalnie 1×/dzień (UTC)
+ADMIN_USER_IDS = {1356372381043523584}
+SUPPORTER_ROLE_ID = 1377326388415299777
+
+def _today_utc_date_str() -> str:
+    return datetime.datetime.utcnow().date().isoformat()
+
+async def db_supporter_quiz_used_today(guild_id: int) -> Optional[Dict[str, str]]:
+    """Zwraca wpis jeśli dzień już zarezerwowany przez Wspierającego."""
+    try:
+        resp = await asyncio.to_thread(
+            lambda: supabase.table("manual_quiz_daily")
+            .select("used_by_user_id, date_utc, used_by_role")
+            .eq("guild_id", str(guild_id))
+            .eq("date_utc", _today_utc_date_str())
+            .eq("used_by_role", "supporter")
+            .limit(1)
+            .execute()
+        )
+        data = getattr(resp, "data", None) or []
+        return data[0] if data else None
+    except Exception as e:
+        log.exception("db_supporter_quiz_used_today error: %r", e)
+        return None
+
+async def db_supporter_quiz_try_reserve_today(guild_id: int, user_id: int) -> bool:
+    """Próbuje 'zarezerwować' dzisiejszy dzień dla Wspierających. True = pierwszy; False = już zajęty."""
+    try:
+        await asyncio.to_thread(
+            lambda: supabase.table("manual_quiz_daily")
+            .insert({
+                "guild_id": str(guild_id),
+                "date_utc": _today_utc_date_str(),
+                "used_by_user_id": str(user_id),
+                "used_by_role": "supporter",
+            })
+            .execute()
+        )
+        return True
+    except Exception as e:
+        msg = str(e).lower()
+        if "duplicate" in msg or "unique" in msg or "uq_manual_quiz_daily_unique_day" in msg:
+            return False
+        log.exception("db_supporter_quiz_try_reserve_today error: %r", e)
+        return False
+
+async def _can_use_manual_quiz(ctx: commands.Context) -> tuple[bool, str, bool]:
+    """
+    Zwraca (can_use, msg_if_denied, is_supporter_flow).
+    is_supporter_flow == True oznacza, że należy wykonać rezerwację dnia przed startem.
+    """
+    author = ctx.author
+    guild = ctx.guild
+
+    # Admin – bez limitu
+    if author.id in ADMIN_USER_IDS:
+        return True, "", False
+
+    # Musi być serwer + rola Wspierający
+    if not guild or not isinstance(author, discord.Member):
+        return False, "Ta komenda działa tylko na serwerze.", False
+
+    role = guild.get_role(SUPPORTER_ROLE_ID)
+    if not role or role not in author.roles:
+        return False, "Ta komenda jest dostępna tylko dla osób z rangą **Wspierający** lub adminów.", False
+
+    # Czy dzisiejszy slot jest już zajęty przez jakiegokolwiek Wspierającego?
+    used = await db_supporter_quiz_used_today(guild.id)
+    if used:
+        return False, "Dzisiejsze ręczne uruchomienie **!quiz** zostało już wykorzystane przez Wspierających. Spróbuj jutro.", True
+
+    # Wspierający – można próbować rezerwować
+    return True, "", True
+
+# =================== KONIEC: uprawnienia do !quiz =======================
+
 # -------------- Events ------------------------
 @bot.event
 async def on_ready():
@@ -1149,6 +1222,28 @@ async def on_app_command_error(interaction: discord.Interaction, error: Exceptio
     except Exception:
         pass
     log.exception("Slash command error: %r", error)
+
+# -------------------- PODMIANA KOMENDY !quiz --------------------
+
+@bot.command()
+async def quiz(ctx: commands.Context):
+    if not isinstance(ctx.channel, discord.TextChannel):
+        return await ctx.reply("Tylko na kanałach tekstowych.")
+
+    can, msg, supporter_flow = await _can_use_manual_quiz(ctx)
+    if not can:
+        return await ctx.reply(msg)
+
+    # Jeśli to flow Wspierających – najpierw zarezerwuj dzień (globalny limit 1×/dzień)
+    if supporter_flow:
+        ok = await db_supporter_quiz_try_reserve_today(ctx.guild.id, ctx.author.id)  # type: ignore
+        if not ok:
+            return await ctx.reply("Dzisiejsze ręczne uruchomienie **!quiz** zostało już wykorzystane przez Wspierających. Spróbuj jutro.")
+
+    # Start quizu
+    await run_quiz(ctx.channel)
+
+# ---------------------------------------------------------------
 
 def main():
     threading.Thread(target=run_health_server, daemon=True).start()
