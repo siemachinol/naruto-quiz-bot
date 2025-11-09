@@ -51,7 +51,7 @@ QUIZ_CHANNEL_NAME = os.getenv("QUIZ_CHANNEL_NAME", "quiz-naruto")
 QUESTIONS_FILE = os.getenv("QUESTIONS_FILE", "pytania.json")
 QUIZ_DURATION_SECONDS = int(os.getenv("QUIZ_DURATION_SECONDS", "900"))  # 15 min
 ALERT_MINUTES_BEFORE = int(os.getenv("ALERT_MINUTES_BEFORE", "10"))
-QUIZ_TIMES_ENV = os.getenv("QUIZ_TIMES", "10:05,13:35,18:39")
+QUIZ_TIMES_ENV = os.getenv("QUIZ_TIMES", "11:00,15:00,19:00")
 
 # --- Ping roli (@Quizowicz) ---
 QUIZ_ROLE_ID = os.getenv("QUIZ_ROLE_ID")
@@ -341,7 +341,7 @@ class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
 
             sent = await _send_report_to_owner("\n".join(lines))
             if sent:
-                await interaction.response.send_message("Dzięki! Zgłoszenie wysłane. ✅", ephemeral=True)
+                await interaction.response.send_message("Dzięki! Twoja odpowiedź została zapisana. ✅", ephemeral=True)
             else:
                 await interaction.response.send_message("Nie udało się wysłać zgłoszenia. ❌", ephemeral=True)
 
