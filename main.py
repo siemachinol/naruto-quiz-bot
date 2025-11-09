@@ -40,7 +40,7 @@ if os.getenv("BOT_DISABLED", "").lower() == "true":
     log.warning("BOT_DISABLED=true → wychodzę.")
     raise SystemExit(0)
 
-TOKEN = require_env("TOKEN")  # <- używaj ENV: TOKEN
+TOKEN = require_env("TOKEN")
 GUILD_ID = int(require_env("GUILD_ID"))
 
 SUPABASE_URL = require_env("SUPABASE_URL")
@@ -98,9 +98,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 # --- REPORT FEATURE: helper do DM do ownera ---
 async def _send_report_to_owner(content: str) -> bool:
-    """
-    Wyślij raport w DM do właściciela aplikacji (fallback: kanał z REPORT_CHANNEL_ID).
-    """
     try:
         app_info = await bot.application_info()
         owner = app_info.owner
@@ -109,7 +106,6 @@ async def _send_report_to_owner(content: str) -> bool:
                 await owner.send(content)
                 return True
             except Exception:
-                # fallback na kanał, jeśli podasz REPORT_CHANNEL_ID w ENV
                 ch_id = os.getenv("REPORT_CHANNEL_ID")
                 if ch_id:
                     guild = bot.get_guild(GUILD_ID) or await bot.fetch_guild(GUILD_ID)
@@ -181,7 +177,6 @@ async def db_save_ranking(data: Dict[str, Dict[str, Any]]) -> None:
         log.error("DB save ranking error: %r", e)
 
 # --- Lifelines: DB helpers (cooldown) ---
-# używamy tabeli: lifelines_usage (user_id TEXT, type TEXT, used_at TIMESTAMP/STRING ISO)
 async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[datetime.datetime]:
     try:
         resp = await asyncio.to_thread(
@@ -334,7 +329,7 @@ class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
                 pass
 # --- END REPORT FEATURE ---
 
-# --- LIFELINES FEATURE: modal do „Telefonu” (pozostawiony, nieużywany) ---
+# --- LIFELINES FEATURE: stary modal (pozostawiony) ---
 class PhoneFriendModal(ui.Modal, title="Telefon do przyjaciela"):
     friend_input = ui.TextInput(
         label="Kogo podglądamy?",
@@ -359,7 +354,7 @@ class PhoneFriendModal(ui.Modal, title="Telefon do przyjaciela"):
             return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
         text = (self.friend_input.value or "").strip()
-        m = re.search(r"(\d{17,20})", text)  # ID z <@...> lub sama liczba
+        m = re.search(r"(\d{17,20})", text)
         if not m:
             return await interaction.response.send_message("Podaj poprawną wzmiankę lub ID.", ephemeral=True)
         uid = int(m.group(1))
@@ -412,11 +407,21 @@ class PhoneFriendSelectView(ui.View):
         if datetime.datetime.utcnow() > state.end_time:
             return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-        try:
-            uid = int(self.select.values[0])
-        except Exception:
-            return await interaction.response.send_message("Nie udało się odczytać wyboru.", ephemeral=True)
+        # --- POPRAWKA: UserSelect zwraca Member/User, więc bierzemy .id ---
+        selected = self.select.values[0]
+        uid = getattr(selected, "id", None)
+        if uid is None:
+            try:
+                uid = int(selected)  # awaryjnie, gdyby biblioteka zwróciła snowflake jako str
+            except Exception:
+                return await interaction.response.send_message("Nie udało się odczytać wyboru.", ephemeral=True)
+
         friend = guild.get_member(uid)
+        if friend is None:
+            try:
+                friend = await guild.fetch_member(uid)
+            except Exception:
+                pass
 
         cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
         if cd:
@@ -485,7 +490,7 @@ class QuizPersistentView(ui.View):
         row=1
     )
     async def _lbl_helpers(self, interaction: Interaction, button: ui.Button):
-        pass  # to tylko etykieta (disabled)
+        pass
 
     # ── KOŁA RATUNKOWE – PRZYCISKI (ROW=1) ──────────────────────────────────
     @ui.button(label="50/50", custom_id="quiz_5050", style=ButtonStyle.primary, row=1)
@@ -549,7 +554,6 @@ class QuizPersistentView(ui.View):
         msg = interaction.message
         if not msg:
             return await interaction.response.send_message("Brak powiązanej wiadomości.", ephemeral=True)
-        # zamiast modala – lista użytkowników do wyboru
         await interaction.response.send_message(
             "Wybierz gracza, do którego dzwonisz:",
             view=PhoneFriendSelectView(source_message_id=msg.id),
@@ -773,9 +777,7 @@ async def punkty(ctx: commands.Context, member: Optional[discord.Member] = None)
 @commands.is_owner()
 async def sync_slash(ctx: commands.Context):
     try:
-        # global
         await bot.tree.sync()
-        # instant dla Twojej gildii
         guild_obj = discord.Object(id=GUILD_ID)
         bot.tree.copy_global_to(guild=guild_obj)
         await bot.tree.sync(guild=guild_obj)
@@ -861,14 +863,11 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     if datetime.datetime.utcnow() > state.end_time:
         return await interaction.response.send_message("Czas na to pytanie już minął.", ephemeral=True)
 
-    # sprawdź cooldown koła
     cd = await lifeline_check_cooldown(interaction.user.id, "telefon")
     if cd:
         return await interaction.response.send_message(f"„Telefon do przyjaciela” w cooldownie jeszcze {cd}.", ephemeral=True)
 
     letter = state.answers.get(friend.id)
-
-    # jeśli wskazany gracz nie odpowiedział → nie zużywamy koła (brak cooldownu)
     if not letter:
         return await interaction.response.send_message(
             f"📵 Abonent **{friend.display_name}** tymczasowo niedostępny – jeszcze nie odpowiedział(a). "
@@ -876,10 +875,7 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
             ephemeral=True
         )
 
-    # jest odpowiedź → teraz zużywamy koło i uruchamiamy cooldown
     await db_lifeline_mark_use(interaction.user.id, "telefon")
-
-    # LOSOWY TEKST NARRACYJNY
     responses = [
         "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie odpowiedź **{answer}**.",
         "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
@@ -889,9 +885,9 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
         "Nie wiem na 100%, ale wydaje mi się, że chodzi o **{answer}**.",
         "Kurczę... mam przeczucie, że to **{answer}**.",
     ]
+    import random
     msg = random.choice(responses).format(answer=letter)
 
-    # >>> ZMIANA: pokazujemy, kto odebrał telefon (nick)
     await interaction.response.send_message(
         f"📞 Telefon do **{friend.display_name}** → {msg}",
         ephemeral=True
@@ -976,7 +972,6 @@ class PingHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    # --- DODANE: HEAD dla monitorów uptime ---
     def do_HEAD(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
@@ -986,7 +981,6 @@ class PingHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    # --- (opcjonalnie) DODANE: POST, jeśli monitor używa POST ---
     def do_POST(self):
         if self.path in ("/healthz", "/"):
             self.send_response(200)
@@ -1019,7 +1013,6 @@ async def watchdog():
 # -------------- Self-uptime ping (Render keep-alive) ------------
 @tasks.loop(minutes=5)
 async def uptime_ping():
-    """Ping co 5 minut, żeby Render nie usypiał instancji."""
     url = "https://naruto-quiz-bot.onrender.com/healthz"
     try:
         async with aiohttp.ClientSession() as session:
@@ -1071,22 +1064,18 @@ async def on_ready():
     if not watchdog.is_running():
         watchdog.start()
     if not uptime_ping.is_running():
-        uptime_ping.start()  # self-ping co 5 min
+        uptime_ping.start()
 
     try:
-        # 1) global sync
         await bot.tree.sync()
-        # 2) instant dla Twojej gildii (kopiuj globalne → gildia) i zsynchronizuj gildię
         guild_obj = discord.Object(id=GUILD_ID)
         bot.tree.copy_global_to(guild=guild_obj)
         await bot.tree.sync(guild=guild_obj)
-
         names = [cmd.name for cmd in bot.tree.get_commands()]
         log.info("Slash commands synced. Global list: %s", names)
     except Exception as e:
         log.exception("Slash sync error: %r", e)
 
-# Globalny handler błędów dla slashy
 @bot.tree.error
 async def on_app_command_error(interaction: discord.Interaction, error: Exception):
     try:
@@ -1099,7 +1088,6 @@ async def on_app_command_error(interaction: discord.Interaction, error: Exceptio
     log.exception("Slash command error: %r", error)
 
 def main():
-    # odpal lekki serwer healthcheck na porcie 8081 (Render go sprawdza)
     threading.Thread(target=run_health_server, daemon=True).start()
     bot.run(TOKEN)
 
