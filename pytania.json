@@ -895,7 +895,7 @@
     "options": {
       "A": "Yamato",
       "B": "Itachi Uchiha",
-      "C": "Might Gay",
+      "C": "Might Guy",
       "D": "Kakashi Hatake"
     },
     "answer": "C",
@@ -3122,5 +3122,181 @@
       "D": "Zostać samotnikiem"
     },
     "answer": "C"
-  }
+  },
+  {
+  "id": 285,
+  "question": "Jak naprawdę nazywała się specjalna technika Kaguy’i, która pozwalała „spłaszczać” przestrzeń i przenosić przeciwnika w inny wymiar?",
+  "options": {
+    "A": "Amenominaka",
+    "B": "Yomotsu Hirasaka",
+    "C": "Tomogoroshi no Haikotsu",
+    "D": "Takamagahara"
+  },
+  "answer": "A"
+},
+{
+  "id": 286,
+  "question": "Jak nazywał się oryginalny, pierwotny właściciel Rinne Sharingan na czole, przed Hagoromo i Indrą?",
+  "options": {
+    "A": "Hamura",
+    "B": "Kaguya",
+    "C": "Isshiki",
+    "D": "Shibai"
+  },
+  "answer": "B"
+},
+{
+  "id": 287,
+  "question": "Którego elementu natury nie posiadał Hashirama Senju w standardowej postaci bez trybu Sage?",
+  "options": {
+    "A": "Dōton",
+    "B": "Suiton",
+    "C": "Fūton",
+    "D": "Mokuton"
+  },
+  "answer": "C"
+},
+{
+  "id": 288,
+  "question": "Skąd wzięła się oryginalna forma techniki Edo Tensei?",
+  "options": {
+    "A": "Madara udoskonalił technikę z notatek Senju",
+    "B": "Tobirama wynalazł ją od zera",
+    "C": "Oparta była na tajnikach fūinjutsu klanu Uzumaki",
+    "D": "Orochimaru wynalazł ją samodzielnie"
+  },
+  "answer": "C"
+},
+{
+  "id": 289,
+  "question": "Jaką dokładnie formę miała pieczęć na brzuchu Naruto, która regulowała przepływ chakry Kuramy?",
+  "options": {
+    "A": "Gogyō Fūin",
+    "B": "Fūjutsukyū",
+    "C": "Reika Fūin",
+    "D": "Hakke no Fūin Shiki"
+  },
+  "answer": "D"
+},
+{
+  "id": 290,
+  "question": "Dlaczego Byakugan jest praktycznie niemożliwy do ukrycia przed identyfikacją chakra-sensorów?",
+  "options": {
+    "A": "Emituje charakterystyczną częstotliwość chakry",
+    "B": "Ma widoczną strukturę nerwowo-żylną, unikalną dla rodu Hyūga",
+    "C": "Aktywuje się sam przy wysokim stresie",
+    "D": "Zawsze błyszczy białym światłem"
+  },
+  "answer": "B"
+},
+{
+  "id": 291,
+  "question": "Dlaczego Hidan jest nieśmiertelny, ale nie może zregenerować utraconych części ciała?",
+  "options": {
+    "A": "Bo jego nieśmiertelność to technika zaklęcia voodoo",
+    "B": "Nieśmiertelność jest duchowa, a nie biologiczna",
+    "C": "Bo stracił dostęp do chakry Jashina",
+    "D": "Bo jego ciało jest martwe od początku"
+  },
+  "answer": "B"
+},
+{
+  "id": 292,
+  "question": "Jaki dokładny warunek pozwala Rinneganowi aktywować Shinra Tensei / Banshō Ten’in?",
+  "options": {
+    "A": "Musi zobaczyć cel",
+    "B": "Musi być blisko",
+    "C": "Musi utrzymywać przepływ chakry z Drogi Deva",
+    "D": "Musi zrównać puls serca z czakrą"
+  },
+  "answer": "C"
+},
+{
+  "id": 293,
+  "question": "Dlaczego Nagato posiadał prawdziwy Rinnegan, mimo że nie był potomkiem Indry i Asury?",
+  "options": {
+    "A": "Reinkarnacja Hagoromo",
+    "B": "Otrzymał Rinnegan przeszczepiony od Madary",
+    "C": "Urodził się z tym po wojnie",
+    "D": "Posiadał gen Hyūga"
+  },
+  "answer": "B"
+},
+{
+  "id": 294,
+  "question": "Dlaczego Sasori zostawił swoje prawdziwe serce zamiast zmienić je na pełny mechanizm?",
+  "options": {
+    "A": "Bał się śmierci",
+    "B": "Chciał mieć zapas chakry",
+    "C": "Serce było jedyną częścią zdolną do przechowywania i cyrkulacji chakry",
+    "D": "Nienawidził ludzkiej formy"
+  },
+  "answer": "C"
+},
+{
+  "id": 295,
+  "question": "Co było pierwotnym źródłem „czarnej mazi” tworzącej ciało Black Zetsu?",
+  "options": {
+    "A": "Eksperyment Hashiramy",
+    "B": "Chakra naturalna z Góry Myōboku",
+    "C": "Manifestacja woli Kaguyi",
+    "D": "Pozostałość po Dziesięcioogoniastej"
+  },
+  "answer": "C"
+},
+{
+  "id": 296,
+  "question": "Dlaczego Senjutsu jest śmiertelnie niebezpieczne, jeśli ktoś nie potrafi utrzymać proporcji natury i własnej chakry?",
+  "options": {
+    "A": "Prowadzi do zatrzymania krążenia chakry",
+    "B": "Powoduje destabilizację mózgu",
+    "C": "Użytkownik zamienia się w kamień",
+    "D": "Wyczerpuje duszę użytkownika"
+  },
+  "answer": "C"
+},
+{
+  "id": 297,
+  "question": "Czemu Zetsu potrafił „wchłaniać” ciała ludzi bez pozostawiania śladów?",
+  "options": {
+    "A": "Używał Mokutonu jak Hashirama",
+    "B": "Jego ciało było strukturą pół-organiczną powstałą z Drzewa Boskiego",
+    "C": "Był klonem Madary",
+    "D": "Był w trybie Sage"
+  },
+  "answer": "B"
+},
+{
+  "id": 298,
+  "question": "Co było pierwszym celem Hagoromo po pokonaniu Kaguyi?",
+  "options": {
+    "A": "Założenie wiosek",
+    "B": "Nauczanie ninjutsu",
+    "C": "Rozdzielenie Dziesięcioogoniastej na Bijuu, aby zrównoważyć świat",
+    "D": "Odbudowa klanów"
+  },
+  "answer": "C"
+},
+{
+  "id": 299,
+  "question": "Dlaczego Hashirama był jedynym znanym naturalnym użytkownikiem Mokutonu?",
+  "options": {
+    "A": "Trening klanu Senju",
+    "B": "Pokrewieństwo z Hyūga",
+    "C": "Był genetyczną anomalią – spontaniczną rekombinacją dziedzictwa Asury",
+    "D": "Dziedziczył to po Tobiramie"
+  },
+  "answer": "C"
+},
+{
+  "id": 300,
+  "question": "Czym Tenseigan różnił się ewolucyjnie od Rinnegana?",
+  "options": {
+    "A": "Był mutacją Sharinganu",
+    "B": "Wywodzi się z potomków Hamury i opiera na Byakuganie",
+    "C": "Został aktywowany przez Katsuyu",
+    "D": "Powstał z fuzji cień-słońce"
+  },
+  "answer": "B"
+}
 ]
