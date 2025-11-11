@@ -2663,7 +2663,7 @@
   },
   {
     "id": 243,
-    "question": "Koszt chakry Henge no Jutsu:",
+    "question": "Koszt chakry Henge no Jutsu to?",
     "options": {
       "A": "10",
       "B": "20",
@@ -2674,7 +2674,7 @@
   },
   {
     "id": 244,
-    "question": "Cooldown Henge no Jutsu:",
+    "question": "Cooldown Henge no Jutsu na naszym serwerze to?",
     "options": {
       "A": "30 s",
       "B": "45 s",
@@ -2685,7 +2685,7 @@
   },
   {
     "id": 245,
-    "question": "Czas trwania Henge:",
+    "question": "Czas trwania Henge no Jutsu na naszym serwerze to?",
     "options": {
       "A": "15 s",
       "B": "20 s",
@@ -2696,7 +2696,7 @@
   },
   {
     "id": 246,
-    "question": "Transformacja w PRZEDMIOT powoduje:",
+    "question": "Transformacja (Henge no Jutsu) w PRZEDMIOT powoduje:",
     "options": {
       "A": "Wolniejszy bieg",
       "B": "Niewidoczny nick",
@@ -2707,7 +2707,7 @@
   },
   {
     "id": 247,
-    "question": "Czego nie możemy, jeżeli wykorzystując Henge no jutsu zamienimy się w przedmiot?",
+    "question": "Czego nie możemy, jeżeli wykorzystując Henge no Jutsu zamienimy się w przedmiot?",
     "options": {
       "A": "Pisać na czacie",
       "B": "Otwierać mape",
@@ -2718,7 +2718,7 @@
   },
   {
     "id": 248,
-    "question": "Co natychmiastowo przerywa Henge?",
+    "question": "Co natychmiastowo przerywa transformacje (Henge no Jutsu) na naszym serwerze?",
     "options": {
       "A": "Zmiana broni",
       "B": "Każdy atak",
@@ -2784,7 +2784,7 @@
   },
   {
     "id": 254,
-    "question": "Po szpitalu akcja przenosi się do:",
+    "question": "Po tutorialu w szpitalu akcja przenosi się do?",
     "options": {
       "A": "ANBU HQ",
       "B": "Akademii Konohy",
@@ -2926,7 +2926,7 @@
     "id": 266
   },
   {
-    "question": "Które jutsu NIE jest wymagane do podejścia do egzaminu na Genina?",
+    "question": "Które jutsu NIE jest wymagane do podejścia do egzaminu na Genina u nas na serwerze?",
     "options": {
       "A": "Henge no Jutsu",
       "B": "Orioke no Jutsu",
@@ -2937,7 +2937,7 @@
     "id": 267
   },
   {
-    "question": "Ile kosztuje Bunshin no Jutsu?",
+    "question": "Ile kosztuje Bunshin no Jutsu u nas na serwerze?",
     "options": {
       "A": "80 Chakry",
       "B": "50 Chakry",
@@ -2948,7 +2948,7 @@
     "id": 268
   },
   {
-    "question": "Od czego zależy liczba klonów w Bunshin no Jutsu?",
+    "question": "Od czego zależy liczba klonów w Bunshin no Jutsu u nas na serwerze?",
     "options": {
       "A": "Od poziomu gracza",
       "B": "Od statystyki Resistance",
@@ -2981,7 +2981,7 @@
     "id": 271
   },
   {
-    "question": "Co NIE jest elementem systemu Wiosek?",
+    "question": "Co NIE jest elementem systemu Wiosek na naszym serwerze?",
     "options": {
       "A": "Czat wioski",
       "B": "Głosowania i zarządzanie rangami",
@@ -2992,7 +2992,7 @@
     "id": 272
   },
   {
-    "question": "Jaką wartość HP ma klon z Bunshin no Jutsu?",
+    "question": "Jaką wartość HP ma klon z Bunshin no Jutsu u nas na serwerze?",
     "options": {
       "A": "1 HP",
       "B": "Tyle co gracz, ale nie atakuje",
@@ -3083,9 +3083,9 @@
     "id": 281,
     "question": "Dlaczego Naruto nie mógł przestać gonić Sasuke, mimo lat cierpienia i upokorzeń?",
     "options": {
-      "A": "Bo obiecał Sakurze",
+      "A": "Bo obiecał Hinacie",
       "B": "Bo był uparty",
-      "C": "Bo zobaczył w Sasuke samego siebie, tylko bez nikogo, kto by o niego walczył",
+      "C": "Bo zobaczył w Sasuke samego siebie",
       "D": "Bo Hokage tak kazał"
     },
     "answer": "C"
@@ -3295,7 +3295,7 @@
     "A": "Był mutacją Sharinganu",
     "B": "Wywodzi się z potomków Hamury i opiera na Byakuganie",
     "C": "Został aktywowany przez Katsuyu",
-    "D": "Powstał z fuzji cień-słońce"
+    "D": "Powstał z fuzji księżyc-słońce"
   },
   "answer": "B"
 }
