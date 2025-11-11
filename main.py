@@ -994,69 +994,99 @@ def _next_occurrence_utc(now: datetime.datetime, times: List[datetime.time]) -> 
     # gdy brak dziś – bierzemy najwcześniejszą godzinę jutro
     return datetime.datetime.combine(now.date() + datetime.timedelta(days=1), min(times))
 
+# === DODANE: format HH:MM (bez Z) do klucza w DB
+def _hhmm(t: datetime.time) -> str:
+    return f"{t.hour:02d}:{t.minute:02d}"
+
 _fired_today: Set[str] = set()
 _last_reset_date: Optional[datetime.date] = None
+
+# === DODANE: persystencja fired slots (catch-up) ===
+async def db_was_quiz_fired(guild_id: int, date_utc: datetime.date, time_hhmm: str) -> bool:
+    try:
+        resp = await asyncio.to_thread(
+            lambda: supabase.table("fired_quizzes")
+            .select("id")
+            .eq("guild_id", str(guild_id))
+            .eq("date_utc", date_utc.isoformat())
+            .eq("time_hhmm", time_hhmm)
+            .limit(1)
+            .execute()
+        )
+        data = getattr(resp, "data", None) or []
+        return bool(data)
+    except Exception as e:
+        log.exception("db_was_quiz_fired error: %r", e)
+        return False
+
+async def db_mark_quiz_fired(guild_id: int, channel_id: int, date_utc: datetime.date, time_hhmm: str) -> None:
+    try:
+        await asyncio.to_thread(
+            lambda: supabase.table("fired_quizzes")
+            .insert({
+                "guild_id": str(guild_id),
+                "channel_id": str(channel_id),
+                "date_utc": date_utc.isoformat(),
+                "time_hhmm": time_hhmm,
+            }).execute()
+        )
+    except Exception as e:
+        if "duplicate" not in str(e).lower():
+            log.exception("db_mark_quiz_fired error: %r", e)
 
 @tasks.loop(minutes=1)
 async def daily_quiz_task():
     """
-    Scheduler minutowy z diagnostyką:
-    - co minutę loguje stan (czas, kanał, czasy QUIZ, fired_today, next),
-    - wysyła alerty ALERT_MINUTES_BEFORE,
-    - odpala quizy o podanych godzinach.
+    Scheduler odporny na restarty:
+    - sprawdza dziś i wczoraj wszystkie targety,
+    - jeśli target minął i nie ma wpisu w DB, odpala quiz (catch-up),
+    - alerty wysyła jak wcześniej (bez nadrabiania historycznych).
     """
-    global _last_reset_date
     now = datetime.datetime.utcnow()
     times = _parse_quiz_times(QUIZ_TIMES_ENV)
-
-    # reset raz dziennie (UTC)
-    if _last_reset_date != now.date():
-        _fired_today.clear()
-        _last_reset_date = now.date()
-        log.info("[diag] Reset dnia UTC -> czyścimy _fired_today")
-
-    # diagnostyka: odczyt kanału + najbliższy termin
     ch = await get_quiz_channel()
-    next_dt = _next_occurrence_utc(now, times)
-    mins_to_next = int((next_dt - now).total_seconds() // 60)
 
-    log.info(
-        "[diag] now=%sZ | channel=%s | times=[%s] | fired_today=%s | next=%sZ (za %sm)",
-        now.strftime("%Y-%m-%d %H:%M"),
-        f"#{ch.name}" if isinstance(ch, discord.TextChannel) else "NONE",
-        _format_times(times),
-        sorted(_fired_today) if _fired_today else "[]",
-        next_dt.strftime("%H:%M"),
-        mins_to_next,
-    )
+    if not ch:
+        log.warning("[scheduler] Brak kanału quizowego – pomijam tick.")
+        return
 
-    # ALERTY
+    guild = ch.guild
+
+    # ALERTY (bieżące, bez catch-upów)
     for t in times:
         alert_dt = (datetime.datetime.combine(now.date(), t) - datetime.timedelta(minutes=ALERT_MINUTES_BEFORE)).time()
         if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
-            if ch:
-                log.info("[diag] Trafiono okno ALERTU dla %02d:%02dZ (teraz %sZ)", t.hour, t.minute, now.strftime("%H:%M"))
-                role = get_quiz_role(ch.guild)
-                if role and PING_ROLE_IN_ALERTS:
-                    await ch.send(
-                        f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
-                        allowed_mentions=discord.AllowedMentions(roles=[role])
-                    )
-                else:
-                    await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
-
-    # START QUIZÓW
-    for t in times:
-        key = f"{t.hour:02d}:{t.minute:02d}"
-        target = datetime.datetime.combine(now.date(), t)
-        # tolerancja ~2 min aby nie wpaść pomiędzy tickami minutowymi
-        if abs((now - target)) < datetime.timedelta(minutes=2) and key not in _fired_today:
-            if ch:
-                log.info("[diag] Odpalamy quiz dla %sZ (key=%s)", key, key)
-                await run_quiz(ch)
-                _fired_today.add(key)
+            role = get_quiz_role(guild)
+            if role and PING_ROLE_IN_ALERTS:
+                await ch.send(
+                    f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
+                    allowed_mentions=discord.AllowedMentions(roles=[role])
+                )
             else:
-                log.warning("[diag] Mieliśmy odpalić %sZ, ale nie znaleziono kanału (sprawdź QUIZ_CHANNEL_NAME/ID).", key)
+                await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
+
+    # START QUIZÓW – catch-up (wczoraj, potem dziś); limit bezpieczeństwa: max 3 na tick
+    fired_count = 0
+    for day_offset in (1, 0):
+        date_utc = (now - datetime.timedelta(days=day_offset)).date()
+        for t in times:
+            target = datetime.datetime.combine(date_utc, t)
+            if target > now:
+                continue
+            hhmm = _hhmm(t)
+            already = await db_was_quiz_fired(guild.id, date_utc, hhmm)
+            if already:
+                continue
+
+            log.info("[scheduler] Odpalam quiz %s %sZ (catch-up=%s)", date_utc.isoformat(), hhmm, day_offset == 1)
+            await run_quiz(ch)
+            await db_mark_quiz_fired(guild.id, ch.id, date_utc, hhmm)
+
+            fired_count += 1
+            if fired_count >= 3:
+                log.info("[scheduler] Osiągnięto limit 3 catch-upów w tym ticku – kolejne za minutę.")
+                return
+            await asyncio.sleep(4)
 
 # -------------- Health server + watchdog ------
 class PingHandler(BaseHTTPRequestHandler):
@@ -1203,6 +1233,7 @@ async def db_supporter_quiz_try_reserve_today(guild_id: int, user_id: int) -> bo
         log.exception("db_supporter_quiz_try_reserve_today error: %r", e)
         return False
 
+# === ZMIENIONE: pełny bypass admina (ID lub permission Administrator)
 async def _can_use_manual_quiz(ctx: commands.Context) -> tuple[bool, str, bool]:
     """
     Zwraca (can_use, msg_if_denied, is_supporter_flow).
@@ -1211,9 +1242,10 @@ async def _can_use_manual_quiz(ctx: commands.Context) -> tuple[bool, str, bool]:
     author = ctx.author
     guild = ctx.guild
 
-    # Admin – bez limitu
-    if author.id in ADMIN_USER_IDS:
-        return True, "", False
+    # Admin – bez limitu (ID lub uprawnienie Administrator)
+    if isinstance(author, discord.Member):
+        if author.id in ADMIN_USER_IDS or author.guild_permissions.administrator:
+            return True, "", False
 
     # Musi być serwer + rola Wspierający
     if not guild or not isinstance(author, discord.Member):
