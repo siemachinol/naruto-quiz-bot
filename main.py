@@ -43,7 +43,6 @@ if os.getenv("BOT_DISABLED", "").lower() == "true":
 
 TOKEN = require_env("TOKEN")
 GUILD_ID = int(require_env("GUILD_ID"))
-
 SUPABASE_URL = require_env("SUPABASE_URL")
 SUPABASE_KEY = require_env("SUPABASE_KEY")
 
@@ -73,10 +72,14 @@ def _fmt_td(td: datetime.timedelta) -> str:
     h, r = divmod(r, 3600)
     m, s = divmod(r, 60)
     parts = []
-    if d: parts.append(f"{d}d")
-    if h: parts.append(f"{h}h")
-    if m: parts.append(f"{m}m")
-    if s and not d: parts.append(f"{s}s")
+    if d:
+        parts.append(f"{d}d")
+    if h:
+        parts.append(f"{h}h")
+    if m:
+        parts.append(f"{m}m")
+    if s and not d:
+        parts.append(f"{s}s")
     return " ".join(parts) or "0s"
 
 def _cooldown_remaining(last_used: datetime.datetime, hours: int) -> datetime.timedelta:
@@ -114,6 +117,7 @@ async def _send_report_to_owner(content: str) -> bool:
                     if isinstance(ch, discord.TextChannel):
                         await ch.send(content)
                         return True
+                return False
         return False
     except Exception:
         log.exception("Report: nie udało się pobrać application_info / wysłać DM")
@@ -230,6 +234,7 @@ def load_questions() -> List[Dict[str, Any]]:
         raise FileNotFoundError(f"Brak pliku z pytaniami: {QUESTIONS_FILE}")
     with open(QUESTIONS_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
+
     normalized = []
     for q in data:
         try:
@@ -287,6 +292,7 @@ async def safe_ephemeral(interaction: Interaction, content: str = "", view: Opti
         except Exception as e:
             log.warning("safe_ephemeral unexpected error: %r", e)
             return None
+
 # ----------------------------------------------------
 
 # --- REPORT FEATURE: modal ---
@@ -313,23 +319,21 @@ class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
                 f"https://discord.com/channels/{guild_id}/{channel_id}/{self.source_message_id}"
                 if (guild_id and channel_id) else "(brak linku)"
             )
-
             lines = [
                 "🚩 **Zgłoszenie pytania**",
-                f"Zgłosił: {interaction.user.mention} (`{interaction.user.id}`)",
-                f"Serwer: `{getattr(guild, 'name', '?')} ({guild_id})`",
-                f"Kanał: `{getattr(channel, 'name', '?')} ({channel_id})`",
+                f"Zgłosił: {interaction.user.mention} ({interaction.user.id})",
+                f"Serwer: {getattr(guild, 'name', '?')} ({guild_id})",
+                f"Kanał: {getattr(channel, 'name', '?')} ({channel_id})",
                 f"Link do wiadomości: {jump_url}",
                 "",
                 f"Powód: {self.reason.value.strip() or '(pusty)'}",
                 ""
             ]
-
             if state:
                 q = state.question
                 lines += [
                     "**Szczegóły pytania:**",
-                    f"ID: `{q.get('id')}`  |  Poprawna: **{q.get('answer')}**",
+                    f"ID: {q.get('id')} | Poprawna: **{q.get('answer')}**",
                     f"Treść: {q.get('question')}",
                     f"A: {q['options'].get('A')}",
                     f"B: {q['options'].get('B')}",
@@ -344,7 +348,6 @@ class ReportQuestionModal(ui.Modal, title="Zgłoś pytanie"):
                 await interaction.response.send_message("Dzięki! Twoja odpowiedź została zapisana. ✅", ephemeral=True)
             else:
                 await interaction.response.send_message("Nie udało się wysłać zgłoszenia. ❌", ephemeral=True)
-
         except Exception as e:
             log.exception("Report modal submit error: %r", e)
             try:
@@ -381,6 +384,7 @@ class PhoneFriendModal(ui.Modal, title="Telefon do przyjaciela"):
         m = re.search(r"(\d{17,20})", text)
         if not m:
             return await interaction.response.send_message("Podaj poprawną wzmiankę lub ID.", ephemeral=True)
+
         uid = int(m.group(1))
         guild = interaction.guild
         friend = guild.get_member(uid) if guild else None
@@ -458,7 +462,6 @@ class PhoneFriendSelectView(ui.View):
             )
 
         await db_lifeline_mark_use(interaction.user.id, "telefon")
-
         responses = [
             "Słuchaj, nie jestem pewien, ale wydaje mi się, że to będzie **{answer}**.",
             "Ciężko powiedzieć, ale coś mi mówi, że to **{answer}**.",
@@ -467,7 +470,6 @@ class PhoneFriendSelectView(ui.View):
         ]
         import random
         msg = random.choice(responses).format(answer=letter)
-
         await interaction.response.send_message(
             f"📞 Telefon do **{friend.display_name if friend else uid}** → {msg}",
             ephemeral=True
@@ -589,7 +591,6 @@ class QuizPersistentView(ui.View):
         total = sum(counts.values()) or 1
         perc = {k: round(v * 100 / total) for k, v in counts.items()}
         await db_lifeline_mark_use(interaction.user.id, "publika")
-
         msg = (
             "📊 Głosy do tej pory:\n"
             f"A: {counts['A']} ({perc['A']}%)\n"
@@ -597,7 +598,6 @@ class QuizPersistentView(ui.View):
             f"C: {counts['C']} ({perc['C']}%)\n"
             f"D: {counts['D']} ({perc['D']}%)"
         )
-
         if not interaction.response.is_done():
             await interaction.response.send_message(msg, ephemeral=True)
         else:
@@ -636,10 +636,10 @@ async def handle_answer_click(interaction: Interaction, letter: str):
         return await safe_ephemeral(interaction, "Ten quiz już nie przyjmuje odpowiedzi.")
     if now > state.end_time:
         return await safe_ephemeral(interaction, "Czas minął. Odpowiedzi po czasie nie są liczone.")
+
     uid = interaction.user.id
     if uid in state.answers:
         return await safe_ephemeral(interaction, "Masz już zapisaną odpowiedź.")
-
     state.answers[uid] = letter
 
     # --- LOG do Render Logs ---
@@ -647,11 +647,8 @@ async def handle_answer_click(interaction: Interaction, letter: str):
         "Answer saved: guild=%s channel=%s user=%s letter=%s msg=%s",
         getattr(interaction.guild, "id", "?"),
         getattr(interaction.channel, "id", "?"),
-        interaction.user.id,
-        letter,
-        mid,
+        interaction.user.id, letter, mid,
     )
-
     await safe_ephemeral(interaction, "Zapisano odpowiedź ✅")
 
 def build_question_message(q: Dict[str, Any]) -> str:
@@ -674,13 +671,16 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
 
     ranking = await db_load_ranking()
     today = datetime.datetime.utcnow().date().isoformat()
+
     for uid in winners:
         uid_s = str(uid)
         member: Optional[discord.Member] = channel.guild.get_member(uid)
         name = member.display_name if member else f"Użytkownik {uid_s}"
+
         user_data = ranking.get(uid_s) or {"name": name, "points": 0, "weekly": {}, "monthly": {}}
         user_data["name"] = name
         user_data["points"] = int(user_data.get("points", 0)) + 1
+
         weekly = dict(user_data.get("weekly") or {})
         monthly = dict(user_data.get("monthly") or {})
         weekly[today] = int(weekly.get(today, 0)) + 1
@@ -688,6 +688,7 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
         user_data["weekly"] = weekly
         user_data["monthly"] = monthly
         ranking[uid_s] = user_data
+
     await db_save_ranking(ranking)
 
     if winners:
@@ -738,7 +739,6 @@ async def run_quiz(channel: discord.TextChannel):
 
         question = random.choice(available)
         qid = int(question["id"])
-
         content = build_question_message(question)
         view = QuizPersistentView()
 
@@ -753,7 +753,6 @@ async def run_quiz(channel: discord.TextChannel):
             msg = await channel.send(content, view=view)
 
         last_quiz_id_per_channel[channel.id] = msg.id
-
         end_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=QUIZ_DURATION_SECONDS)
         state = QuizState(question=question, message_id=msg.id, end_time=end_time)
         active_quizzes[msg.id] = state
@@ -767,10 +766,10 @@ async def run_quiz(channel: discord.TextChannel):
                 await db_add_used_id(qid)
             finally:
                 active_quizzes.pop(msg.id, None)
+
         asyncio.create_task(_finish())
 
 # -------------- Komendy (prefix) --------------
-
 def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
     embed = discord.Embed(title=title, colour=0x2b7cff)
     if not pairs:
@@ -783,8 +782,10 @@ def _top_embed(title: str, pairs: List[tuple[str, int]]) -> discord.Embed:
 @bot.command()
 async def ranking(ctx: commands.Context):
     data = await db_load_ranking()
-    pairs = sorted(((v.get("name") or str(uid), int(v.get("points",0))) for uid, v in data.items()),
-                   key=lambda x: x[1], reverse=True)
+    pairs = sorted(
+        ((v.get("name") or str(uid), int(v.get("points",0))) for uid, v in data.items()),
+        key=lambda x: x[1], reverse=True
+    )
     await ctx.send(embed=_top_embed("Ranking – All time", pairs))
 
 def _sum_period(d: Dict[str, int], days: int) -> int:
@@ -856,6 +857,7 @@ async def slash_polnapol(interaction: discord.Interaction):
     ch = interaction.channel
     if not isinstance(ch, (discord.TextChannel, discord.Thread)):
         return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+
     state = get_state_for_channel(ch.id)
     if not state:
         return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
@@ -870,7 +872,6 @@ async def slash_polnapol(interaction: discord.Interaction):
     wrong = [x for x in ["A","B","C","D"] if x != correct]
     kept = [correct, random.choice(wrong)]
     random.shuffle(kept)
-
     await db_lifeline_mark_use(interaction.user.id, "5050")
     await interaction.response.send_message(
         f"🔔 50/50 → zostały: **{kept[0]}** lub **{kept[1]}**",
@@ -882,6 +883,7 @@ async def slash_publika(interaction: discord.Interaction):
     ch = interaction.channel
     if not isinstance(ch, (discord.TextChannel, discord.Thread)):
         return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+
     state = get_state_for_channel(ch.id)
     if not state:
         return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
@@ -898,7 +900,6 @@ async def slash_publika(interaction: discord.Interaction):
             counts[letter] += 1
     total = sum(counts.values()) or 1
     perc = {k: round(v * 100 / total) for k, v in counts.items()}
-
     await db_lifeline_mark_use(interaction.user.id, "publika")
     msg = (
         "📊 Głosy do tej pory:\n"
@@ -915,6 +916,7 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     ch = interaction.channel
     if not isinstance(ch, (discord.TextChannel, discord.Thread)):
         return await interaction.response.send_message("Użyj na kanale tekstowym.", ephemeral=True)
+
     state = get_state_for_channel(ch.id)
     if not state:
         return await interaction.response.send_message("Brak aktywnego pytania na tym kanale.", ephemeral=True)
@@ -945,7 +947,6 @@ async def slash_telefon(interaction: discord.Interaction, friend: discord.Member
     ]
     import random
     msg = random.choice(responses).format(answer=letter)
-
     await interaction.response.send_message(
         f"📞 Telefon do **{friend.display_name}** → {msg}",
         ephemeral=True
@@ -994,99 +995,69 @@ def _next_occurrence_utc(now: datetime.datetime, times: List[datetime.time]) -> 
     # gdy brak dziś – bierzemy najwcześniejszą godzinę jutro
     return datetime.datetime.combine(now.date() + datetime.timedelta(days=1), min(times))
 
-# === DODANE: format HH:MM (bez Z) do klucza w DB
-def _hhmm(t: datetime.time) -> str:
-    return f"{t.hour:02d}:{t.minute:02d}"
-
 _fired_today: Set[str] = set()
 _last_reset_date: Optional[datetime.date] = None
-
-# === DODANE: persystencja fired slots (catch-up) ===
-async def db_was_quiz_fired(guild_id: int, date_utc: datetime.date, time_hhmm: str) -> bool:
-    try:
-        resp = await asyncio.to_thread(
-            lambda: supabase.table("fired_quizzes")
-            .select("id")
-            .eq("guild_id", str(guild_id))
-            .eq("date_utc", date_utc.isoformat())
-            .eq("time_hhmm", time_hhmm)
-            .limit(1)
-            .execute()
-        )
-        data = getattr(resp, "data", None) or []
-        return bool(data)
-    except Exception as e:
-        log.exception("db_was_quiz_fired error: %r", e)
-        return False
-
-async def db_mark_quiz_fired(guild_id: int, channel_id: int, date_utc: datetime.date, time_hhmm: str) -> None:
-    try:
-        await asyncio.to_thread(
-            lambda: supabase.table("fired_quizzes")
-            .insert({
-                "guild_id": str(guild_id),
-                "channel_id": str(channel_id),
-                "date_utc": date_utc.isoformat(),
-                "time_hhmm": time_hhmm,
-            }).execute()
-        )
-    except Exception as e:
-        if "duplicate" not in str(e).lower():
-            log.exception("db_mark_quiz_fired error: %r", e)
 
 @tasks.loop(minutes=1)
 async def daily_quiz_task():
     """
-    Scheduler odporny na restarty:
-    - sprawdza dziś i wczoraj wszystkie targety,
-    - jeśli target minął i nie ma wpisu w DB, odpala quiz (catch-up),
-    - alerty wysyła jak wcześniej (bez nadrabiania historycznych).
+    Scheduler minutowy z diagnostyką:
+    - co minutę loguje stan (czas, kanał, czasy QUIZ, fired_today, next),
+    - wysyła alerty ALERT_MINUTES_BEFORE,
+    - odpala quizy o podanych godzinach.
     """
+    global _last_reset_date
+
     now = datetime.datetime.utcnow()
     times = _parse_quiz_times(QUIZ_TIMES_ENV)
+
+    # reset raz dziennie (UTC)
+    if _last_reset_date != now.date():
+        _fired_today.clear()
+        _last_reset_date = now.date()
+        log.info("[diag] Reset dnia UTC -> czyścimy _fired_today")
+
+    # diagnostyka: odczyt kanału + najbliższy termin
     ch = await get_quiz_channel()
+    next_dt = _next_occurrence_utc(now, times)
+    mins_to_next = int((next_dt - now).total_seconds() // 60)
+    log.info(
+        "[diag] now=%sZ | channel=%s | times=[%s] | fired_today=%s | next=%sZ (za %sm)",
+        now.strftime("%Y-%m-%d %H:%M"),
+        f"#{ch.name}" if isinstance(ch, discord.TextChannel) else "NONE",
+        _format_times(times),
+        sorted(_fired_today) if _fired_today else "[]",
+        next_dt.strftime("%H:%M"),
+        mins_to_next,
+    )
 
-    if not ch:
-        log.warning("[scheduler] Brak kanału quizowego – pomijam tick.")
-        return
-
-    guild = ch.guild
-
-    # ALERTY (bieżące, bez catch-upów)
+    # ALERTY
     for t in times:
         alert_dt = (datetime.datetime.combine(now.date(), t) - datetime.timedelta(minutes=ALERT_MINUTES_BEFORE)).time()
         if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
-            role = get_quiz_role(guild)
-            if role and PING_ROLE_IN_ALERTS:
-                await ch.send(
-                    f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
-                    allowed_mentions=discord.AllowedMentions(roles=[role])
-                )
+            if ch:
+                log.info("[diag] Trafiono okno ALERTU dla %02d:%02dZ (teraz %sZ)", t.hour, t.minute, now.strftime("%H:%M"))
+                role = get_quiz_role(ch.guild)
+                if role and PING_ROLE_IN_ALERTS:
+                    await ch.send(
+                        f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
+                        allowed_mentions=discord.AllowedMentions(roles=[role])
+                    )
+                else:
+                    await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
+
+    # START QUIZÓW
+    for t in times:
+        key = f"{t.hour:02d}:{t.minute:02d}"
+        target = datetime.datetime.combine(now.date(), t)
+        # tolerancja ~2 min aby nie wpaść pomiędzy tickami minutowymi
+        if abs((now - target)) < datetime.timedelta(minutes=2) and key not in _fired_today:
+            if ch:
+                log.info("[diag] Odpalamy quiz dla %sZ (key=%s)", key, key)
+                await run_quiz(ch)
+                _fired_today.add(key)
             else:
-                await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
-
-    # START QUIZÓW – catch-up (wczoraj, potem dziś); limit bezpieczeństwa: max 3 na tick
-    fired_count = 0
-    for day_offset in (1, 0):
-        date_utc = (now - datetime.timedelta(days=day_offset)).date()
-        for t in times:
-            target = datetime.datetime.combine(date_utc, t)
-            if target > now:
-                continue
-            hhmm = _hhmm(t)
-            already = await db_was_quiz_fired(guild.id, date_utc, hhmm)
-            if already:
-                continue
-
-            log.info("[scheduler] Odpalam quiz %s %sZ (catch-up=%s)", date_utc.isoformat(), hhmm, day_offset == 1)
-            await run_quiz(ch)
-            await db_mark_quiz_fired(guild.id, ch.id, date_utc, hhmm)
-
-            fired_count += 1
-            if fired_count >= 3:
-                log.info("[scheduler] Osiągnięto limit 3 catch-upów w tym ticku – kolejne za minutę.")
-                return
-            await asyncio.sleep(4)
+                log.warning("[diag] Mieliśmy odpalić %sZ, ale nie znaleziono kanału (sprawdź QUIZ_CHANNEL_NAME/ID).", key)
 
 # -------------- Health server + watchdog ------
 class PingHandler(BaseHTTPRequestHandler):
@@ -1170,10 +1141,12 @@ async def get_quiz_channel() -> Optional[discord.TextChannel]:
                 _guild_cache = await bot.fetch_guild(GUILD_ID)
             except Exception:
                 return None
+
     ch = discord.utils.get(_guild_cache.text_channels, name=QUIZ_CHANNEL_NAME)
     if ch:
         _channel_cache = ch
         return ch
+
     ch_id = os.getenv("QUIZ_CHANNEL_ID")
     if ch_id:
         try:
@@ -1186,68 +1159,82 @@ async def get_quiz_channel() -> Optional[discord.TextChannel]:
     return None
 
 # ===================== DODANE: uprawnienia do !quiz =====================
-
-# Admin (użytkownik) bez limitu, Wspierający (rola) – globalnie 1×/dzień (UTC)
+# Admin (użytkownik) bez limitu, Wspierający – cooldown 72h per user
 ADMIN_USER_IDS = {1356372381043523584}
 SUPPORTER_ROLE_ID = 1377326388415299777
 
-def _today_utc_date_str() -> str:
-    return datetime.datetime.utcnow().date().isoformat()
+SUPPORTER_COOLDOWN_HOURS = 72  # <—— 72h cooldown dla Wspierających
 
-async def db_supporter_quiz_used_today(guild_id: int) -> Optional[Dict[str, str]]:
-    """Zwraca wpis jeśli dzień już zarezerwowany przez Wspierającego."""
+def _is_real_admin(member: discord.Member) -> bool:
+    # admin serwera lub ktoś z silnymi uprawnieniami – rozszerz, jeśli chcesz
+    perms = getattr(member, "guild_permissions", None)
+    return bool(perms and (perms.administrator or perms.manage_guild or perms.manage_roles))
+
+async def db_supporter_last_used(guild_id: int, user_id: int) -> Optional[datetime.datetime]:
+    """
+    Zwraca datetime ostatniego użycia !quiz przez danego Wspierającego (UTC, naive).
+    Bazuje na tabeli supporter_manual_quiz_usage (Opcja A).
+    """
     try:
         resp = await asyncio.to_thread(
-            lambda: supabase.table("manual_quiz_daily")
-            .select("used_by_user_id, date_utc, used_by_role")
+            lambda: supabase.table("supporter_manual_quiz_usage")
+            .select("used_at")
             .eq("guild_id", str(guild_id))
-            .eq("date_utc", _today_utc_date_str())
-            .eq("used_by_role", "supporter")
+            .eq("user_id", str(user_id))
+            .order("used_at", desc=True)
             .limit(1)
             .execute()
         )
         data = getattr(resp, "data", None) or []
-        return data[0] if data else None
+        if not data:
+            return None
+        iso = data[0]["used_at"]
+        if isinstance(iso, str):
+            if iso.endswith("Z"):
+                iso = iso[:-1] + "+00:00"
+            dt = datetime.datetime.fromisoformat(iso)\
+                 .astimezone(datetime.timezone.utc)\
+                 .replace(tzinfo=None)
+            return dt
+        return None
     except Exception as e:
-        log.exception("db_supporter_quiz_used_today error: %r", e)
+        log.exception("db_supporter_last_used error: %r", e)
         return None
 
-async def db_supporter_quiz_try_reserve_today(guild_id: int, user_id: int) -> bool:
-    """Próbuje 'zarezerwować' dzisiejszy dzień dla Wspierających. True = pierwszy; False = już zajęty."""
+async def db_supporter_mark_used(guild_id: int, user_id: int) -> None:
     try:
         await asyncio.to_thread(
-            lambda: supabase.table("manual_quiz_daily")
+            lambda: supabase.table("supporter_manual_quiz_usage")
             .insert({
                 "guild_id": str(guild_id),
-                "date_utc": _today_utc_date_str(),
-                "used_by_user_id": str(user_id),
-                "used_by_role": "supporter",
+                "user_id": str(user_id),
+                "used_at": datetime.datetime.utcnow().isoformat() + "Z",
             })
             .execute()
         )
-        return True
     except Exception as e:
-        msg = str(e).lower()
-        if "duplicate" in msg or "unique" in msg or "uq_manual_quiz_daily_unique_day" in msg:
-            return False
-        log.exception("db_supporter_quiz_try_reserve_today error: %r", e)
-        return False
+        log.exception("db_supporter_mark_used error: %r", e)
 
-# === ZMIENIONE: pełny bypass admina (ID lub permission Administrator)
 async def _can_use_manual_quiz(ctx: commands.Context) -> tuple[bool, str, bool]:
     """
     Zwraca (can_use, msg_if_denied, is_supporter_flow).
-    is_supporter_flow == True oznacza, że należy wykonać rezerwację dnia przed startem.
+
+    - Admin (ID w ADMIN_USER_IDS **lub** realny admin Discorda) → pełny bypass, bez cooldownu,
+      is_supporter_flow = False (nie zapisujemy użycia).
+    - Wspierający → cooldown 72h per user; jeśli OK → is_supporter_flow = True (zapis użycia po starcie).
     """
     author = ctx.author
     guild = ctx.guild
 
-    # Admin – bez limitu (ID lub uprawnienie Administrator)
-    if isinstance(author, discord.Member):
-        if author.id in ADMIN_USER_IDS or author.guild_permissions.administrator:
-            return True, "", False
+    # 1) Twardy admin po ID (backdoor)
+    if author.id in ADMIN_USER_IDS:
+        return True, "", False
 
-    # Musi być serwer + rola Wspierający
+    # 2) Realny admin Discorda po uprawnieniach
+    if isinstance(author, discord.Member) and _is_real_admin(author):
+        return True, "", False
+
+    # 3) Wspierający na serwerze → podlega cooldownowi 72h
     if not guild or not isinstance(author, discord.Member):
         return False, "Ta komenda działa tylko na serwerze.", False
 
@@ -1255,14 +1242,16 @@ async def _can_use_manual_quiz(ctx: commands.Context) -> tuple[bool, str, bool]:
     if not role or role not in author.roles:
         return False, "Ta komenda jest dostępna tylko dla osób z rangą **Wspierający** lub adminów.", False
 
-    # Czy dzisiejszy slot jest już zajęty przez jakiegokolwiek Wspierającego?
-    used = await db_supporter_quiz_used_today(guild.id)
-    if used:
-        return False, "Dzisiejsze ręczne uruchomienie **!quiz** zostało już wykorzystane przez Wspierających. Spróbuj jutro.", True
+    # Sprawdź ostatnie użycie
+    last = await db_supporter_last_used(guild.id, author.id)
+    if last:
+        rem = _cooldown_remaining(last, SUPPORTER_COOLDOWN_HOURS)
+        if rem.total_seconds() > 0:
+            # czytelny tekst – np. "2d 3h 15m"
+            return False, f"⏳ Cooldown **{_fmt_td(rem)}**. Spróbuj ponownie później.", True
 
-    # Wspierający – można próbować rezerwować
+    # Wspierający, cooldown minął → OK, zapiszemy użycie po starcie
     return True, "", True
-
 # =================== KONIEC: uprawnienia do !quiz =======================
 
 # -------------- Events ------------------------
@@ -1270,6 +1259,7 @@ async def _can_use_manual_quiz(ctx: commands.Context) -> tuple[bool, str, bool]:
 async def on_ready():
     log.info("Zalogowano jako %s (%s)", bot.user, bot.user.id if bot.user else "?")
     bot.add_view(QuizPersistentView())
+
     if not daily_quiz_task.is_running():
         daily_quiz_task.start()
     if not watchdog.is_running():
@@ -1298,8 +1288,7 @@ async def on_app_command_error(interaction: discord.Interaction, error: Exceptio
         pass
     log.exception("Slash command error: %r", error)
 
-# -------------------- PODMIANA KOMENDY !quiz --------------------
-
+# -------------------- KOMENDA !quiz --------------------
 @bot.command()
 async def quiz(ctx: commands.Context):
     if not isinstance(ctx.channel, discord.TextChannel):
@@ -1309,16 +1298,19 @@ async def quiz(ctx: commands.Context):
     if not can:
         return await ctx.reply(msg)
 
-    # Jeśli to flow Wspierających – najpierw zarezerwuj dzień (globalny limit 1×/dzień)
+    # Wspierający – zapisz 'użycie' (start cooldownu) PRZED startem,
+    # żeby nie było race condition przy szybkim kliku.
     if supporter_flow:
-        ok = await db_supporter_quiz_try_reserve_today(ctx.guild.id, ctx.author.id)  # type: ignore
-        if not ok:
-            return await ctx.reply("Dzisiejsze ręczne uruchomienie **!quiz** zostało już wykorzystane przez Wspierających. Spróbuj jutro.")
+        try:
+            await db_supporter_mark_used(ctx.guild.id, ctx.author.id)  # type: ignore
+        except Exception:
+            log.warning(
+                "Nie udało się zapisać użycia !quiz przez Wspierającego (guild=%s, user=%s).",
+                getattr(ctx.guild, "id", "?"), ctx.author.id
+            )
 
-    # Start quizu
     await run_quiz(ctx.channel)
-
-# ---------------------------------------------------------------
+# -------------------------------------------------------
 
 def main():
     threading.Thread(target=run_health_server, daemon=True).start()
