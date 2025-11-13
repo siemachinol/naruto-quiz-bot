@@ -1007,57 +1007,66 @@ async def daily_quiz_task():
     - odpala quizy o podanych godzinach.
     """
     global _last_reset_date
+    try:
+        now = datetime.datetime.utcnow()
+        times = _parse_quiz_times(QUIZ_TIMES_ENV)
 
-    now = datetime.datetime.utcnow()
-    times = _parse_quiz_times(QUIZ_TIMES_ENV)
+        # reset raz dziennie (UTC)
+        if _last_reset_date != now.date():
+            _fired_today.clear()
+            _last_reset_date = now.date()
+            log.info("[diag] Reset dnia UTC -> czyścimy _fired_today")
 
-    # reset raz dziennie (UTC)
-    if _last_reset_date != now.date():
-        _fired_today.clear()
-        _last_reset_date = now.date()
-        log.info("[diag] Reset dnia UTC -> czyścimy _fired_today")
+        # diagnostyka: odczyt kanału + najbliższy termin
+        ch = await get_quiz_channel()
+        next_dt = _next_occurrence_utc(now, times)
+        mins_to_next = int((next_dt - now).total_seconds() // 60)
+        log.info(
+            "[diag] now=%sZ | channel=%s | times=[%s] | fired_today=%s | next=%sZ (za %sm)",
+            now.strftime("%Y-%m-%d %H:%M"),
+            f"#{ch.name}" if isinstance(ch, discord.TextChannel) else "NONE",
+            _format_times(times),
+            sorted(_fired_today) if _fired_today else "[]",
+            next_dt.strftime("%H:%M"),
+            mins_to_next,
+        )
 
-    # diagnostyka: odczyt kanału + najbliższy termin
-    ch = await get_quiz_channel()
-    next_dt = _next_occurrence_utc(now, times)
-    mins_to_next = int((next_dt - now).total_seconds() // 60)
-    log.info(
-        "[diag] now=%sZ | channel=%s | times=[%s] | fired_today=%s | next=%sZ (za %sm)",
-        now.strftime("%Y-%m-%d %H:%M"),
-        f"#{ch.name}" if isinstance(ch, discord.TextChannel) else "NONE",
-        _format_times(times),
-        sorted(_fired_today) if _fired_today else "[]",
-        next_dt.strftime("%H:%M"),
-        mins_to_next,
-    )
+        # ALERTY
+        for t in times:
+            alert_dt = (datetime.datetime.combine(now.date(), t) - datetime.timedelta(minutes=ALERT_MINUTES_BEFORE)).time()
+            if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
+                if ch:
+                    log.info("[diag] Trafiono okno ALERTU dla %02d:%02dZ (teraz %sZ)", t.hour, t.minute, now.strftime("%H:%M"))
+                    role = get_quiz_role(ch.guild)
+                    if role and PING_ROLE_IN_ALERTS:
+                        await ch.send(
+                            f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
+                            allowed_mentions=discord.AllowedMentions(roles=[role])
+                        )
+                    else:
+                        await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
 
-    # ALERTY
-    for t in times:
-        alert_dt = (datetime.datetime.combine(now.date(), t) - datetime.timedelta(minutes=ALERT_MINUTES_BEFORE)).time()
-        if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
-            if ch:
-                log.info("[diag] Trafiono okno ALERTU dla %02d:%02dZ (teraz %sZ)", t.hour, t.minute, now.strftime("%H:%M"))
-                role = get_quiz_role(ch.guild)
-                if role and PING_ROLE_IN_ALERTS:
-                    await ch.send(
-                        f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
-                        allowed_mentions=discord.AllowedMentions(roles=[role])
-                    )
+        # START QUIZÓW
+        for t in times:
+            key = f"{t.hour:02d}:{t.minute:02d}"
+            target = datetime.datetime.combine(now.date(), t)
+
+            # delta < 0 → jeszcze przed czasem
+            # delta >= 0 → po czasie; dopuszczamy max 2 min spóźnienia
+            delta = now - target
+            if datetime.timedelta(0) <= delta < datetime.timedelta(minutes=2) and key not in _fired_today:
+                if ch:
+                    log.info("[diag] Odpalamy quiz dla %sZ (key=%s)", key, key)
+                    await run_quiz(ch)
+                    _fired_today.add(key)
                 else:
-                    await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
-
-    # START QUIZÓW
-    for t in times:
-        key = f"{t.hour:02d}:{t.minute:02d}"
-        target = datetime.datetime.combine(now.date(), t)
-        # tolerancja ~2 min aby nie wpaść pomiędzy tickami minutowymi
-        if abs((now - target)) < datetime.timedelta(minutes=2) and key not in _fired_today:
-            if ch:
-                log.info("[diag] Odpalamy quiz dla %sZ (key=%s)", key, key)
-                await run_quiz(ch)
-                _fired_today.add(key)
-            else:
-                log.warning("[diag] Mieliśmy odpalić %sZ, ale nie znaleziono kanału (sprawdź QUIZ_CHANNEL_NAME/ID).", key)
+                    log.warning(
+                        "[diag] Mieliśmy odpalić %sZ, ale nie znaleziono kanału (sprawdź QUIZ_CHANNEL_NAME/ID).",
+                        key
+                    )
+    except Exception as e:
+        # Nie zabijamy loopa – logujemy błąd i lecimy dalej przy następnym ticku
+        log.exception("daily_quiz_task error: %r", e)
 
 # -------------- Health server + watchdog ------
 class PingHandler(BaseHTTPRequestHandler):
