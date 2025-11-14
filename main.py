@@ -715,6 +715,23 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
     except discord.NotFound:
         await channel.send(msg)
 
+    # --- DODANE: auto-ranking po 20 sekundach ---
+    async def _send_ranking_later():
+        try:
+            await asyncio.sleep(20)  # opóźnienie po zakończeniu quizu
+            data = await db_load_ranking()
+            pairs = sorted(
+                ((v.get("name") or str(uid), int(v.get("points", 0))) for uid, v in data.items()),
+                key=lambda x: x[1],
+                reverse=True
+            )
+            embed = _top_embed("Ranking – All time (po tym pytaniu)", pairs)
+            await channel.send(embed=embed)
+        except Exception as e:
+            log.error("Auto-ranking error: %r", e)
+
+    asyncio.create_task(_send_ranking_later())
+
 # -------------- Uruchamianie quizu ------------
 def get_quiz_role(guild: discord.Guild) -> Optional[discord.Role]:
     role = None
