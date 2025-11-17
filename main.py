@@ -52,6 +52,10 @@ QUIZ_DURATION_SECONDS = int(os.getenv("QUIZ_DURATION_SECONDS", "900"))  # 15 min
 ALERT_MINUTES_BEFORE = int(os.getenv("ALERT_MINUTES_BEFORE", "10"))
 QUIZ_TIMES_ENV = os.getenv("QUIZ_TIMES", "11:00,15:00,19:00")
 
+# --- WŁĄCZNIK/WYŁĄCZNIK ALERTÓW 10 MIN PRZED QUIZEM ---
+# domyślnie WYŁĄCZONE (false), żeby alertów nie było, ale kod pozostaje
+QUIZ_ALERTS_ENABLED = os.getenv("QUIZ_ALERTS_ENABLED", "false").lower() == "true"
+
 # --- Ping roli (@Quizowicz) ---
 QUIZ_ROLE_ID = os.getenv("QUIZ_ROLE_ID")
 QUIZ_ROLE_NAME = os.getenv("QUIZ_ROLE_NAME", "Quizowicz")
@@ -1020,7 +1024,7 @@ async def daily_quiz_task():
     """
     Scheduler minutowy z diagnostyką:
     - co minutę loguje stan (czas, kanał, czasy QUIZ, fired_today, next),
-    - wysyła alerty ALERT_MINUTES_BEFORE,
+    - wysyła alerty ALERT_MINUTES_BEFORE (jeśli włączone),
     - odpala quizy o podanych godzinach.
     """
     global _last_reset_date
@@ -1039,29 +1043,32 @@ async def daily_quiz_task():
         next_dt = _next_occurrence_utc(now, times)
         mins_to_next = int((next_dt - now).total_seconds() // 60)
         log.info(
-            "[diag] now=%sZ | channel=%s | times=[%s] | fired_today=%s | next=%sZ (za %sm)",
+            "[diag] now=%sZ | channel=%s | times=[%s] | fired_today=%s | next=%sZ (za %sm) | alerts_enabled=%s",
             now.strftime("%Y-%m-%d %H:%M"),
             f"#{ch.name}" if isinstance(ch, discord.TextChannel) else "NONE",
             _format_times(times),
             sorted(_fired_today) if _fired_today else "[]",
             next_dt.strftime("%H:%M"),
             mins_to_next,
+            QUIZ_ALERTS_ENABLED,
         )
 
-        # ALERTY
-        for t in times:
-            alert_dt = (datetime.datetime.combine(now.date(), t) - datetime.timedelta(minutes=ALERT_MINUTES_BEFORE)).time()
-            if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
-                if ch:
-                    log.info("[diag] Trafiono okno ALERTU dla %02d:%02dZ (teraz %sZ)", t.hour, t.minute, now.strftime("%H:%M"))
-                    role = get_quiz_role(ch.guild)
-                    if role and PING_ROLE_IN_ALERTS:
-                        await ch.send(
-                            f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
-                            allowed_mentions=discord.AllowedMentions(roles=[role])
-                        )
-                    else:
-                        await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
+        # ALERTY (tylko jeśli włączone przełącznikiem)
+        if QUIZ_ALERTS_ENABLED:
+            for t in times:
+                alert_dt = (datetime.datetime.combine(now.date(), t) - datetime.timedelta(minutes=ALERT_MINUTES_BEFORE)).time()
+                if alert_dt.hour == now.hour and alert_dt.minute == now.minute:
+                    if ch:
+                        log.info("[diag] Trafiono okno ALERTU dla %02d:%02dZ (teraz %sZ)", t.hour, t.minute, now.strftime("%H:%M"))
+                        role = get_quiz_role(ch.guild)
+                        if role and PING_ROLE_IN_ALERTS:
+                            await ch.send(
+                                f"{role.mention} " + f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
+                                allowed_mentions=discord.AllowedMentions(roles=[role])
+                            )
+                        else:
+                            await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
+        # (jeśli wyłączone, po prostu nic nie robimy – log wyżej pokazuje stan)
 
         # START QUIZÓW
         for t in times:
@@ -1284,6 +1291,13 @@ async def _can_use_manual_quiz(ctx: commands.Context) -> tuple[bool, str, bool]:
 @bot.event
 async def on_ready():
     log.info("Zalogowano jako %s (%s)", bot.user, bot.user.id if bot.user else "?")
+    # Info w logach, czy alert 10 min przed quizem jest włączony
+    log.info(
+        "Opcja alertów 10 min przed quizem jest %s (ENV QUIZ_ALERTS_ENABLED=%s).",
+        "WŁĄCZONA" if QUIZ_ALERTS_ENABLED else "WYŁĄCZONA",
+        QUIZ_ALERTS_ENABLED,
+    )
+
     bot.add_view(QuizPersistentView())
 
     if not daily_quiz_task.is_running():
