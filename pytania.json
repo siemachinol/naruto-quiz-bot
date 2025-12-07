@@ -561,14 +561,14 @@
     "id": 51
   },
   {
-    "question": "Co NIE jest głównym źródłem doświadczenia na naszym serwerze?",
+    "question": "Wskaż opcję, która NIE przyczynia się do zdobywania expa na serwerze.",
     "options": {
       "A": "PvP",
       "B": "Taski",
       "C": "Bicie potworów",
       "D": "Questy"
     },
-    "answer": "C",
+    "answer": "A",
     "id": 52
   },
   {
@@ -649,7 +649,7 @@
     "id": 59
   },
   {
-    "question": "Jakie nagrody mogą otrzymać ANBU na naszym serwerze?",
+    "question": "Za co ANBU mogą otrzymać nagrody na naszym serwerze?",
     "options": {
       "A": "Za niszczenie pułapek",
       "B": "Za leczenie graczy",
@@ -1001,14 +1001,14 @@
     "id": 91
   },
   {
-    "question": "Co NIE jest głównym źródłem doświadczenia na naszym serwerze?",
+    "question": "Która z poniższych rzeczy nie daje doświadczenia na naszym serwerze?",
     "options": {
       "A": "PvP",
       "B": "Taski",
       "C": "Zabijanie graczy",
       "D": "Questy"
     },
-    "answer": "C",
+    "answer": "A",
     "id": 92
   },
   {
@@ -2745,7 +2745,7 @@
       "A": "Czat tekstowy",
       "B": "Interaktywny overlay na ekranie",
       "C": "NPC dialog",
-      "D": "\"Papierowy\" test jednokrotnego wyboru"
+      "D": "\"Papierowy\" test wielokrotnego wyboru"
     },
     "answer": "B"
   },
@@ -2985,7 +2985,7 @@
     "options": {
       "A": "Czat wioski",
       "B": "Głosowania i zarządzanie rangami",
-      "C": "Automatyczna teleportacja członków do siebie",
+      "C": "Teleportacja członków do siebie",
       "D": "Reputacja sumowana z reputacji graczy"
     },
     "answer": "C",
