@@ -630,11 +630,11 @@
     "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach na naszym serwerze?",
     "options": {
       "A": "Fuinjutsu",
-      "B": "Genjutsu",
+      "B": "Taijutsu",
       "C": "Ninjutsu",
-      "D": "Taijutsu"
+      "D": "Genjutsu"
     },
-    "answer": "B",
+    "answer": "D",
     "id": 58
   },
   {
@@ -660,7 +660,7 @@
     "id": 60
   },
   {
-    "question": "Który z Kage był pierwszą osobą w historii znaną z posiadania Kekkei Tōta?",
+    "question": "Który z Kage jest pierwszym znanym użytkownikiem Kekkei Tōta?",
     "options": {
       "A": "Mū z Iwagakure",
       "B": "Onoki z Iwagakure",
@@ -957,7 +957,7 @@
     "id": 87
   },
   {
-    "question": "W oryginalnym kanonie, zanim system drużyn shinobi (np. trójki geninów z jōninem) został oficjalnie przyjęty w Konohagakure, istniał eksperymentalny zespół, który jako pierwszy sprawdzono w tej formule. Kto był jego liderem?",
+    "question": "Kto był liderem drużyny, która jako jedna z pierwszych funkcjonowała w formacie będącym prototypem późniejszego systemu drużyn shinobi?",
     "options": {
       "A": "Kagami Uchiha",
       "B": "Tobirama Senju",
@@ -979,12 +979,12 @@
     "id": 89
   },
   {
-    "question": "Podczas Pierwszej Wielkiej Wojny Shinobi, klan Uzumaki został niemal całkowicie zniszczony. Wśród krajów, które brały udział w zniszczeniu Uzushiogakure, który kraj jako pierwszy zainicjował atak, obawiając się pieczętujących technik klanu Uzumaki?",
+    "question": "Który kraj był jednym z głównych agresorów biorących udział w zniszczeniu Uzushiogakure podczas Pierwszej Wielkiej Wojny Shinobi?”",
     "options": {
       "A": "Kraj Ziemi - Iwagakure",
       "B": "Kraj Wody - Kirigakure",
-      "C": "Kraj Chmury - Kumogakure",
-      "D": "Kraj Pioruna - Hoshigakure"
+      "C": "Kraj Błyskawic - Kumogakure",
+      "D": "Kraj Wiatru - Sunagakure"
     },
     "answer": "B",
     "id": 90
@@ -1001,14 +1001,14 @@
     "id": 91
   },
   {
-    "question": "Która z poniższych rzeczy nie daje doświadczenia na naszym serwerze?",
+    "question": "Za co z tej listy nie dostaniesz expa na naszym serwerze?",
     "options": {
-      "A": "PvP",
+      "A": "Questy",
       "B": "Taski",
       "C": "Zabijanie graczy",
-      "D": "Questy"
+      "D": "PVP"
     },
-    "answer": "A",
+    "answer": "D",
     "id": 92
   },
   {
@@ -1067,7 +1067,7 @@
     "id": 97
   },
   {
-    "question": "Która statystyka odpowiada za siłę technik opartych na iluzjach na naszym serwerze?",
+    "question": "Która statystyka odpowiada za skalowanie obrażeń i skuteczności technik iluzji na serwerze?",
     "options": {
       "A": "Fuinjutsu",
       "B": "Genjutsu",
@@ -1089,12 +1089,12 @@
     "id": 99
   },
   {
-    "question": "Za jakie czynności ANBU mogą otrzymać nagrody na naszym serwerze?",
+    "question": "Co daje zwiększenie statystyki Intelligence na naszym serwerze?",
     "options": {
-      "A": "Za niszczenie pułapek",
-      "B": "Za leczenie graczy",
-      "C": "Za eliminowanie morderców (PK)",
-      "D": "Za największy poziom"
+      "A": "Szybsze bieganie",
+      "B": "Większa odporność na obrażenia",
+      "C": "Lepsza skuteczność pułapek",
+      "D": "Dłuższy czas trwania buffów"
     },
     "answer": "C",
     "id": 100
@@ -3165,7 +3165,7 @@
     "C": "Oparta była na tajnikach fūinjutsu klanu Uzumaki",
     "D": "Orochimaru wynalazł ją samodzielnie"
   },
-  "answer": "C"
+  "answer": "B"
 },
 {
   "id": 289,
@@ -3180,7 +3180,7 @@
 },
 {
   "id": 290,
-  "question": "Dlaczego Byakugan jest praktycznie niemożliwy do ukrycia przed identyfikacją chakra-sensorów?",
+  "question": "Dlaczego oczy klanu Hyūga są łatwe do rozpoznania?",
   "options": {
     "A": "Emituje charakterystyczną częstotliwość chakry",
     "B": "Ma widoczną strukturę nerwowo-żylną, unikalną dla rodu Hyūga",
