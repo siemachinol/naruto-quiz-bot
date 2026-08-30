@@ -39,7 +39,7 @@ def require_env(name: str) -> str:
     return v
 
 # Kill-switch
-if os.getenv("BOT_DISABLED", "").lower() == "false":
+if os.getenv("BOT_DISABLED", "").lower() == "true":
     log.warning("BOT_DISABLED=true → wychodzę.")
     raise SystemExit(0)
 
@@ -50,8 +50,8 @@ SUPABASE_KEY = require_env("SUPABASE_KEY")
 
 QUIZ_CHANNEL_NAME = os.getenv("QUIZ_CHANNEL_NAME", "quiz-naruto")
 QUESTIONS_FILE = os.getenv("QUESTIONS_FILE", "pytania.json")
-QUIZ_DURATION_SECONDS = int(os.getenv("QUIZ_DURATION_SECONDS", "900"))  # 15 min
-ALERT_MINUTES_BEFORE = int(os.getenv("ALERT_MINUTES_BEFORE", "5"))
+QUIZ_DURATION_SECONDS = int(os.getenv("QUIZ_DURATION_SECONDS", "600"))  # 10 min
+ALERT_MINUTES_BEFORE = int(os.getenv("ALERT_MINUTES_BEFORE", "2"))
 
 # Jeden automatyczny quiz dziennie o losowej godzinie czasu polskiego.
 POLAND_TZ = ZoneInfo("Europe/Warsaw")
@@ -100,6 +100,14 @@ def _fmt_td(td: datetime.timedelta) -> str:
     if s and not d:
         parts.append(f"{s}s")
     return " ".join(parts) or "0s"
+
+def _minutes_text(minutes: int) -> str:
+    """Poprawna polska odmiana liczby minut w komunikatach bota."""
+    if minutes == 1:
+        return "1 minutę"
+    if minutes % 10 in (2, 3, 4) and minutes % 100 not in (12, 13, 14):
+        return f"{minutes} minuty"
+    return f"{minutes} minut"
 
 def _cooldown_remaining(last_used: datetime.datetime, hours: int) -> datetime.timedelta:
     end = last_used + datetime.timedelta(hours=hours)
@@ -717,7 +725,8 @@ def build_question_message(q: Dict[str, Any]) -> str:
         f":regional_indicator_b: {q['options']['B']}\n"
         f":regional_indicator_c: {q['options']['C']}\n"
         f":regional_indicator_d: {q['options']['D']}\n\n"
-        f"Kliknij przycisk z odpowiedzią poniżej. Masz {QUIZ_DURATION_SECONDS//60} min na odpowiedź!"
+        f"Kliknij przycisk z odpowiedzią poniżej. "
+        f"Masz {_minutes_text(QUIZ_DURATION_SECONDS // 60)} na odpowiedź!"
     )
 
 async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
@@ -1160,11 +1169,13 @@ async def daily_quiz_task():
             role = get_quiz_role(ch.guild)
             if role and PING_ROLE_IN_ALERTS:
                 await ch.send(
-                    f"{role.mention} 🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!",
+                    f"{role.mention} 🧠 Za {_minutes_text(ALERT_MINUTES_BEFORE)} pojawi się pytanie quizowe!",
                     allowed_mentions=discord.AllowedMentions(roles=[role]),
                 )
             else:
-                await ch.send(f"🧠 Za {ALERT_MINUTES_BEFORE} minut pojawi się pytanie quizowe!")
+                await ch.send(
+                    f"🧠 Za {_minutes_text(ALERT_MINUTES_BEFORE)} pojawi się pytanie quizowe!"
+                )
             _alerted_today.add(daily_key)
 
         # Po osiągnięciu zaplanowanej godziny najpierw atomowo rezerwujemy quiz
