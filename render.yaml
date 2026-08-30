@@ -37,7 +37,7 @@ services:
         value: quiz-naruto
 
       - key: QUIZ_DURATION_SECONDS
-        value: "900"
+        value: "600"
 
       - key: QUESTIONS_FILE
         value: pytania.json
