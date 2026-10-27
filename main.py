@@ -67,6 +67,8 @@ POINTS_BY_DIFFICULTY = {
     "nws": 2,
 }
 
+HANDICAP_SEASON = "season_3"
+
 # --- WŁĄCZNIK/WYŁĄCZNIK REMINDERA PRZED QUIZEM ---
 # Domyślnie włączony; można wyłączyć przez QUIZ_ALERTS_ENABLED=false.
 QUIZ_ALERTS_ENABLED = os.getenv("QUIZ_ALERTS_ENABLED", "true").lower() == "true"
@@ -272,6 +274,78 @@ async def db_save_ranking(data: Dict[str, Dict[str, Any]]) -> None:
         "ranking.upsert",
         lambda: supabase.table("ranking").upsert(payload, on_conflict="user_id").execute(),
     )
+
+async def db_load_handicaps(
+    guild_id: int,
+    user_ids: List[int],
+) -> Dict[str, Dict[str, Any]]:
+    if not user_ids:
+        return {}
+    resp = await _db_call(
+        "quiz_handicaps.select",
+        lambda: supabase.table("quiz_handicaps")
+        .select("*")
+        .eq("guild_id", str(guild_id))
+        .eq("season", HANDICAP_SEASON)
+        .in_("user_id", [str(uid) for uid in user_ids])
+        .execute(),
+    )
+    return {str(row["user_id"]): dict(row) for row in (resp.data or [])}
+
+async def db_create_handicaps(rows: List[Dict[str, Any]]) -> None:
+    if not rows:
+        return
+    await _db_call(
+        "quiz_handicaps.insert",
+        lambda: supabase.table("quiz_handicaps").insert(rows).execute(),
+    )
+
+async def db_complete_handicap(guild_id: int, user_id: int) -> None:
+    await _db_call(
+        "quiz_handicaps.complete",
+        lambda: supabase.table("quiz_handicaps")
+        .update({
+            "completed": True,
+            "completed_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        })
+        .eq("guild_id", str(guild_id))
+        .eq("user_id", str(user_id))
+        .eq("season", HANDICAP_SEASON)
+        .execute(),
+    )
+
+def calculate_points_with_handicap(
+    base_points: int,
+    current_points: int,
+    handicap: Optional[Dict[str, Any]],
+) -> tuple[int, Optional[str], bool]:
+    """Zwraca (przyznane punkty, etykieta bonusu, czy handicap się zakończył)."""
+    if not handicap or bool(handicap.get("completed")):
+        return base_points, None, False
+
+    double_until = int(handicap.get("double_until") or 0)
+    handicap_until = int(handicap.get("handicap_until") or 0)
+    if current_points >= handicap_until:
+        return base_points, None, True
+
+    if current_points < double_until:
+        raw_points = base_points * 2
+        label = "⚡ Podwójne punkty"
+    else:
+        raw_points = base_points + 1
+        label = "🔥 Bonus doganiający"
+
+    # Zwykłe punkty mogą przekroczyć próg końcowy, ale sam bonus nie
+    # przerzuca gracza ponad zapisane 80% wyniku TOP 3.
+    normal_total = current_points + base_points
+    bonus = max(0, raw_points - base_points)
+    bonus_room = max(0, handicap_until - normal_total)
+    awarded_points = base_points + min(bonus, bonus_room)
+    if awarded_points == base_points:
+        label = None
+
+    completed = current_points + awarded_points >= handicap_until
+    return awarded_points, label, completed
 
 # --- Lifelines: DB helpers (cooldown) ---
 async def db_lifeline_last_used(user_id: int, lifeline_type: str) -> Optional[datetime.datetime]:
@@ -739,10 +813,59 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
     points_for_question = POINTS_BY_DIFFICULTY[difficulty]
     winners: List[int] = [uid for uid, letter in state.answers.items() if letter == correct]
 
-    ranking_saved = True
+    ranking_saved = False
+    awarded_by_user: Dict[int, tuple[int, Optional[str]]] = {}
+    handicaps_to_complete: Set[int] = set()
     try:
         ranking = await db_load_ranking()
         today = datetime.datetime.now(POLAND_TZ).date().isoformat()
+
+        # Handicap jest ustalany raz na sezon przy pierwszej oddanej
+        # odpowiedzi (również błędnej). Progi zapisujemy na stałe na podstawie
+        # wyniku aktualnego trzeciego miejsca.
+        participant_ids = list(state.answers.keys())
+        handicaps = await db_load_handicaps(channel.guild.id, participant_ids)
+        ranking_points = sorted(
+            (int(data.get("points", 0)) for data in ranking.values()),
+            reverse=True,
+        )
+        if len(ranking_points) >= 3:
+            top3_points = ranking_points[2]
+            double_until = (top3_points * 50) // 100
+            handicap_until = (top3_points * 80) // 100
+            new_rows: List[Dict[str, Any]] = []
+
+            for uid in participant_ids:
+                uid_s = str(uid)
+                if uid_s in handicaps:
+                    continue
+                current_points = int((ranking.get(uid_s) or {}).get("points", 0))
+                completed = handicap_until <= 0 or current_points >= handicap_until
+                row = {
+                    "guild_id": str(channel.guild.id),
+                    "user_id": uid_s,
+                    "season": HANDICAP_SEASON,
+                    "top3_points_at_start": top3_points,
+                    "double_until": double_until,
+                    "handicap_until": handicap_until,
+                    "completed": completed,
+                    "completed_at": (
+                        datetime.datetime.now(datetime.timezone.utc).isoformat()
+                        if completed else None
+                    ),
+                }
+                new_rows.append(row)
+                handicaps[uid_s] = row
+                log.info(
+                    "Handicap initialized: user=%s top3=%s double_until=%s handicap_until=%s completed=%s",
+                    uid_s,
+                    top3_points,
+                    double_until,
+                    handicap_until,
+                    completed,
+                )
+
+            await db_create_handicaps(new_rows)
 
         for uid in winners:
             uid_s = str(uid)
@@ -751,28 +874,60 @@ async def conclude_quiz(channel: discord.TextChannel, state: QuizState):
 
             user_data = ranking.get(uid_s) or {"name": name, "points": 0, "weekly": {}, "monthly": {}}
             user_data["name"] = name
-            user_data["points"] = int(user_data.get("points", 0)) + points_for_question
+            current_points = int(user_data.get("points", 0))
+            awarded_points, bonus_label, handicap_completed = calculate_points_with_handicap(
+                points_for_question,
+                current_points,
+                handicaps.get(uid_s),
+            )
+            user_data["points"] = current_points + awarded_points
+            awarded_by_user[uid] = (awarded_points, bonus_label)
+            if handicap_completed:
+                handicaps_to_complete.add(uid)
 
             weekly = dict(user_data.get("weekly") or {})
             monthly = dict(user_data.get("monthly") or {})
-            weekly[today] = int(weekly.get(today, 0)) + points_for_question
-            monthly[today] = int(monthly.get(today, 0)) + points_for_question
+            weekly[today] = int(weekly.get(today, 0)) + awarded_points
+            monthly[today] = int(monthly.get(today, 0)) + awarded_points
             user_data["weekly"] = weekly
             user_data["monthly"] = monthly
             ranking[uid_s] = user_data
 
         await db_save_ranking(ranking)
+        ranking_saved = True
     except SupabaseOperationError:
-        ranking_saved = False
         log.error("Nie zapisano punktów dla quizu message_id=%s", state.message_id)
 
+    if ranking_saved:
+        for uid in handicaps_to_complete:
+            try:
+                await db_complete_handicap(channel.guild.id, uid)
+                log.info("Handicap completed: user=%s season=%s", uid, HANDICAP_SEASON)
+            except SupabaseOperationError:
+                # Punkty są już zapisane. Przy kolejnym pytaniu bieżący wynik
+                # nadal zablokuje bonus, a aktualizacja zostanie ponowiona.
+                log.error("Nie udało się oznaczyć handicapu jako zakończony: user=%s", uid)
+
     if winners and ranking_saved:
-        mentions = ", ".join(f"<@{uid}>" for uid in winners)
-        msg = (
-            f"**Koniec czasu!**\n"
-            f"Prawidłowa odpowiedź: **{correct}**\n"
-            f"Gratulacje dla: {mentions} (+{points_for_question} pkt)"
-        )
+        handicap_used = any(label for _, label in awarded_by_user.values())
+        if handicap_used:
+            result_lines = []
+            for uid in winners:
+                awarded_points, bonus_label = awarded_by_user[uid]
+                suffix = f" — {bonus_label}" if bonus_label else ""
+                result_lines.append(f"<@{uid}> — +{awarded_points} pkt{suffix}")
+            msg = (
+                f"**Koniec czasu!**\n"
+                f"Prawidłowa odpowiedź: **{correct}**\n"
+                "Gratulacje dla:\n" + "\n".join(result_lines)
+            )
+        else:
+            mentions = ", ".join(f"<@{uid}>" for uid in winners)
+            msg = (
+                f"**Koniec czasu!**\n"
+                f"Prawidłowa odpowiedź: **{correct}**\n"
+                f"Gratulacje dla: {mentions} (+{points_for_question} pkt)"
+            )
     elif winners:
         mentions = ", ".join(f"<@{uid}>" for uid in winners)
         msg = (
