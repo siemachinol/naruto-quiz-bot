@@ -16,7 +16,7 @@ services:
 
     envVars:
       - key: BOT_DISABLED
-        value: false
+        value: true
 
       - key: PYTHON_VERSION
         value: 3.11.9
